@@ -6,7 +6,7 @@ from Color import Color
 pygame.init()
 
 # Screen
-SCREEN_WIDTH, SCREEN_HEIGHT = 300, 300
+SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 1000
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 SCREEN = pygame.display.set_mode(SCREEN_SIZE)
 
@@ -41,7 +41,7 @@ with open("map.txt", "r") as game_map:
         map_data.append(line)
 
 MAP_SIZE = len(map_data)
-TILE_SIZE = SCREEN_HEIGHT / MAP_SIZE
+TILE_SIZE = SCREEN_HEIGHT // MAP_SIZE
 
 # Create map
 for row, tiles in enumerate(map_data):
@@ -53,8 +53,8 @@ for row, tiles in enumerate(map_data):
             wall_group.add(Wall(row, col, Color.GREEN.value, TILE_SIZE))
 
         elif tile == "S":
-            wall_group.add(Wall(row, col, Color.SPAWN.value, TILE_SIZE))
 
+            wall_group.add(Wall(row, col, Color.SPAWN.value, TILE_SIZE))
 
 # Game loop
 running = True
