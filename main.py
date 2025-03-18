@@ -1,6 +1,6 @@
 import pygame
 
-from Color import Color
+from data.texture.Color import Color
 
 # Activate all the pygame functions 
 pygame.init()
