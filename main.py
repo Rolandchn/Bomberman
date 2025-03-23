@@ -2,7 +2,7 @@ import pygame
 
 from core import prepare, Bomberman
 
-# Game loop
+""" # Game loop
 running = True
 while running:
 
@@ -16,7 +16,7 @@ while running:
     pygame.display.update()
 
 else:
-    pygame.quit()
+    pygame.quit() """
 
 def main():
     Bomberman.Game
