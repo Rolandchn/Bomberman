@@ -1,6 +1,6 @@
 import pygame
 
-from core import prepare
+from core import prepare, Bomberman
 
 # Game loop
 running = True
@@ -17,3 +17,9 @@ while running:
 
 else:
     pygame.quit()
+
+def main():
+    Bomberman.Game
+
+if __name__ == "__main__":
+    main()

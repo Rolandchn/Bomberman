@@ -1,26 +1,28 @@
+
 import pygame
 
-class Game():
+from data.entity.Wall import Wall
+from data.texture.Color import Color
 
-    def __init__(self, width, height):
+
+class Game():
+    def __init__(self):
+        # Activate all the pygame functions 
         pygame.init()
 
-        #--------------------
-        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = width, height
-        self.SCREEN_SIZE = self.SCREEN_WIDTH, self.SCREEN_HEIGHT
-        #--------------------
+        # Constants
+        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 1000, 1000
+        self.SCREEN_SIZE = (self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
 
-        self.screen = pygame.display.set_mode(self.SCREEN_SIZE)
+        GAME_TITLE = "Bomberman"
 
-        #############################################################
-
-        self.background = None
-
-        self.set_background("background.jpg")                          
+        # Initialize
+        pygame.display.set_caption(GAME_TITLE)
+        self.SCREEN = pygame.display.set_mode(self.SCREEN_SIZE)
 
         #################################################
 
-        self.player = MyPlayer("ball1.png", 100, 200)
+        """ self.player = MyPlayer("ball1.png", 100, 200)
 
         self.sprites_list = []
 
@@ -28,41 +30,59 @@ class Game():
         self.add_sprite(MySprite("ball2.png", 300, 500))
         self.add_sprite(MySprite("ball2.png", 300, 200))
 
-        self.remove_last_sprite()
+        self.remove_last_sprite() """
 
         #-----------------------------
 
-        # red text "PAUSE"
-        font = pygame.font.SysFont("", 72)
-        self.text_pause = font.render("PAUSE", True, (255, 0, 0))
-
-        # center text on screen
-        screen_center = self.screen.get_rect().center
-        self.text_pause_rect = self.text_pause.get_rect(center=screen_center) 
+        self.create_map()
 
     #--------------------------
 
-    def add_sprite(self, sprite):
-        self.sprites_list.append(sprite)
+    """ def add_sprite(self, sprite):
+        self.sprites_list.append(sprite) """
 
     #--------------------------
 
-    def remove_last_sprite(self):
+    """ def remove_last_sprite(self):
         if self.sprites_list:
-            del self.sprites_list[-1]
+            del self.sprites_list[-1] """
 
     #--------------------------
 
-    def draw_sprites(self, screen):
+    """ def draw_sprites(self, screen):
         for sprite in self.sprites_list:
-            sprite.draw(screen)
+            sprite.draw(screen) """
 
     #--------------------------
 
-    def draw_background(self, screen:pygame.Surface):
-        screen.fill((0,64,0)) # clear screen to green
-        if self.background:
-            screen.blit(self.background, (0,0))
+    def create_map(self):
+        map_data = []
+        self.wall_group = pygame.sprite.Group()
+
+        # Read map
+        with open("./data/map/map.txt", "r") as game_map:
+            for line in game_map:
+                map_data.append(line)
+
+        MAP_SIZE = len(map_data)
+        TILE_SIZE = self.SCREEN_HEIGHT // MAP_SIZE
+
+        for row, tiles in enumerate(map_data):
+            for col, tile in enumerate(tiles):
+                if tile == "#":
+                    self.wall_group.add(Wall(row, col, Color.OBSTACLE.value, TILE_SIZE))
+                
+                elif tile == "0":
+                    self.wall_group.add(Wall(row, col, Color.GREEN.value, TILE_SIZE))
+
+                elif tile == "S":
+
+                    self.wall_group.add(Wall(row, col, Color.SPAWN.value, TILE_SIZE))
+
+
+
+    def draw_map(self, screen:pygame.Surface):
+        self.wall_group.draw(screen)
 
     #--------------------------
 
@@ -76,13 +96,6 @@ class Game():
 
         return temp
 
-
-    #--------------------------
-
-    def set_background(self, image=None):
-        if image: 
-            self.background = pygame.image.load(image)
-
     #--------------------------
 
     def run(self):
@@ -90,12 +103,10 @@ class Game():
         clock = pygame.time.Clock()
 
         RUNNING = True
-        PAUSED = False
 
         while RUNNING:
 
             #--- events ---
-
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
@@ -104,8 +115,6 @@ class Game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         RUNNING = False
-                    elif event.key == pygame.K_SPACE:
-                        PAUSED = not PAUSED
 
                     if event.key == pygame.K_UP:
                         self.player.set_speed(0,-10)
@@ -120,28 +129,14 @@ class Game():
                     if event.key in (pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT):
                         self.player.set_speed(0,0)
 
-            #--- changes ----
-
-            if not PAUSED:
-                # change elements position
-                self.player.update()
 
             #--- draws ---
-
-            self.draw_background(self.screen)
-            self.draw_sprites(self.screen) 
-            self.player.draw(self.screen)
-
-            if PAUSED:
-                # draw pause string
-                self.screen.blit(self.text_pause, self.text_pause_rect.topleft)
+            self.draw_map(self.SCREEN)
 
             pygame.display.update()
 
             #--- FPS ---
-
             clock.tick(25) # 25 Frames Per Seconds
 
         #--- finish ---
-
         pygame.quit()
