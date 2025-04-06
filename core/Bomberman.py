@@ -1,28 +1,31 @@
-
 import pygame
-
+from data.entity.Player import Player
+from data.entity.Bombe import BombManager
+from data.map.Map import Map
 from data.entity.Wall import Wall
-from data.texture.Color import Color
 
 
 class Game():
     def __init__(self):
-        # Activate all the pygame functions 
-        pygame.init()
-
-        # Constants
-        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 1000, 1000
-        self.SCREEN_SIZE = (self.SCREEN_WIDTH, self.SCREEN_HEIGHT)
-
-        GAME_TITLE = "Bomberman"
-
         # Initialize
-        pygame.display.set_caption(GAME_TITLE)
-        self.SCREEN = pygame.display.set_mode(self.SCREEN_SIZE)
+        self.map = Map()
+        self.player = Player(1, 1)
+        self.bombs = BombManager(self.map)
 
-        #################################################
+    def handle_event(self, event):
+        self.player.handle_input(event, self.map, self.bombs)
 
-        """ self.player = MyPlayer("ball1.png", 100, 200)
+    def update(self):
+        self.bombs.update()
+
+    def render(self, screen):
+        self.map.draw(screen)
+        self.bombs.draw(screen)
+        self.player.draw(screen)
+
+        """#################################################
+
+         self.player = MyPlayer("ball1.png", 100, 200)
 
         self.sprites_list = []
 
@@ -30,30 +33,31 @@ class Game():
         self.add_sprite(MySprite("ball2.png", 300, 500))
         self.add_sprite(MySprite("ball2.png", 300, 200))
 
-        self.remove_last_sprite() """
+        self.remove_last_sprite() 
 
         #-----------------------------
 
-        self.create_map()
+     self.create_map()
 
     #--------------------------
 
-    """ def add_sprite(self, sprite):
-        self.sprites_list.append(sprite) """
+     def add_sprite(self, sprite):
+        self.sprites_list.append(sprite) 
 
     #--------------------------
 
-    """ def remove_last_sprite(self):
+    def remove_last_sprite(self):
         if self.sprites_list:
-            del self.sprites_list[-1] """
+            del self.sprites_list[-1]
 
     #--------------------------
 
-    """ def draw_sprites(self, screen):
+    def draw_sprites(self, screen):
         for sprite in self.sprites_list:
-            sprite.draw(screen) """
+            sprite.draw(screen) 
 
     #--------------------------
+
 
     def create_map(self):
         map_data = []
@@ -71,7 +75,7 @@ class Game():
             for col, tile in enumerate(tiles):
                 if tile == "#":
                     self.wall_group.add(Wall(row, col, Color.OBSTACLE.value, TILE_SIZE))
-                
+
                 elif tile == "0":
                     self.wall_group.add(Wall(row, col, Color.GREEN.value, TILE_SIZE))
 
@@ -139,4 +143,4 @@ class Game():
             clock.tick(25) # 25 Frames Per Seconds
 
         #--- finish ---
-        pygame.quit()
+        pygame.quit()"""

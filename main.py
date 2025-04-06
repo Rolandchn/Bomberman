@@ -1,6 +1,7 @@
 import pygame
-
-from core import prepare, Bomberman
+import sys
+from data.texture.config import *
+from core.Bomberman import Game
 
 """ # Game loop
 running = True
@@ -18,8 +19,25 @@ while running:
 else:
     pygame.quit() """
 
-def main():
-    Bomberman.Game
 
-if __name__ == "__main__":
-    main()
+# Active Pygame
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Bomberman")
+clock = pygame.time.Clock()
+
+game = Game()
+
+while True:
+    screen.fill(WHITE)
+    game.update()
+    game.render(screen)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        game.handle_event(event)
+
+    pygame.display.update()
+    clock.tick(10)
