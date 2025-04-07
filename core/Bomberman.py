@@ -4,13 +4,22 @@ from data.entity.Bombe import BombManager
 from data.map.Map import Map
 from data.entity.Wall import Wall
 
+from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH, WHITE
+
+
 
 class Game():
     def __init__(self):
-        # Initialize
+        pygame.init()
+        # Initialize general
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Bomberman")
+
+        # Initialize Game
         self.map = Map()
         self.player = Player(1, 1)
         self.bombs = BombManager(self.map)
+
 
     def handle_event(self, event):
         self.player.handle_input(event, self.map, self.bombs)
@@ -22,6 +31,25 @@ class Game():
         self.map.draw(screen)
         self.bombs.draw(screen)
         self.player.draw(screen)
+
+    def run(self):
+        clock = pygame.time.Clock()
+
+        RUNNING = True
+        while RUNNING:
+            self.screen.fill(WHITE)
+            self.update()
+            self.render(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                self.handle_event(event)
+
+            pygame.display.update()
+            
+            clock.tick(10)
+
 
         """#################################################
 
@@ -101,7 +129,6 @@ class Game():
         return temp
 
     #--------------------------
-
     def run(self):
 
         clock = pygame.time.Clock()
