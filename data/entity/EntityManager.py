@@ -22,8 +22,8 @@ class EntityManager:
 
 
     def draw(self, screen):
-        self.wall_group.draw(screen)
         self.floor_group.draw(screen)
+        self.wall_group.draw(screen)
         
         self.player_group.draw(screen)
 

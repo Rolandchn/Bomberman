@@ -43,7 +43,9 @@ class Bomb(Entity):
 
                 collided_wall = pygame.sprite.spritecollideany(self, self.entities.wall_group, collided=lambda s1, s2: tile_rect.colliderect(s2.rect))
                 
+                print(collided_wall)
                 if isinstance(collided_wall, Obstacle):
+                    print("aaaa")
                     collided_wall.kill()
                 
                 elif collided_wall == None:

@@ -47,6 +47,8 @@ class Map:
         
                 elif tile == "X":
                     self.entities.wall_group.add(Obstacle(row, col, Color.OBSTACLE.value, TILE_SIZE))
+                    self.entities.floor_group.add(Floor(row, col, Color.GREEN.value, TILE_SIZE))
+
         
 
     def is_walkable(self, player:Player, dx, dy):
