@@ -22,7 +22,7 @@ class Game():
         self.players = pygame.sprite.Group()
         self.player = Player(self.map.respawn(), pygame.Surface((TILE_SIZE, TILE_SIZE)), self.players)
 
-        #self.bombs = BombManager(self.map)
+        self.bombs = BombManager(self.map)
 
 
     def handle_event(self):
@@ -33,7 +33,7 @@ class Game():
 
     def render(self, screen):
         self.map.draw(screen)
-        #self.bombs.draw(screen)
+        self.bombs.draw(screen)
         self.players.draw(screen)
 
 
@@ -47,9 +47,13 @@ class Game():
                 if event.type == pygame.QUIT:
                     RUNNING = False
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.bombs.place_bomb(self.player.grid_x, self.player.grid_y)
+
             self.handle_event()
 
-            #self.update()
+            self.update()
             self.render(self.screen)
 
             pygame.display.update()
