@@ -36,18 +36,18 @@ class Map:
         for row, tiles in enumerate(self.grid):
             for col, tile in enumerate(tiles):
                 if tile == "#":
-                    self.entities.wall_group.add(Wall(row, col, Color.WALL.value, TILE_SIZE))
+                    self.entities.wall_group.add(Wall(col, row, Color.WALL.value, TILE_SIZE))
 
                 elif tile == ".":
-                    self.entities.floor_group.add(Floor(row, col, Color.GREEN.value, TILE_SIZE))
+                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
                 
                 elif tile == "S":
-                    self.entities.floor_group.add(Floor(row, col, Color.SPAWN.value, TILE_SIZE))
-                    self.spawn_point.append((row, col))
+                    self.entities.floor_group.add(Floor(col, row, Color.SPAWN.value, TILE_SIZE))
+                    self.spawn_point.append((col, row))
         
                 elif tile == "X":
-                    self.entities.wall_group.add(Obstacle(row, col, Color.OBSTACLE.value, TILE_SIZE))
-                    self.entities.floor_group.add(Floor(row, col, Color.GREEN.value, TILE_SIZE))
+                    self.entities.wall_group.add(Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE))
+                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
 
         
 
