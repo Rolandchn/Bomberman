@@ -1,9 +1,12 @@
 import pygame
+
+
 from data.texture.config import TILE_SIZE
 
 
+
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, position, image:pygame.Surface, *groups):
+    def __init__(self, position:int, image:pygame.Surface, *groups):
         super().__init__(*groups)
 
         self.image = image

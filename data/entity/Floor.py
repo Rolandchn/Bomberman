@@ -1,9 +1,11 @@
 
 import pygame
 
+from data.texture.Color import Color
+
 
 class Floor(pygame.sprite.Sprite):
-    def __init__(self, x, y, color, size):
+    def __init__(self, x:int, y:int, color:Color, size:int):
         super().__init__()
 
         self.grid_x = x

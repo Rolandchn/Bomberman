@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from data.map.Map import Map
@@ -8,15 +8,16 @@ if TYPE_CHECKING:
 
 import pygame
 
-from data.texture.config import TILE_SIZE
-from data.texture.Color import Color
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
+
+from data.texture.Color import Color
+from data.texture.config import TILE_SIZE
 
 
 
 class Player(Entity):
-    def __init__(self, spawn, entities:EntityManager):
+    def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.entities = entities
@@ -24,14 +25,14 @@ class Player(Entity):
         self.image.fill(Color.WHITE.value)
 
     
-    def input(self, map:Map):
+    def input(self, map:Map) -> bool:
         if self.move(map) : return True
         elif self.bomb() : return True
 
         return False
     
 
-    def move(self, map:Map):
+    def move(self, map:Map) -> bool:
         has_moved = False
         keys = pygame.key.get_pressed()
         
@@ -63,7 +64,7 @@ class Player(Entity):
         return has_moved
         
 
-    def bomb(self):
+    def bomb(self) -> bool:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE]:

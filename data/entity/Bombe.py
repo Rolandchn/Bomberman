@@ -1,17 +1,17 @@
 
 import pygame
 
-from data.texture.config import TILE_SIZE
-from data.texture.Color import Color
-from data.entity.Entity import Entity
-from data.entity.EntityManager import EntityManager
 from data.entity.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
+from data.entity.EntityManager import EntityManager
+from data.entity.Entity import Entity
 
+from data.texture.Color import Color
+from data.texture.config import TILE_SIZE
 
 
 class Bomb(Entity):
-    def __init__(self, x, y, entities:EntityManager, timer=2, spread=2):
+    def __init__(self, x:int, y:int, entities:EntityManager, timer=2, spread=2):
         super().__init__((x, y), pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.bomb_group)
 
         self.image.fill(Color.BOMBE.value)
@@ -43,9 +43,7 @@ class Bomb(Entity):
 
                 collided_wall = pygame.sprite.spritecollideany(self, self.entities.wall_group, collided=lambda s1, s2: tile_rect.colliderect(s2.rect))
                 
-                print(collided_wall)
                 if isinstance(collided_wall, Obstacle):
-                    print("aaaa")
                     collided_wall.kill()
                 
                 elif collided_wall == None:
