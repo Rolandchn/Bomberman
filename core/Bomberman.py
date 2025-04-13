@@ -1,8 +1,7 @@
 import pygame
 from data.entity.Player import Player
-from data.entity.Bombe import BombManager
 from data.map.Map import Map
-from data.entity.Wall import Wall
+from data.entity.EntityManager import EntityManager
 from data.texture.config import TILE_SIZE
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
@@ -17,25 +16,24 @@ class Game():
         self.clock = pygame.time.Clock()
 
         # Initialize Game
-        self.map = Map()
+        self.entities = EntityManager()
 
-        self.players = pygame.sprite.Group()
-        self.player = Player(self.map.respawn(), pygame.Surface((TILE_SIZE, TILE_SIZE)), self.players)
+        self.map = Map(self.entities)
+        self.player = Player(self.map.respawn(), self.entities)
 
-        self.bombs = BombManager(self.map)
+        self.turn_state = "P1"
 
 
     def handle_event(self):
-        self.player.move(self.map)
+        if self.turn_state == "P1":
+            if self.player.input(self.map):
+                self.turn_state = "P1"
 
-    def update(self):
-        self.bombs.update()
-
-    def render(self, screen):
-        self.map.draw(screen)
-        self.bombs.draw(screen)
-        self.players.draw(screen)
-
+        elif self.turn_state == "P2":
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_a]:
+                self.turn_state = "P1"
+            
 
     def collision(self):
         pass
@@ -47,14 +45,11 @@ class Game():
                 if event.type == pygame.QUIT:
                     RUNNING = False
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.bombs.place_bomb(self.player.grid_x, self.player.grid_y)
-
+            print(self.turn_state)
             self.handle_event()
 
-            self.update()
-            self.render(self.screen)
+            self.entities.update()
+            self.entities.draw(self.screen)
 
             pygame.display.update()
             

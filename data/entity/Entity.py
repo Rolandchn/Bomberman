@@ -3,16 +3,16 @@ from data.texture.config import TILE_SIZE
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, spawn, image:pygame.Surface, *groups):
+    def __init__(self, position, image:pygame.Surface, *groups):
         super().__init__(*groups)
 
         self.image = image
         
-        self.rect = self.image.get_rect(topleft=(spawn[0] * TILE_SIZE, spawn[1] * TILE_SIZE))
+        self.rect = self.image.get_rect(topleft=(position[0] * TILE_SIZE, position[1] * TILE_SIZE))
         
         # Position inside the grip in Map
-        self.grid_x = spawn[0]
-        self.grid_y = spawn[1]
+        self.grid_x = position[0]
+        self.grid_y = position[1]
 
 
     def update_rect(self):

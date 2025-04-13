@@ -1,38 +1,52 @@
 
 import pygame
-from data.texture.config import BOMB_TIMER, EXPLOSION_DURATION, TILE_SIZE
+
+from data.texture.config import TILE_SIZE
 from data.texture.Color import Color
+from data.entity.Entity import Entity
+from data.entity.EntityManager import EntityManager
+from data.entity.Obstacle import Obstacle
+from data.entity.Explosion import Explosion
 
 
 
-class BombManager:
-    def __init__(self, tilemap):
-        self.tilemap = tilemap
-        self.bombs = []
-        self.explosions = []
+class Bomb(Entity):
+    def __init__(self, x, y, entities:EntityManager, timer=2, spread=2):
+        super().__init__((x, y), pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.bomb_group)
 
-    def place_bomb(self, x, y):
-        self.bombs.append({'pos': (x, y), 'time': pygame.time.get_ticks()})
+        self.image.fill(Color.BOMBE.value)
+        
+        self.entities = entities
+
+        self.timer = timer
+        self.spread = spread
+
 
     def update(self):
-        now = pygame.time.get_ticks()
+        self.timer -= 1
 
-        for bomb in self.bombs[:]:
-            if now - bomb['time'] >= BOMB_TIMER:
-                x, y = bomb['pos']
-                self.explosions.append({'pos': (x, y), 'time': now})
-                self.tilemap.explode(x, y)
-                self.bombs.remove(bomb)
+        if self.timer <= 0:
+            self.kill()
+            self.explode()
 
-        for exp in self.explosions[:]:
-            if now - exp['time'] >= EXPLOSION_DURATION:
-                self.explosions.remove(exp)
 
-    def draw(self, screen):
-        for bomb in self.bombs:
-            x, y = bomb['pos']
-            pygame.draw.circle(screen, Color.RED.value, (x * TILE_SIZE + TILE_SIZE//2, y * TILE_SIZE + TILE_SIZE//2), TILE_SIZE // 3)
+    def explode(self):
+        Explosion(self.grid_x, self.grid_y, self.entities)
 
-        for exp in self.explosions:
-            x, y = exp['pos']
-            pygame.draw.rect(screen, Color.RED.value, pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+        # up, down, right, left
+        for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            for spread in range(1, self.spread):
+                nx, ny = self.grid_x + dx * spread, self.grid_y + dy * spread
+
+                tile_rect = self.rect.copy()
+                tile_rect.topleft = (nx * TILE_SIZE, ny * TILE_SIZE)
+
+                collided_wall = pygame.sprite.spritecollideany(self, self.entities.wall_group, collided=lambda s1, s2: tile_rect.colliderect(s2.rect))
+                
+                if isinstance(collided_wall, Obstacle):
+                    collided_wall.kill()
+                
+                elif collided_wall == None:
+                    Explosion(nx, ny, self.entities)
+
+                
