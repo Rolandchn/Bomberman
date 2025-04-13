@@ -1,7 +1,8 @@
-from data.texture.config import *
-from core.Bomberman import Game
 
 import pygame
+
+from core.Bomberman import Game
+
 
 
 
