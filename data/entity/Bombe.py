@@ -1,6 +1,8 @@
 
 import pygame
-from data.texture.config import BOMB_TIMER, EXPLOSION_DURATION, TILE_SIZE, RED
+from data.texture.config import BOMB_TIMER, EXPLOSION_DURATION, TILE_SIZE
+from data.texture.Color import Color
+
 
 
 class BombManager:
@@ -29,8 +31,8 @@ class BombManager:
     def draw(self, screen):
         for bomb in self.bombs:
             x, y = bomb['pos']
-            pygame.draw.circle(screen, RED, (x * TILE_SIZE + TILE_SIZE//2, y * TILE_SIZE + TILE_SIZE//2), TILE_SIZE // 3)
+            pygame.draw.circle(screen, Color.RED.value, (x * TILE_SIZE + TILE_SIZE//2, y * TILE_SIZE + TILE_SIZE//2), TILE_SIZE // 3)
 
         for exp in self.explosions:
             x, y = exp['pos']
-            pygame.draw.rect(screen, RED, pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+            pygame.draw.rect(screen, Color.RED.value, pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))

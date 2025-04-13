@@ -2,7 +2,7 @@
 import pygame
 
 
-class Obstacle(pygame.sprite.Sprite):
+class Floor(pygame.sprite.Sprite):
     def __init__(self, x, y, color, size):
         super().__init__()
 
