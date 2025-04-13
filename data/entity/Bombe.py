@@ -18,14 +18,19 @@ class Bomb(Entity):
         
         self.entities = entities
 
+        self.start_turn = None
+        
         self.timer = timer
         self.spread = spread
 
 
-    def update(self):
-        self.timer -= 1
+    def update(self, game_turn:int):
+        if self.start_turn is None:
+            self.start_turn = game_turn
 
-        if self.timer <= 0:
+        turns_passed = game_turn - self.start_turn
+
+        if self.timer < turns_passed:
             self.kill()
             self.explode()
 

@@ -27,28 +27,29 @@ class Game():
     def handle_event(self):
         if self.turn_state == "P1":
             if self.player.input(self.map):
-                self.turn_state = "P1"
+                self.turn_state = "P2"
 
         elif self.turn_state == "P2":
             keys = pygame.key.get_pressed()
+
             if keys[pygame.K_a]:
                 self.turn_state = "P1"
-            
+                self.turn += 1
 
-    def collision(self):
-        pass
 
     def run(self):
+        self.turn = 0
+
         RUNNING = True
         while RUNNING:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     RUNNING = False
 
-            print(self.turn_state)
+            print(self.turn)
             self.handle_event()
 
-            self.entities.update()
+            self.entities.update(self.turn)
             self.entities.draw(self.screen)
 
             pygame.display.update()

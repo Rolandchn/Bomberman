@@ -14,10 +14,10 @@ class EntityManager:
         self.explosion_group = pygame.sprite.Group()
 
 
-    def update(self):
+    def update(self, game_turn):
         self.player_group.update()
 
-        self.bomb_group.update()
+        self.bomb_group.update(game_turn)
         self.explosion_group.update()
 
 
