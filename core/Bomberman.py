@@ -24,7 +24,7 @@ class Game():
         self.turn_state = "P1"
 
 
-    def handle_event(self):
+    def handle_input(self):
         if self.turn_state == "P1":
             if self.player.input(self.map):
                 self.turn_state = "P2"
@@ -37,6 +37,11 @@ class Game():
                 self.turn += 1
 
 
+    def handle_event(self):
+        if self.player.is_hit():
+            self.player.life -= 1
+
+
     def run(self):
         self.turn = 0
 
@@ -46,8 +51,12 @@ class Game():
                 if event.type == pygame.QUIT:
                     RUNNING = False
 
-            print(self.turn)
+            self.handle_input()
             self.handle_event()
+
+            if self.player.life <= 0:
+                self.player.kill()
+                self.player = Player(self.map.respawn(), self.entities)
 
             self.entities.update(self.turn)
             self.entities.draw(self.screen)

@@ -20,6 +20,8 @@ class Player(Entity):
     def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
+        self.life = 1
+
         self.entities = entities
 
         self.image.fill(Color.WHITE.value)
@@ -81,4 +83,4 @@ class Player(Entity):
 
 
     def is_hit(self):
-        pass
+        return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
