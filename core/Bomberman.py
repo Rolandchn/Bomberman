@@ -27,7 +27,7 @@ class Game():
     def handle_event(self):
         if self.turn_state == "P1":
             if self.player.input(self.map):
-                self.turn_state = "P1"
+                self.turn_state = "P2"
 
         elif self.turn_state == "P2":
             keys = pygame.key.get_pressed()
