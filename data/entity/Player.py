@@ -35,6 +35,10 @@ class Player(Entity):
     
 
     def move(self, map:Map) -> bool:
+        '''
+        Output: check player key input (up, down, left, right) and move
+        ''' 
+
         has_moved = False
         keys = pygame.key.get_pressed()
         
@@ -67,6 +71,10 @@ class Player(Entity):
         
 
     def bomb(self) -> bool:
+        '''
+        Output: check player key input (space) and drop bomb  
+        ''' 
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE]:
@@ -78,12 +86,24 @@ class Player(Entity):
 
 
     def handle_input(self, map:Map):
+        '''
+        Output: check player key input
+        ''' 
+
         self.move(map)
         self.bomb()
 
 
     def is_hit(self):
+        '''
+        Output: check player sprite collides with any explosion. Return True if collides, otherwise False
+        ''' 
+
         return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
     
     def is_dead(self):
+        '''
+        Output: check player life.
+        ''' 
+
         return self.life <= 0

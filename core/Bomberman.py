@@ -26,6 +26,10 @@ class Game():
 
 
     def handle_input(self):
+        '''
+        Output: check turn state and wait for player input before switching turn.  
+        ''' 
+
         if self.turn_state == "P1":
             if self.player1.input(self.map):
                 self.turn_state = "P2"
@@ -38,19 +42,27 @@ class Game():
 
 
     def handle_event(self):
+        '''
+        Output: check if player is hit or is dead. If player died, respawn.  
+        ''' 
+
         if self.player1.is_dead():
                 self.player1.kill()
                 self.player1 = Player(self.map.spawn_point[0], self.entities)
 
         if self.player2.is_dead():
             self.player2.kill()
-            self.player2 = Player(self.map.spawn_point[0], self.entities)
+            self.player2 = Player(self.map.spawn_point[-1], self.entities)
 
         if self.player1.is_hit():
             self.player1.life -= 1
 
 
     def run(self):
+        '''
+        Output: game loop  
+        ''' 
+
         self.turn = 0
 
         RUNNING = True

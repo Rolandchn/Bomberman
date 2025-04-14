@@ -29,12 +29,20 @@ class Map:
 
 
     def read_map(self):
+        '''
+        Output: Read the map.txt file and store the content in grid
+        '''
+
         with open("./data/map/map.txt", "r") as map:
             for line in map:
                 self.grid.append(line)
 
 
     def generate_map(self):
+        '''
+        Output: Generate wall, floor and obstacle, and store them inside a sprite group in self.entities  
+        ''' 
+
         for row, tiles in enumerate(self.grid):
             for col, tile in enumerate(tiles):
                 if tile == "#":
@@ -54,6 +62,10 @@ class Map:
         
 
     def is_walkable(self, player:Player, dx:int, dy:int) -> bool:
+        '''
+        Output: Check if a tile is walkable for the player, return True if it's possible, otherwhise False. 
+        '''
+
         future_rect = player.rect.copy()
         future_rect.topleft = (dx * TILE_SIZE, dy * TILE_SIZE)
 
@@ -61,5 +73,9 @@ class Map:
 
 
     def respawn(self) -> Tuple[int, int]:
+        '''
+        Output: return a random spawn point on the map. 
+        '''
+        
         return random.choice(self.spawn_point)
     
