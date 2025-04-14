@@ -84,3 +84,6 @@ class Player(Entity):
 
     def is_hit(self):
         return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
+    
+    def is_dead(self):
+        return self.life <= 0

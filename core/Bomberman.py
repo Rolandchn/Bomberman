@@ -38,11 +38,11 @@ class Game():
 
 
     def handle_event(self):
-        if self.player1.life <= 0:
+        if self.player1.is_dead():
                 self.player1.kill()
                 self.player1 = Player(self.map.spawn_point[0], self.entities)
 
-        if self.player2.life <= 0:
+        if self.player2.is_dead():
             self.player2.kill()
             self.player2 = Player(self.map.spawn_point[0], self.entities)
 
