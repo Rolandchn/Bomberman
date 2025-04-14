@@ -14,6 +14,9 @@ from data.texture.config import TILE_SIZE
 
 
 class IA(Entity):
+    # difficulty:
+    #   easy: random
+    #   moderate:  follow td4 (strategie: take the center, destroy obstacle, corner the player, ...)
     def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
