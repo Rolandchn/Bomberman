@@ -19,27 +19,35 @@ class Game():
         self.entities = EntityManager()
 
         self.map = Map(self.entities)
-        self.player = Player(self.map.respawn(), self.entities)
-
+        self.player1 = Player(self.map.spawn_point[0], self.entities)
+        self.player2 = Player(self.map.spawn_point[-1], self.entities)
+        
         self.turn_state = "P1"
 
 
     def handle_input(self):
         if self.turn_state == "P1":
-            if self.player.input(self.map):
+            if self.player1.input(self.map):
                 self.turn_state = "P2"
 
         elif self.turn_state == "P2":
-            keys = pygame.key.get_pressed()
-
-            if keys[pygame.K_a]:
+            if self.player2.input(self.map):
                 self.turn_state = "P1"
+
                 self.turn += 1
 
 
     def handle_event(self):
-        if self.player.is_hit():
-            self.player.life -= 1
+        if self.player1.life <= 0:
+                self.player1.kill()
+                self.player1 = Player(self.map.spawn_point[0], self.entities)
+
+        if self.player2.life <= 0:
+            self.player2.kill()
+            self.player2 = Player(self.map.spawn_point[0], self.entities)
+
+        if self.player1.is_hit():
+            self.player1.life -= 1
 
 
     def run(self):
@@ -53,10 +61,6 @@ class Game():
 
             self.handle_input()
             self.handle_event()
-
-            if self.player.life <= 0:
-                self.player.kill()
-                self.player = Player(self.map.respawn(), self.entities)
 
             self.entities.update(self.turn)
             self.entities.draw(self.screen)
