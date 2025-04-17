@@ -1,11 +1,17 @@
 import pygame
 
+from enum import Enum
+
 from data.map.Map import Map
 from data.entity.Player import Player
 from data.entity.EntityManager import EntityManager
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
+
+class GameTurn(Enum):
+    P1: 1
+    P2: 2
 
 
 class Game():

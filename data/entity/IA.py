@@ -25,3 +25,39 @@ class IA(Entity):
         self.entities = entities
 
         self.image.fill(Color.BLACK.value)
+
+    def turn(self):
+        '''
+        retourne le joueur qui va joue (minmax)
+        '''
+        pass
+
+    def action(self):
+        '''
+        Output: return all the available actions in one state.
+        '''
+
+        pass
+
+    def eval(self):
+        '''
+        Output: évalue la position 
+        '''
+        pass
+
+    def value(self):
+        '''
+        Output: retourne une value à une position de la partie (négatif perd, 0 neutre, positif gagne) 
+        '''
+        pass
+
+    def result(self):
+        '''
+        Output: retourne l'état de la partie après une action donnée
+        '''
+
+    def terminal(self):
+        '''
+        Output détermine si la partie est terminée (gagnant, perdant, égalité)
+        '''
+        pass
