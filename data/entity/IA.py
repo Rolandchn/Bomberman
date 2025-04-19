@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from data.entity.EntityManager import EntityManager
+    from data.map.Map import Map
 
 
 import pygame
@@ -17,14 +18,15 @@ class IA(Entity):
     # difficulty:
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
-    def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
+    def __init__(self, spawn:Tuple[int, int], map:Map, entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
+        self.image.fill(Color.BLACK.value)
 
+        self.map = map
         self.entities = entities
 
-        self.image.fill(Color.BLACK.value)
 
     def turn(self):
         '''
