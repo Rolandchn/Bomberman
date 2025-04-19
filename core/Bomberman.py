@@ -4,6 +4,7 @@ from enum import Enum
 
 from data.map.Map import Map
 from data.entity.Player import Player
+from data.entity.Player import PlayerStatus
 from data.entity.EntityManager import EntityManager
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
@@ -25,10 +26,10 @@ class Game():
         self.entities = EntityManager()
 
         self.map = Map(self.entities)
-        self.player1 = Player(self.map.spawn_point[0], self.entities)
-        self.player2 = Player(self.map.spawn_point[-1], self.entities)
+        self.player1 = Player(PlayerStatus.P1, self.map.spawn_point[0], self.entities)
+        self.player2 = Player(PlayerStatus.IA, self.map.spawn_point[-1], self.entities)
         
-        self.turn_state = "P1"
+        self.turn_state = PlayerStatus.P1
 
 
     def handle_input(self):
@@ -36,13 +37,13 @@ class Game():
         Output: check turn state and wait for player input before switching turn.  
         ''' 
 
-        if self.turn_state == "P1":
+        if self.turn_state == PlayerStatus.P1:
             if self.player1.input(self.map):
-                self.turn_state = "P2"
+                self.turn_state = PlayerStatus.P2
 
-        elif self.turn_state == "P2":
+        elif self.turn_state == PlayerStatus.P2:
             if self.player2.input(self.map):
-                self.turn_state = "P1"
+                self.turn_state = PlayerStatus.P1
 
                 self.turn += 1
 
@@ -79,6 +80,8 @@ class Game():
 
             self.handle_input()
             self.handle_event()
+
+            print(self.map.get_players_pos())
 
             self.entities.update(self.turn)
             self.entities.draw(self.screen)

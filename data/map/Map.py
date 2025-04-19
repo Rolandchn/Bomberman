@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from data.entity.Player import Player
+    from data.entity.Entity import Entity
     from data.entity.EntityManager import EntityManager
 
 
@@ -108,6 +109,19 @@ class Map:
         
         return random.choice(self.spawn_point)
     
-    def get_player_pos(self, player:Player):
+    def get_players_pos(self):
+        players_pos = []
+
         for player in self.entities.player_group:
-            pass
+            players_pos.append((player.grid_x, player.grid_y))
+            
+        return players_pos
+    
+    def get_enemies_pos(self, player: Entity):
+        enemies_pos = []
+
+        for p in self.entities.player_group:
+            if p != player:
+                enemies_pos.append((p.grid_x, p.grid_y))
+
+        return enemies_pos

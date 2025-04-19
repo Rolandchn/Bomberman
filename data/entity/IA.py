@@ -45,6 +45,8 @@ class IA(Entity):
         '''
         Output: évalue la position 
         '''
+        ia_x, ia_y = self.grid_x, self.grid_y
+        player_x, player_y = self.map.get_players_pos()
         pass
 
     def value(self):

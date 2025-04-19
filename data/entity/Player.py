@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 import pygame
 
+from enum import Enum, auto
+
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
 
@@ -15,16 +17,25 @@ from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
+class PlayerStatus(Enum):
+    P1: int = auto()
+    P2: int = auto()
+    P3: int = auto()
+    P4: int = auto()
+    IA: int = auto()
+
 
 class Player(Entity):
-    def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
+    def __init__(self, player_status: PlayerStatus, spawn:Tuple[int, int], entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
+        self.player_status = player_status
 
         self.entities = entities
 
         self.image.fill(Color.WHITE.value)
+
 
     
     def input(self, map:Map) -> bool:
@@ -107,3 +118,10 @@ class Player(Entity):
         ''' 
 
         return self.life <= 0
+    
+    def __eq__(self, other):
+        return isinstance(other, Player) and other.player_status != self.player_status
+    
+    def __hash__(self):
+        return hash(self.player_status)
+ 
