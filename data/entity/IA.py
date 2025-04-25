@@ -6,6 +6,7 @@ import pygame
 if TYPE_CHECKING:
     from data.entity.EntityManager import EntityManager
     from data.map.Map import Map
+    from core.Bomberman import GameStatus
 
 
 from data.entity.Entity import Entity
@@ -20,14 +21,19 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, color:Color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
-        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
+    def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
+        self.status = status
+        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)))
 
         self.life = 1
+
         self.entities = entities
         self.image.fill(color.value)
-        self.difficulty = difficulty
         self.map = map
+
+        self.difficulty = difficulty
+        
+
 
     def input(self):
         if self.difficulty == "facile":
@@ -61,6 +67,8 @@ class IA(Entity):
         '''
         ia_x, ia_y = self.grid_x, self.grid_y
         player_x, player_y = self.map.get_players_pos()
+
+
         pass
 
     def value(self):
@@ -81,11 +89,11 @@ class IA(Entity):
         '''
         pass
 
+
+
     '''
     Méthode pour l'IA random
     '''
-
-
     def random_turn(self):
         '''
         IA Random : déplacement aléatoire + pose bombe aléatoire

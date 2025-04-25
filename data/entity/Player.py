@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from data.map.Map import Map
     from data.entity.EntityManager import EntityManager
+    from core.Bomberman import GameStatus
 
 
 import pygame
@@ -17,9 +18,9 @@ from data.texture.config import TILE_SIZE
 
 
 class Player(Entity):
-    def __init__(self, color:Color, spawn:Tuple[int, int], entities:EntityManager):
+    def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], entities:EntityManager):
+        self.status = status
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
-
         self.life = 1
 
         self.entities = entities
@@ -111,3 +112,10 @@ class Player(Entity):
 
         return self.life <= 0
 
+
+    def __eq__(self, other):
+        return isinstance(other, Player) and other.status == self.status
+
+
+    def __hash__(self):
+        return hash(self.status)

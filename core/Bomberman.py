@@ -11,9 +11,9 @@ from data.entity.IA import IA
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
-class GameTurn(Enum):
-    PLAYER = 0
-    IA = 1
+class GameStatus(Enum):
+    P1 = 0
+    P2 = 1
 
 
 class Game():
@@ -31,10 +31,10 @@ class Game():
 
         self.map = Map(self.entities)
 
-        self.player1 = Player(Color.WHITE, self.map.spawn_point[0], self.entities)
-        self.player2 = IA(Color.BLACK, self.map.spawn_point[-1], self.entities, self.map, difficulty="facile")
+        self.player1 = Player(GameStatus.P1, Color.WHITE, self.map.spawn_point[0], self.entities)
+        self.ia = IA(GameStatus.P2, Color.BLACK, self.map.spawn_point[-1], self.entities, self.map)
         
-        self.turn_state = GameTurn.PLAYER
+        self.turn_status = GameStatus.P1
         self.turn = 0
 
 
@@ -43,13 +43,13 @@ class Game():
         Output: check turn state and wait for player1 input before switching turn.  
         ''' 
 
-        if self.turn_state == GameTurn.PLAYER:
+        if self.turn_status == GameStatus.P1:
             if self.player1.input(self.map):
-                self.turn_state = GameTurn.IA
+                self.turn_status = GameStatus.P2
 
-        elif self.turn_state == GameTurn.IA:
-            if self.player2.input():
-                self.turn_state = GameTurn.PLAYER
+        elif self.turn_status == GameStatus.P2:
+            if self.ia.input():
+                self.turn_status = GameStatus.P1
 
                 self.turn += 1
 
@@ -62,18 +62,17 @@ class Game():
 
         if self.player1.is_dead():
                 self.player1.kill()
-                self.player1 = Player(Color.WHITE, self.map.spawn_point[0], self.entities)
+                self.player1 = Player(GameStatus.P1, Color.WHITE, self.map.spawn_point[0], self.entities)
 
-
-        if self.player2.is_dead():
-            self.player2.kill()
-            self.player2 = IA(Color.BLACK, self.map.spawn_point[-1], self.entities, self.map, difficulty="facile")
+        if self.ia.is_dead():
+            self.ia.kill()
+            self.ia = IA(GameStatus.P2, Color.BLACK, self.map.spawn_point[-1], self.entities, self.map)
 
         if self.player1.is_hit():
             self.player1.life -= 1
         
-        if self.player2.is_hit():
-            self.player2.life -= 1
+        if self.ia.is_hit():
+            self.ia.life -= 1
 
 
     def run(self):
