@@ -5,6 +5,7 @@ from enum import Enum
 from data.map.Map import Map
 from data.entity.Player import Player
 from data.entity.EntityManager import EntityManager
+from data.texture.Color import Color
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -25,8 +26,8 @@ class Game():
         self.entities = EntityManager()
 
         self.map = Map(self.entities)
-        self.player = Player(self.map.spawn_point[0], self.entities)
-        self.ia = Player(self.map.spawn_point[-1], self.entities)
+        self.player = Player(Color.WHITE, self.map.spawn_point[0], self.entities)
+        self.ia = Player(Color.BLACK, self.map.spawn_point[-1], self.entities)
         
         self.turn_state = GameTurn.PLAYER
 

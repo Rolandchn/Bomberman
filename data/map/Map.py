@@ -27,9 +27,41 @@ class Map:
 
         self.entities = entities
 
-
-        self.read_map()
         self.generate_map()
+        self.generate_valued_grid()
+
+
+    def read_map(self):
+        '''
+        Output: Read the map.txt file and store the content in grid
+        '''
+
+        with open("./data/map/map.txt", "r") as map:
+            for line in map:
+                self.grid.append(line)
+
+
+    def generate_map(self):
+        '''
+        Output: Generate wall, floor and obstacle, and store them inside a sprite group in self.entities  
+        ''' 
+        self.read_map()
+
+        for row, tiles in enumerate(self.grid):
+            for col, tile in enumerate(tiles):
+                if tile == "#":
+                    self.entities.wall_group.add(Wall(col, row, Color.WALL.value, TILE_SIZE))
+
+                elif tile == ".":
+                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
+                
+                elif tile == "S":
+                    self.entities.floor_group.add(Floor(col, row, Color.SPAWN.value, TILE_SIZE))
+                    self.spawn_point.append((col, row))
+        
+                elif tile == "X":
+                    self.entities.wall_group.add(Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE))
+                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
 
 
     def generate_valued_grid(self):
@@ -56,39 +88,6 @@ class Map:
 
         if nb_row % 2 != 0:
             self.valued_grid.pop(len(self.valued_grid) // 2)
-        
-
-    def read_map(self):
-        '''
-        Output: Read the map.txt file and store the content in grid
-        '''
-
-        with open("./data/map/map.txt", "r") as map:
-            for line in map:
-                self.grid.append(line)
-
-
-    def generate_map(self):
-        '''
-        Output: Generate wall, floor and obstacle, and store them inside a sprite group in self.entities  
-        ''' 
-
-        for row, tiles in enumerate(self.grid):
-            for col, tile in enumerate(tiles):
-                if tile == "#":
-                    self.entities.wall_group.add(Wall(col, row, Color.WALL.value, TILE_SIZE))
-
-                elif tile == ".":
-                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
-                
-                elif tile == "S":
-                    self.entities.floor_group.add(Floor(col, row, Color.SPAWN.value, TILE_SIZE))
-                    self.spawn_point.append((col, row))
-        
-                elif tile == "X":
-                    self.entities.wall_group.add(Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE))
-                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
-
         
 
     def is_walkable(self, player:Player, dx:int, dy:int) -> bool:

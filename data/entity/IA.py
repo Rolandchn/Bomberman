@@ -18,11 +18,11 @@ class IA(Entity):
     # difficulty:
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
-    def __init__(self, spawn:Tuple[int, int], map:Map, entities:EntityManager):
+    def __init__(self, color:Color, spawn:Tuple[int, int], map:Map, entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
-        self.image.fill(Color.BLACK.value)
+        self.image.fill(color.value)
 
         self.map = map
         self.entities = entities
