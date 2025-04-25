@@ -8,21 +8,12 @@ if TYPE_CHECKING:
 
 import pygame
 
-from enum import Enum, auto
-
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
-
-class PlayerStatus(Enum):
-    P1: int = auto()
-    P2: int = auto()
-    P3: int = auto()
-    P4: int = auto()
-    IA: int = auto()
 
 
 class Player(Entity):
