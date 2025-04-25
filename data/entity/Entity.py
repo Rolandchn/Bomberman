@@ -10,6 +10,7 @@ class Entity(pygame.sprite.Sprite):
         super().__init__(*groups)
 
         self.image = image
+        self.life=1
         
         self.rect = self.image.get_rect(topleft=(position[0] * TILE_SIZE, position[1] * TILE_SIZE))
         
@@ -20,3 +21,9 @@ class Entity(pygame.sprite.Sprite):
 
     def update_rect(self):
         self.rect.topleft = (self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE)
+
+    def is_dead(self):
+        '''
+        Output: check player life.
+        '''
+        return self.life <= 0

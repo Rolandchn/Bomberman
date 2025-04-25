@@ -24,18 +24,18 @@ class Map:
 
         self.entities = entities
 
-        self.read_map()
+        self.read_map("map.txt")
         self.generate_map()
 
 
-    def read_map(self):
+    def read_map(self, filename):
+        ''''
+        Output: Lis le fichier map.txt et enregistre le contenue dans la grille
         '''
-        Output: Read the map.txt file and store the content in grid
-        '''
-
-        with open("./data/map/map.txt", "r") as map:
-            for line in map:
-                self.grid.append(line)
+        with open(filename, "r") as map:
+            lines = map.read().splitlines()
+            for line in lines:
+                self.grid.append(list(line))
 
 
     def generate_map(self):
@@ -76,6 +76,18 @@ class Map:
         '''
         Output: return a random spawn point on the map. 
         '''
-        
         return random.choice(self.spawn_point)
-    
+
+
+    def is_tile_walkable(self, col: int, row: int) -> bool:
+        '''
+        Output: Méthode ajoutée pour IA : vérifie directement si une case est libre, par coordonnées (col, row)
+        '''
+        if 0 <= col < len(self.grid[0]) and 0 <= row < len(self.grid):
+            # On vérifie s'il y a un mur/obstacle à cette position
+            temp_rect = pygame.Rect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            temp_player = pygame.sprite.Sprite()
+            temp_player.rect = temp_rect
+            temp_player.add(pygame.sprite.Group())
+            return not pygame.sprite.spritecollideany(temp_player, self.entities.wall_group,collided=lambda s1, s2: s1.rect.colliderect(s2.rect))
+        return False

@@ -100,10 +100,3 @@ class Player(Entity):
         ''' 
 
         return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
-    
-    def is_dead(self):
-        '''
-        Output: check player life.
-        ''' 
-
-        return self.life <= 0

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 # Couleurs
 class Color(Enum):
     GRAY = (180, 180, 180)
