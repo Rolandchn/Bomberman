@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from data.entity.EntityManager import EntityManager
     from data.map.Map import Map
 
+
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
 
@@ -18,14 +19,16 @@ class IA(Entity):
     # difficulty:
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
-    def __init__(self, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
+
+    def __init__(self, color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
         self.entities = entities
-        self.image.fill(Color.BLACK.value)
+        self.image.fill(color.value)
         self.difficulty = difficulty
         self.map = map
+
 
     def turn(self):
         '''
@@ -55,6 +58,8 @@ class IA(Entity):
         '''
         Output: évalue la position 
         '''
+        ia_x, ia_y = self.grid_x, self.grid_y
+        player_x, player_y = self.map.get_players_pos()
         pass
 
     def value(self):

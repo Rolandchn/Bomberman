@@ -17,14 +17,15 @@ from data.texture.config import TILE_SIZE
 
 
 class Player(Entity):
-    def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
+    def __init__(self, color:Color, spawn:Tuple[int, int], entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
 
         self.entities = entities
 
-        self.image.fill(Color.WHITE.value)
+        self.image.fill(color.value)
+
 
     
     def input(self, map:Map) -> bool:
@@ -100,3 +101,11 @@ class Player(Entity):
         ''' 
 
         return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
+    
+    def is_dead(self):
+        '''
+        Output: check player life.
+        ''' 
+
+        return self.life <= 0
+

@@ -5,7 +5,7 @@ class Color(Enum):
     GRAY = (180, 180, 180)
     
     WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
+    BLACK = (30, 30, 30)
 
     RED = (255, 0, 0)
     BROWN = (139, 69, 19)
