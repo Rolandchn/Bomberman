@@ -81,7 +81,12 @@ class Game():
             self.handle_input()
             self.handle_event()
 
-            print(self.turn_state)
+
+            self.map.update_valued_grid()
+            for _ in self.map.valued_grid:
+                print(_)
+
+            return
 
             self.entities.update(self.turn)
             self.entities.draw(self.screen)

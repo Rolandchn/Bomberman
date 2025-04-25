@@ -59,6 +59,7 @@ class IA(Entity):
         '''
         Output: retourne l'état de la partie après une action donnée
         '''
+        pass
 
     def terminal(self):
         '''

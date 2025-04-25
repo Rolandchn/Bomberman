@@ -65,14 +65,22 @@ class Map:
 
 
     def generate_valued_grid(self):
-        nb_grid = (12, 12)
+        '''
+        Output: Generate a valued map with score increasing as we go to the center of the map
+        '''
 
+        nb_grid = (13, 13)
         nb_row, nb_column = nb_grid
+
+        # add map border = 0
+        self.valued_grid.append([0 for i in range(nb_row + 2)])
+        self.valued_grid.append([0 for i in range(nb_row + 2)])
 
         column_increment = 0
 
         for row in range(math.ceil(nb_row / 2)):
-            buff = []
+            # add map border = 0
+            buff = [0, 0]
             
             for column_value in range(math.ceil(nb_column / 2)):
                 buff.insert(len(buff) // 2, column_value * 100 + column_increment)
@@ -89,6 +97,19 @@ class Map:
         if nb_row % 2 != 0:
             self.valued_grid.pop(len(self.valued_grid) // 2)
         
+
+    def update_valued_grid(self):
+        '''
+        Output: Update the valued grid with player position and obstacle
+        '''
+        for wall in self.entities.wall_group:
+            if isinstance(wall, Wall):
+                self.valued_grid[wall.grid_y][wall.grid_x] = 0
+
+            elif isinstance(wall, Obstacle):
+                self.valued_grid[wall.grid_y][wall.grid_x] = 50
+        
+
 
     def is_walkable(self, player:Player, dx:int, dy:int) -> bool:
         '''
