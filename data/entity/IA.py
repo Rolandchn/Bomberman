@@ -23,7 +23,7 @@ class IA(Entity):
 
     def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
         self.status = status
-        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)))
+        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
 
@@ -61,15 +61,18 @@ class IA(Entity):
 
         pass
 
-    def eval(self):
+    def eval(self, game_state):
         '''
-        Output: évalue la position 
+        Output: evaluate the game state depending on the AI position.
         '''
-        ia_x, ia_y = self.grid_x, self.grid_y
-        player_x, player_y = self.map.get_players_pos()
+        ai_x, ai_y = self.grid_x, self.grid_y
+        player_x, player_y = self.map.get_enemies_pos(self)
+        
+        ai_score = self.map.valued_grid[ai_y][ai_x]
+        player_score = self.map.valued_grid[player_y][player_x]
 
+        return ai_score - player_score
 
-        pass
 
     def value(self):
         '''
@@ -134,3 +137,11 @@ class IA(Entity):
         ''' 
 
         return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
+
+
+    def __eq__(self, other):
+        return isinstance(other, IA) and other.status == self.status
+
+
+    def __hash__(self):
+        return hash(self.status)
