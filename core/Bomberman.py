@@ -34,29 +34,25 @@ class Game():
         self.player1 = Player(Color.WHITE, self.map.spawn_point[0], self.entities)
         self.player2 = IA(Color.BLACK, self.map.spawn_point[-1], self.entities, self.map, difficulty="facile")
         
-        self.turn_state = "P1"
+        self.turn_state = GameTurn.PLAYER
         self.turn = 0
 
 
     def handle_input(self):
         '''
-        Output: check turn state and wait for player input before switching turn.  
+        Output: check turn state and wait for player1 input before switching turn.  
         ''' 
 
         if self.turn_state == GameTurn.PLAYER:
-            if self.player.input(self.map):
+            if self.player1.input(self.map):
                 self.turn_state = GameTurn.IA
 
         elif self.turn_state == GameTurn.IA:
-            if self.ia.input(self.map):
+            if self.player2.input():
                 self.turn_state = GameTurn.PLAYER
 
-
-            if now - self.last_ia_move_time >= self.ia_move_delay:
-                self.player2.turn()
-                self.last_ia_move_time = now
-                self.turn_state = "P1"
                 self.turn += 1
+
 
 
     def handle_event(self):
@@ -64,17 +60,20 @@ class Game():
         Output: check if player is hit or is dead. If player died, respawn.  
         ''' 
 
-        if self.player.is_dead():
-                self.player.kill()
-                self.player = Player(self.map.spawn_point[0], self.entities)
+        if self.player1.is_dead():
+                self.player1.kill()
+                self.player1 = Player(Color.WHITE, self.map.spawn_point[0], self.entities)
 
 
         if self.player2.is_dead():
             self.player2.kill()
-            self.player2 = IA(self.map.spawn_point[-1], self.entities, self.map, difficulty="facile")
+            self.player2 = IA(Color.BLACK, self.map.spawn_point[-1], self.entities, self.map, difficulty="facile")
 
-        if self.player.is_hit():
-            self.player.life -= 1
+        if self.player1.is_hit():
+            self.player1.life -= 1
+        
+        if self.player2.is_hit():
+            self.player2.life -= 1
 
 
     def run(self):
@@ -92,13 +91,6 @@ class Game():
 
             self.handle_input()
             self.handle_event()
-
-
-            self.map.update_valued_grid()
-            for _ in self.map.valued_grid:
-                print(_)
-
-            return
 
             self.entities.update(self.turn)
             self.entities.draw(self.screen)

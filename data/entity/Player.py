@@ -62,13 +62,15 @@ class Player(Entity):
             has_moved = True
 
 
-        if map.is_walkable(self, dx, dy):
+        if has_moved and map.is_walkable(self, dx, dy):
             self.grid_x = dx
             self.grid_y = dy
 
             self.update_rect()
-            
-        return has_moved
+
+            return True
+
+        return False
         
 
     def bomb(self) -> bool:

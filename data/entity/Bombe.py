@@ -33,7 +33,7 @@ class Bomb(Entity):
             self.start_turn = game_turn
 
         turns_passed = game_turn - self.start_turn
-
+        
         if self.timer < turns_passed:
             self.kill()
             self.explode()

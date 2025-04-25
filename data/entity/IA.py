@@ -20,7 +20,7 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
+    def __init__(self, color:Color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
@@ -29,20 +29,21 @@ class IA(Entity):
         self.difficulty = difficulty
         self.map = map
 
-
-    def turn(self):
-        '''
-        retourne le joueur qui va joue en fonction de la difficulté
-        '''
-
+    def input(self):
         if self.difficulty == "facile":
-            self.random_turn()
+            return self.random_turn()
 
         elif self.difficulty == "moyen":
             pass #à implementer
 
         elif self.difficulty == "difficile":
             pass #à implementer (minMax)
+
+
+    def turn(self):
+        '''
+        retourne le joueur qui va joue en fonction de la difficulté
+        '''
 
         pass
 
@@ -89,38 +90,39 @@ class IA(Entity):
         '''
         IA Random : déplacement aléatoire + pose bombe aléatoire
         '''
-        direction = self.get_random_direction()
-        self.move(direction)
+        action = random.choice([self.move, self.bomb])
+        
+        return action()
 
-        # Bombe avec 10% de chance
-        if random.random() < 0.1:
-            self.place_bomb()
 
-    def get_random_direction(self) -> Tuple[int, int]:
+    def move(self) -> bool:
         #Retourne une direction valide aléatoire
-        directions = [(0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)]
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         random.shuffle(directions)
 
         for dx, dy in directions:
             nx = self.grid_x + dx
             ny = self.grid_y + dy
-            if self.map.is_tile_walkable(nx, ny):
-                return dx, dy
-        return 0, 0
 
-    def move(self, direction:Tuple[int, int]):
-        #deplace l'IA si la case est libre
-        dx, dy = direction
-        new_x = self.grid_x + dx
-        new_y = self.grid_y + dy
+            if self.map.is_walkable(self, nx, ny):
+                self.grid_x = nx
+                self.grid_y = ny
 
-        if self.map.is_tile_walkable(new_x, new_y):
-            self.grid_x = new_x
-            self.grid_y = new_y
-            self.update_rect()
+                self.update_rect()
+                return True
+            
+        return False
 
 
-    def place_bomb(self):
-            #Pose une bombe sur la position actuelle
-            Bomb(self.grid_x, self.grid_y, self.entities)
+    def bomb(self):
+        #Pose une bombe sur la position actuelle
+        Bomb(self.grid_x, self.grid_y, self.entities)
+        return True
+    
 
+    def is_hit(self):
+        '''
+        Output: check player sprite collides with any explosion. Return True if collides, otherwise False
+        ''' 
+
+        return pygame.sprite.spritecollideany(self, self.entities.explosion_group)

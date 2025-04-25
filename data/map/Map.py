@@ -31,11 +31,11 @@ class Map:
         self.generate_valued_grid()
 
 
-    def read_map(self, filename):
+    def read_map(self):
         ''''
         Output: Lis le fichier map.txt et enregistre le contenue dans la grille
         '''
-        with open(filename, "r") as map:
+        with open("./data/map/map.txt", "r") as map:
             lines = map.read().splitlines()
             for line in lines:
                 self.grid.append(list(line))
