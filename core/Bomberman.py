@@ -11,8 +11,8 @@ from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 class GameTurn(Enum):
-    P1: 1
-    P2: 2
+    PLAYER = 0
+    IA = 1
 
 
 class Game():
@@ -26,10 +26,10 @@ class Game():
         self.entities = EntityManager()
 
         self.map = Map(self.entities)
-        self.player1 = Player(PlayerStatus.P1, self.map.spawn_point[0], self.entities)
-        self.player2 = Player(PlayerStatus.IA, self.map.spawn_point[-1], self.entities)
+        self.player = Player(self.map.spawn_point[0], self.entities)
+        self.ia = Player(self.map.spawn_point[-1], self.entities)
         
-        self.turn_state = PlayerStatus.P1
+        self.turn_state = GameTurn.PLAYER
 
 
     def handle_input(self):
@@ -37,13 +37,13 @@ class Game():
         Output: check turn state and wait for player input before switching turn.  
         ''' 
 
-        if self.turn_state == PlayerStatus.P1:
-            if self.player1.input(self.map):
-                self.turn_state = PlayerStatus.P2
+        if self.turn_state == GameTurn.PLAYER:
+            if self.player.input(self.map):
+                self.turn_state = GameTurn.IA
 
-        elif self.turn_state == PlayerStatus.P2:
-            if self.player2.input(self.map):
-                self.turn_state = PlayerStatus.P1
+        elif self.turn_state == GameTurn.IA:
+            if self.ia.input(self.map):
+                self.turn_state = GameTurn.PLAYER
 
                 self.turn += 1
 
@@ -53,16 +53,16 @@ class Game():
         Output: check if player is hit or is dead. If player died, respawn.  
         ''' 
 
-        if self.player1.is_dead():
-                self.player1.kill()
-                self.player1 = Player(self.map.spawn_point[0], self.entities)
+        if self.player.is_dead():
+                self.player.kill()
+                self.player = Player(self.map.spawn_point[0], self.entities)
 
-        if self.player2.is_dead():
-            self.player2.kill()
-            self.player2 = Player(self.map.spawn_point[-1], self.entities)
+        if self.ia.is_dead():
+            self.ia.kill()
+            self.ia = Player(self.map.spawn_point[-1], self.entities)
 
-        if self.player1.is_hit():
-            self.player1.life -= 1
+        if self.player.is_hit():
+            self.player.life -= 1
 
 
     def run(self):
@@ -81,7 +81,7 @@ class Game():
             self.handle_input()
             self.handle_event()
 
-            print(self.map.get_players_pos())
+            print(self.turn_state)
 
             self.entities.update(self.turn)
             self.entities.draw(self.screen)

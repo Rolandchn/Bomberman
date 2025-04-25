@@ -26,11 +26,10 @@ class PlayerStatus(Enum):
 
 
 class Player(Entity):
-    def __init__(self, player_status: PlayerStatus, spawn:Tuple[int, int], entities:EntityManager):
+    def __init__(self, spawn:Tuple[int, int], entities:EntityManager):
         super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
 
         self.life = 1
-        self.player_status = player_status
 
         self.entities = entities
 
@@ -119,9 +118,4 @@ class Player(Entity):
 
         return self.life <= 0
     
-    def __eq__(self, other):
-        return isinstance(other, Player) and other.player_status != self.player_status
-    
-    def __hash__(self):
-        return hash(self.player_status)
  
