@@ -108,5 +108,4 @@ class Player(Entity):
         ''' 
 
         return self.life <= 0
-    
- 
+

@@ -1,5 +1,3 @@
-
-
 #Taille
 
 TILE_SIZE = 40

@@ -31,14 +31,14 @@ class Map:
         self.generate_valued_grid()
 
 
-    def read_map(self):
+    def read_map(self, filename):
+        ''''
+        Output: Lis le fichier map.txt et enregistre le contenue dans la grille
         '''
-        Output: Read the map.txt file and store the content in grid
-        '''
-
-        with open("./data/map/map.txt", "r") as map:
-            for line in map:
-                self.grid.append(line)
+        with open(filename, "r") as map:
+            lines = map.read().splitlines()
+            for line in lines:
+                self.grid.append(list(line))
 
 
     def generate_map(self):
@@ -126,7 +126,6 @@ class Map:
         '''
         Output: return a random spawn point on the map. 
         '''
-        
         return random.choice(self.spawn_point)
     
     def get_players_pos(self):
@@ -145,3 +144,4 @@ class Map:
                 enemies_pos.append((p.grid_x, p.grid_y))
 
         return enemies_pos
+
