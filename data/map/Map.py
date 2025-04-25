@@ -100,7 +100,7 @@ class Map:
 
     def update_valued_grid(self):
         '''
-        Output: Update the valued grid with player position and obstacle
+        Output: Update the valued grid with obstacle
         '''
         for wall in self.entities.wall_group:
             if isinstance(wall, Wall):
