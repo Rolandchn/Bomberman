@@ -1,19 +1,17 @@
 import pygame
 
-from enum import Enum
 
-from data.map.Map import Map
+from core.GameStatus import GameStatus
+
 from data.entity.Player import Player
-from data.entity.EntityManager import EntityManager
+from data.entity.GameWord import GameWorld
 from data.texture.Color import Color
 from data.entity.IA import IA
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
-class GameStatus(Enum):
-    P1 = 0
-    P2 = 1
+
 
 
 class Game():
@@ -27,12 +25,10 @@ class Game():
         self.last_ia_move_time = pygame.time.get_ticks()
 
         # Initialize Game
-        self.entities = EntityManager()
+        self.world = GameWorld()
 
-        self.map = Map(self.entities)
-
-        self.player1 = Player(GameStatus.P1, Color.WHITE, self.map.spawn_point[0], self.entities)
-        self.ia = IA(GameStatus.P2, Color.BLACK, self.map.spawn_point[-1], self.entities, self.map)
+        self.player1 = Player(GameStatus.P1, Color.WHITE, self.world)
+        self.ai = IA(GameStatus.P2, Color.BLACK, self.world)
         
         self.turn_status = GameStatus.P1
         self.turn = 0
@@ -44,11 +40,12 @@ class Game():
         ''' 
 
         if self.turn_status == GameStatus.P1:
-            if self.player1.input(self.map):
+            if self.player1.input():
                 self.turn_status = GameStatus.P2
+                print(self.world.map.grid)
 
         elif self.turn_status == GameStatus.P2:
-            if self.ia.input():
+            if self.ai.input():
                 self.turn_status = GameStatus.P1
 
                 self.turn += 1
@@ -62,17 +59,17 @@ class Game():
 
         if self.player1.is_dead():
                 self.player1.kill()
-                self.player1 = Player(GameStatus.P1, Color.WHITE, self.map.spawn_point[0], self.entities)
+                self.player1 = Player(GameStatus.P1, Color.WHITE, self.world)
 
-        if self.ia.is_dead():
-            self.ia.kill()
-            self.ia = IA(GameStatus.P2, Color.BLACK, self.map.spawn_point[-1], self.entities, self.map)
+        if self.ai.is_dead():
+            self.ai.kill()
+            self.ai = IA(GameStatus.P2, Color.BLACK, self.world)
 
         if self.player1.is_hit():
             self.player1.life -= 1
         
-        if self.ia.is_hit():
-            self.ia.life -= 1
+        if self.ai.is_hit():
+            self.ai.life -= 1
 
 
     def run(self):
@@ -91,8 +88,8 @@ class Game():
             self.handle_input()
             self.handle_event()
 
-            self.entities.update(self.turn)
-            self.entities.draw(self.screen)
+            self.world.update(self.turn)
+            self.world.draw(self.screen)
 
             pygame.display.update()
             

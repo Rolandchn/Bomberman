@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 import random
 import pygame
 
 if TYPE_CHECKING:
-    from data.entity.EntityManager import EntityManager
-    from data.map.Map import Map
+    from data.entity.GameWord import GameWorld
     from core.Bomberman import GameStatus
 
 
@@ -21,15 +20,11 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], entities:EntityManager, map: Map, difficulty="facile"):
-        self.status = status
-        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)))
+    def __init__(self, status:GameStatus, color:Color, world:GameWorld, difficulty="facile"):
+        super().__init__(status, world.map.respawn(status), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
 
-        self.life = 1
-
-        self.entities = entities
+        self.world = world
         self.image.fill(color.value)
-        self.map = map
 
         self.difficulty = difficulty
         
@@ -61,15 +56,18 @@ class IA(Entity):
 
         pass
 
-    def eval(self):
+    def eval(self, game_state):
         '''
-        Output: évalue la position 
+        Output: evaluate the game state depending on the AI position.
         '''
-        ia_x, ia_y = self.grid_x, self.grid_y
-        player_x, player_y = self.map.get_players_pos()
+        ai_x, ai_y = self.grid_x, self.grid_y
+        player_x, player_y = self.world.map.get_enemies_pos(self)
+        
+        ai_score = self.world.map.valued_grid[ai_y][ai_x]
+        player_score = self.world.map.valued_grid[player_y][player_x]
 
+        return ai_score - player_score
 
-        pass
 
     def value(self):
         '''
@@ -112,7 +110,8 @@ class IA(Entity):
             nx = self.grid_x + dx
             ny = self.grid_y + dy
 
-            if self.map.is_walkable(self, nx, ny):
+            if self.world.map.is_walkable(self, nx, ny):
+                self.world.map.update_grid_position(self, nx, ny)
                 self.grid_x = nx
                 self.grid_y = ny
 
@@ -124,7 +123,7 @@ class IA(Entity):
 
     def bomb(self):
         #Pose une bombe sur la position actuelle
-        Bomb(self.grid_x, self.grid_y, self.entities)
+        Bomb((self.grid_x, self.grid_y), self.world)
         return True
     
 
@@ -133,4 +132,4 @@ class IA(Entity):
         Output: check player sprite collides with any explosion. Return True if collides, otherwise False
         ''' 
 
-        return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
+        return pygame.sprite.spritecollideany(self, self.world.explosion_group)

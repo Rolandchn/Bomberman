@@ -1,9 +1,8 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from data.map.Map import Map
-    from data.entity.EntityManager import EntityManager
+    from data.entity.GameWord import GameWorld
     from core.Bomberman import GameStatus
 
 
@@ -18,25 +17,23 @@ from data.texture.config import TILE_SIZE
 
 
 class Player(Entity):
-    def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], entities:EntityManager):
-        self.status = status
-        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.player_group)
-        self.life = 1
-
-        self.entities = entities
+    def __init__(self, status:GameStatus, color:Color, world:GameWorld):
+        super().__init__(status, world.map.respawn(status), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
+        
+        self.world = world
 
         self.image.fill(color.value)
 
 
     
-    def input(self, map:Map) -> bool:
-        if self.move(map) : return True
+    def input(self) -> bool:
+        if self.move() : return True
         elif self.bomb() : return True
 
         return False
     
 
-    def move(self, map:Map) -> bool:
+    def move(self) -> bool:
         '''
         Output: check player key input (up, down, left, right) and move
         ''' 
@@ -44,28 +41,30 @@ class Player(Entity):
         has_moved = False
         keys = pygame.key.get_pressed()
         
-        dx, dy = self.grid_x, self.grid_y
+        nx, ny = self.grid_x, self.grid_y
 
         if keys[pygame.K_LEFT]: 
-            dx -= 1
+            nx -= 1
             has_moved = True
 
         if keys[pygame.K_RIGHT]: 
-            dx += 1
+            nx += 1
             has_moved = True
 
         if keys[pygame.K_UP]: 
-            dy -= 1
+            ny -= 1
             has_moved = True
 
         if keys[pygame.K_DOWN]: 
-            dy += 1
+            ny += 1
             has_moved = True
 
 
-        if has_moved and map.is_walkable(self, dx, dy):
-            self.grid_x = dx
-            self.grid_y = dy
+        if has_moved and self.world.map.is_walkable(self, nx, ny):
+            self.world.map.update_grid_position(self, nx, ny)
+            
+            self.grid_x = nx
+            self.grid_y = ny
 
             self.update_rect()
 
@@ -82,20 +81,11 @@ class Player(Entity):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE]:
-            Bomb(self.grid_x, self.grid_y, self.entities)
+            Bomb((self.grid_x, self.grid_y), self.world)
 
             return True
         
         return False
-
-
-    def handle_input(self, map:Map):
-        '''
-        Output: check player key input
-        ''' 
-
-        self.move(map)
-        self.bomb()
 
 
     def is_hit(self):
@@ -103,19 +93,5 @@ class Player(Entity):
         Output: check player sprite collides with any explosion. Return True if collides, otherwise False
         ''' 
 
-        return pygame.sprite.spritecollideany(self, self.entities.explosion_group)
-    
-    def is_dead(self):
-        '''
-        Output: check player life.
-        ''' 
+        return pygame.sprite.spritecollideany(self, self.world.explosion_group)
 
-        return self.life <= 0
-
-
-    def __eq__(self, other):
-        return isinstance(other, Player) and other.status == self.status
-
-
-    def __hash__(self):
-        return hash(self.status)

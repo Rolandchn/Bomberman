@@ -1,25 +1,31 @@
 
 import pygame
 
+from typing import Tuple
+
+
 from data.entity.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
-from data.entity.EntityManager import EntityManager
-from data.entity.Entity import Entity
+from data.entity.GameWord import GameWorld
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
-class Bomb(Entity):
-    def __init__(self, x:int, y:int, entities:EntityManager, timer=2, spread=2):
-        super().__init__((x, y), pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.bomb_group)
+class Bomb(pygame.sprite.Sprite):
+    def __init__(self, position: Tuple[int, int], world:GameWorld, timer=2, spread=2):
+        self.world = world
+        super().__init__(self.world.bomb_group)
 
+        # Position inside the grip in Map
+        self.grid_x, self.grid_y = position
+
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(Color.BOMBE.value)
-        
-        self.entities = entities
 
-        self.start_turn = None
+        self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
         
+        self.start_turn = None
         self.timer = timer
         self.spread = spread
 
@@ -44,7 +50,7 @@ class Bomb(Entity):
         Output: spread the explosion to all direction (up, down, left, right)  
         ''' 
 
-        Explosion(self.grid_x, self.grid_y, self.entities)
+        Explosion((self.grid_x, self.grid_y), self.world)
 
         # up, down, right, left
         for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
@@ -54,14 +60,14 @@ class Bomb(Entity):
                 tile_rect = self.rect.copy()
                 tile_rect.topleft = (nx * TILE_SIZE, ny * TILE_SIZE)
 
-                collided_wall = pygame.sprite.spritecollideany(self, self.entities.wall_group, collided=lambda s1, s2: tile_rect.colliderect(s2.rect))
+                collided_wall = pygame.sprite.spritecollideany(self, self.world.wall_group, collided=lambda s1, s2: tile_rect.colliderect(s2.rect))
 
-                # if explosion collides with obstacle, destroy it and remove it from wall_group in entities         
+                # if explosion collides with obstacle, destroy it and remove it from wall_group in world         
                 if isinstance(collided_wall, Obstacle):
                     collided_wall.kill()
 
-                # if explosion collides with nothing, add it to explosion_group in entities         
+                # if explosion collides with nothing, add it to explosion_group in world         
                 elif collided_wall == None:
-                    Explosion(nx, ny, self.entities)
+                    Explosion((nx, ny), self.world)
 
                 
