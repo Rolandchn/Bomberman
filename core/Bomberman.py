@@ -89,6 +89,6 @@ class Game():
 
             pygame.display.update()
             
-            self.clock.tick(10)
+            self.clock.tick(40)
         
         pygame.quit()
