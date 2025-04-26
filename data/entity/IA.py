@@ -82,15 +82,23 @@ class IA(Entity):
         '''
         pass
 
-    def terminal(self):
+    def terminal(self, simulated_world:GameWorld):
         '''
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
-        for position in self.world.map.grid.items():
+        for position in simulated_world.map.grid.items():
             if GameStatus.P1 in position or GameStatus.P2 in position:
                 return True
         
         return False
+
+
+    def minmax(self):
+        simulated_world = self.world.clone()
+
+        if self.terminal(simulated_world):
+            pass
+
 
 
 
