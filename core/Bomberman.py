@@ -44,6 +44,8 @@ class Game():
         elif self.turn_status == GameStatus.P2:
             if self.ai.input():
                 self.turn_status = GameStatus.P1
+                print(self.world.map.grid)
+                print("\n\n===============================================")
 
                 self.turn += 1
 
