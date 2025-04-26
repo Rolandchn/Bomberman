@@ -8,10 +8,11 @@ if TYPE_CHECKING:
 
 
 import pygame
-import random
 import math
 
 from collections import defaultdict
+
+from core.GameStatus import GameStatus
 
 from data.entity.Wall import Wall
 from data.entity.Floor import Floor
@@ -23,7 +24,7 @@ from data.texture.config import TILE_SIZE
 
 class Map:
     def __init__(self, world:GameWorld):
-        self.grid = defaultdict(dict)
+        self.grid = defaultdict(list)
         self.valued_grid = []
         self.spawn_point = []
 
@@ -107,38 +108,37 @@ class Map:
                 self.valued_grid[wall.grid_y][wall.grid_x] = 50
     
 
-    def update_grid(self):
-        pass
 
+    def update_grid_position(self, entity:Entity, nx:int, ny:int):
+        if entity.status in self.grid[(entity.grid_x, entity.grid_y)]:
+            self.grid[(entity.grid_x, entity.grid_y)].remove(entity.status)
 
-    def update_position(self, dx:int, dy:int, entity:Entity):
-        if (entity.grid_x, entity.grid_y) in self.grid:
-            del self.grid[(entity.grid_x, entity.grid_y)]["player"]
-
-        self.grid[(entity.grid_x + dx, entity.grid_y + dy)]["player"] = entity
+        self.grid[(nx, ny)].append(entity)
 
 
 
-    def is_walkable(self, player:Player, dx:int, dy:int) -> bool:
+    def is_walkable(self, player:Player, nx:int, ny:int) -> bool:
         '''
         Output: Check if a tile is walkable for the player, return True if it's possible, otherwhise False. 
         '''
 
         future_rect = player.rect.copy()
-        future_rect.topleft = (dx * TILE_SIZE, dy * TILE_SIZE)
+        future_rect.topleft = (nx * TILE_SIZE, ny * TILE_SIZE)
 
         return not pygame.sprite.spritecollideany(player, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
 
 
-    def respawn(self) -> Tuple[int, int]:
+    def respawn(self, status) -> Tuple[int, int]:
         '''
         Output: return a random spawn point on the map. 
         '''
+
+        if status == GameStatus.P1:
+            return self.spawn_point[0]
         
-        if len(self.spawn_point) == 0:
-            return (0, 0)
-        return self.spawn_point.pop(0)
-    
+        elif status == GameStatus.P2:
+            return self. spawn_point[-1]
+        
 
     def get_players_pos(self):
         players_pos = []

@@ -21,8 +21,7 @@ class IA(Entity):
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
     def __init__(self, status:GameStatus, color:Color, world:GameWorld, difficulty="facile"):
-        self.status = status
-        super().__init__(world.map.respawn(), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
+        super().__init__(status, world.map.respawn(status), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
 
         self.world = world
         self.image.fill(color.value)
@@ -112,6 +111,7 @@ class IA(Entity):
             ny = self.grid_y + dy
 
             if self.world.map.is_walkable(self, nx, ny):
+                self.world.map.update_grid_position(self, nx, ny)
                 self.grid_x = nx
                 self.grid_y = ny
 
@@ -133,11 +133,3 @@ class IA(Entity):
         ''' 
 
         return pygame.sprite.spritecollideany(self, self.world.explosion_group)
-
-
-    def __eq__(self, other):
-        return isinstance(other, IA) and other.status == self.status
-
-
-    def __hash__(self):
-        return hash(self.status)

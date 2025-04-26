@@ -1,8 +1,8 @@
 import pygame
 
-from enum import Enum
 
-from data.map.Map import Map
+from core.GameStatus import GameStatus
+
 from data.entity.Player import Player
 from data.entity.GameWord import GameWorld
 from data.texture.Color import Color
@@ -11,9 +11,7 @@ from data.entity.IA import IA
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
-class GameStatus(Enum):
-    P1 = 0
-    P2 = 1
+
 
 
 class Game():
