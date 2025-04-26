@@ -1,11 +1,10 @@
 import pygame
-
+import copy
 
 from core.GameStatus import GameStatus
 
 from data.entity.Player import Player
 from data.entity.GameWord import GameWorld
-from data.texture.Color import Color
 from data.entity.IA import IA
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
@@ -39,7 +38,6 @@ class Game():
         if self.turn_status == GameStatus.P1:
             if self.player1.input():
                 self.turn_status = GameStatus.P2
-                
 
         elif self.turn_status == GameStatus.P2:
             if self.ai.input():

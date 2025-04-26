@@ -49,20 +49,20 @@ class Map:
         for row, tiles in enumerate(buff):
             for col, tile in enumerate(tiles):
                 if tile == "#":
-                    self.world.wall_group.add(Wall(col, row, Color.WALL.value, TILE_SIZE))
+                    self.world.wall_group.add(Wall(col, row))
 
                 elif tile == ".":
-                    self.world.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
+                    self.world.floor_group.add(Floor(col, row))
                 
                 elif tile == "S":
-                    self.world.floor_group.add(Floor(col, row, Color.SPAWN.value, TILE_SIZE))
+                    self.world.floor_group.add(Floor(col, row))
                     self.spawn_point.append((col, row))
         
                 elif tile == "X":
-                    obstacle = Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE)
+                    obstacle = Obstacle(col, row)
                     
                     self.world.wall_group.add(obstacle)
-                    self.world.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
+                    self.world.floor_group.add(Floor(col, row))
 
                     self.grid[(col, row)].append(obstacle)
 

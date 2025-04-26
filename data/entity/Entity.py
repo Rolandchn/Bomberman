@@ -6,10 +6,10 @@ from data.texture.config import TILE_SIZE
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, position:int, image:pygame.Surface, *groups):
+    def __init__(self, position:int, *groups):
         super().__init__(*groups)
 
-        self.image = image
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.life = 1
         
         self.rect = self.image.get_rect(topleft=(position[0] * TILE_SIZE, position[1] * TILE_SIZE))
