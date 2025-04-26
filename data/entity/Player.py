@@ -18,7 +18,8 @@ from data.texture.config import TILE_SIZE
 
 class Player(Entity):
     def __init__(self, status:GameStatus, color:Color, world:GameWorld):
-        super().__init__(status, world.map.respawn(status), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
+        self.status = status
+        super().__init__(world.map.respawn(self), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
         
         self.world = world
 
@@ -59,7 +60,6 @@ class Player(Entity):
             ny += 1
             has_moved = True
 
-
         if has_moved and self.world.map.is_walkable(self, nx, ny):
             self.world.map.update_grid_position(self, nx, ny)
             
@@ -95,3 +95,10 @@ class Player(Entity):
 
         return pygame.sprite.spritecollideany(self, self.world.explosion_group)
 
+
+    def __eq__(self, other):
+        return isinstance(other, Player) and other.status == self.status
+
+
+    def __hash__(self):
+        return hash(self.status)

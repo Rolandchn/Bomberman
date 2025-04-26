@@ -64,6 +64,7 @@ class Bomb(pygame.sprite.Sprite):
 
                 # if explosion collides with obstacle, destroy it and remove it from wall_group in world         
                 if isinstance(collided_wall, Obstacle):
+                    self.world.map.update_grid_explosion(collided_wall)
                     collided_wall.kill()
 
                 # if explosion collides with nothing, add it to explosion_group in world         

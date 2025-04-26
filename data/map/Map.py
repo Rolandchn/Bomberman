@@ -58,8 +58,12 @@ class Map:
                     self.spawn_point.append((col, row))
         
                 elif tile == "X":
-                    self.world.wall_group.add(Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE))
+                    obstacle = Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE)
+                    
+                    self.world.wall_group.add(obstacle)
                     self.world.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
+
+                    self.grid[(col, row)].append(obstacle)
 
 
     def generate_valued_grid(self):
@@ -110,11 +114,23 @@ class Map:
 
 
     def update_grid_position(self, entity:Entity, nx:int, ny:int):
-        if entity in self.grid[(entity.grid_x, entity.grid_y)]:
+        try:
             self.grid[(entity.grid_x, entity.grid_y)].remove(entity)
+        
+            if len(self.grid[(entity.grid_x, entity.grid_y)]) == 0:
+                del self.grid[(entity.grid_x, entity.grid_y)]
+        
+        except(ValueError):
+            pass
 
         self.grid[(nx, ny)].append(entity)
 
+
+    def update_grid_explosion(self, obstacle:Obstacle):
+            self.grid[(obstacle.grid_x, obstacle.grid_y)].remove(obstacle)
+            
+            if len(self.grid[(obstacle.grid_x, obstacle.grid_y)]) == 0:
+                del self.grid[(obstacle.grid_x, obstacle.grid_y)]
 
 
     def is_walkable(self, player:Player, nx:int, ny:int) -> bool:
@@ -128,15 +144,18 @@ class Map:
         return not pygame.sprite.spritecollideany(player, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
 
 
-    def respawn(self, status) -> Tuple[int, int]:
+    def respawn(self, entity) -> Tuple[int, int]:
         '''
         Output: return a random spawn point on the map. 
         '''
+        if entity.status == GameStatus.P1:
+            self.grid[(self.spawn_point[0])].append(entity)
 
-        if status == GameStatus.P1:
             return self.spawn_point[0]
         
-        elif status == GameStatus.P2:
+        elif entity.status == GameStatus.P2:
+            self.grid[(self.spawn_point[-1])].append(entity)
+
             return self. spawn_point[-1]
         
 
