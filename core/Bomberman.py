@@ -41,7 +41,7 @@ class Game():
 
         if self.turn_status == GameStatus.P1:
             if self.player1.input():
-                self.turn_status = GameStatus.P1
+                self.turn_status = GameStatus.P2
                 
 
         elif self.turn_status == GameStatus.P2:
