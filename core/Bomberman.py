@@ -43,17 +43,12 @@ class Game():
             if self.player1.input():
                 self.turn_status = GameStatus.P1
                 
-                count = 0
-                for i in self.world.map.grid:
-                    count += 1
-                print(count)
-                self.turn += 1
 
         elif self.turn_status == GameStatus.P2:
             if self.ai.input():
                 self.turn_status = GameStatus.P1
 
-
+                self.turn += 1
 
 
     def handle_event(self):

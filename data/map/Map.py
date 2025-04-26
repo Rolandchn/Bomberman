@@ -112,8 +112,7 @@ class Map:
                 self.valued_grid[wall.grid_y][wall.grid_x] = 50
     
 
-
-    def update_grid_position(self, entity:Entity, nx:int, ny:int):
+    def update_grid_position(self, entity:Entity, nx:int=None, ny:int=None):
         try:
             self.grid[(entity.grid_x, entity.grid_y)].remove(entity)
         
@@ -123,8 +122,9 @@ class Map:
         except(ValueError):
             pass
 
-        self.grid[(nx, ny)].append(entity)
-
+        if nx is not None and ny is not None:
+            self.grid[(nx, ny)].append(entity)
+    
 
     def update_grid_explosion(self, obstacle:Obstacle):
             self.grid[(obstacle.grid_x, obstacle.grid_y)].remove(obstacle)

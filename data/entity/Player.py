@@ -95,6 +95,11 @@ class Player(Entity):
 
         return pygame.sprite.spritecollideany(self, self.world.explosion_group)
 
+    def kill(self):
+        self.world.map.update_grid_position(self)
+
+        super().kill()
+        
 
     def __eq__(self, other):
         return isinstance(other, Player) and other.status == self.status
