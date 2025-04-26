@@ -1,7 +1,7 @@
 from enum import Enum
 
-
+from data.texture.Color import Color
 
 class GameStatus(Enum):
-    P1 = 0
-    P2 = 1
+    P1 = Color.WHITE
+    P2 = Color.BLACK

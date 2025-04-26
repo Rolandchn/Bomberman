@@ -21,12 +21,12 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, status:GameStatus, color:Color, world:GameWorld, difficulty="facile"):
+    def __init__(self, status:GameStatus, world:GameWorld, difficulty="facile"):
         self.status = status
         super().__init__(world.map.respawn(self), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
 
         self.world = world
-        self.image.fill(color.value)
+        self.image.fill(self.status.value.value)
 
         self.difficulty = difficulty
         
