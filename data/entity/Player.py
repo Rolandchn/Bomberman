@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
@@ -17,12 +17,10 @@ from data.texture.config import TILE_SIZE
 
 
 class Player(Entity):
-    def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], world:GameWorld):
+    def __init__(self, status:GameStatus, color:Color, world:GameWorld):
         self.status = status
-        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
+        super().__init__(world.map.respawn(), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
         
-        self.life = 1
-
         self.world = world
 
         self.image.fill(color.value)
@@ -64,6 +62,8 @@ class Player(Entity):
 
 
         if has_moved and self.world.map.is_walkable(self, dx, dy):
+            self.world.map.update_position(dx, dy, self)
+            
             self.grid_x = dx
             self.grid_y = dy
 
@@ -82,7 +82,7 @@ class Player(Entity):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE]:
-            Bomb(self.grid_x, self.grid_y, self.world)
+            Bomb((self.grid_x, self.grid_y), self.world)
 
             return True
         

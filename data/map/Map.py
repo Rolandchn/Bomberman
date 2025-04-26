@@ -111,6 +111,13 @@ class Map:
         pass
 
 
+    def update_position(self, dx:int, dy:int, entity:Entity):
+        if (entity.grid_x, entity.grid_y) in self.grid:
+            del self.grid[(entity.grid_x, entity.grid_y)]["player"]
+
+        self.grid[(entity.grid_x + dx, entity.grid_y + dy)]["player"] = entity
+
+
 
     def is_walkable(self, player:Player, dx:int, dy:int) -> bool:
         '''
@@ -127,7 +134,10 @@ class Map:
         '''
         Output: return a random spawn point on the map. 
         '''
-        return random.choice(self.spawn_point)
+        
+        if len(self.spawn_point) == 0:
+            return (0, 0)
+        return self.spawn_point.pop(0)
     
 
     def get_players_pos(self):
@@ -138,7 +148,7 @@ class Map:
             
         return players_pos
     
-    
+
     def get_enemies_pos(self, player: Entity):
         enemies_pos = []
 

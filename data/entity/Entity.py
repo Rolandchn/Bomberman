@@ -10,7 +10,7 @@ class Entity(pygame.sprite.Sprite):
         super().__init__(*groups)
 
         self.image = image
-        self.life=1
+        self.life = 1
         
         self.rect = self.image.get_rect(topleft=(position[0] * TILE_SIZE, position[1] * TILE_SIZE))
         

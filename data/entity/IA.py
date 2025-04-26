@@ -20,11 +20,9 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, status:GameStatus, color:Color, spawn:Tuple[int, int], world:GameWorld, difficulty="facile"):
+    def __init__(self, status:GameStatus, color:Color, world:GameWorld, difficulty="facile"):
         self.status = status
-        super().__init__(spawn, pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
-
-        self.life = 1
+        super().__init__(world.map.respawn(), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
 
         self.world = world
         self.image.fill(color.value)
@@ -125,7 +123,7 @@ class IA(Entity):
 
     def bomb(self):
         #Pose une bombe sur la position actuelle
-        Bomb(self.grid_x, self.grid_y, self.world)
+        Bomb((self.grid_x, self.grid_y), self.world)
         return True
     
 

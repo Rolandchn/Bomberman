@@ -2,21 +2,28 @@
 
 import pygame
 
-from data.entity.Entity import Entity
+from typing import Tuple
+
 from data.entity.GameWord import GameWorld
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
-class Explosion(Entity):
-    def __init__(self, x:int, y:int, entities:GameWorld, duration=3):
-        super().__init__((x, y), pygame.Surface((TILE_SIZE, TILE_SIZE)), entities.explosion_group)
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, position: Tuple[int, int], world:GameWorld, duration=3):
+        self.world = world
+        super().__init__(self.world.explosion_group)
 
-        self.entities = entities
-        self.duration = duration
+        # Position inside the grip in Map
+        self.grid_x, self.grid_y = position
 
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(Color.EXPLOSION.value)
+
+        self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
+
+        self.duration = duration
 
 
     def update(self):

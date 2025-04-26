@@ -1,25 +1,31 @@
 
 import pygame
 
+from typing import Tuple
+
+
 from data.entity.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
 from data.entity.GameWord import GameWorld
-from data.entity.Entity import Entity
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
-class Bomb(Entity):
-    def __init__(self, x:int, y:int, world:GameWorld, timer=2, spread=2):
-        super().__init__((x, y), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.bomb_group)
-
-        self.image.fill(Color.BOMBE.value)
-        
+class Bomb(pygame.sprite.Sprite):
+    def __init__(self, position: Tuple[int, int], world:GameWorld, timer=2, spread=2):
         self.world = world
+        super().__init__(self.world.bomb_group)
 
-        self.start_turn = None
+        # Position inside the grip in Map
+        self.grid_x, self.grid_y = position
+
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
+        self.image.fill(Color.BOMBE.value)
+
+        self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
         
+        self.start_turn = None
         self.timer = timer
         self.spread = spread
 
@@ -44,7 +50,7 @@ class Bomb(Entity):
         Output: spread the explosion to all direction (up, down, left, right)  
         ''' 
 
-        Explosion(self.grid_x, self.grid_y, self.world)
+        Explosion((self.grid_x, self.grid_y), self.world)
 
         # up, down, right, left
         for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
@@ -62,6 +68,6 @@ class Bomb(Entity):
 
                 # if explosion collides with nothing, add it to explosion_group in world         
                 elif collided_wall == None:
-                    Explosion(nx, ny, self.world)
+                    Explosion((nx, ny), self.world)
 
                 

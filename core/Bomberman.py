@@ -29,8 +29,8 @@ class Game():
         # Initialize Game
         self.world = GameWorld()
 
-        self.player1 = Player(GameStatus.P1, Color.WHITE, self.world.map.spawn_point[0], self.world)
-        self.ai = IA(GameStatus.P2, Color.BLACK, self.world.map.spawn_point[-1], self.world)
+        self.player1 = Player(GameStatus.P1, Color.WHITE, self.world)
+        self.ai = IA(GameStatus.P2, Color.BLACK, self.world)
         
         self.turn_status = GameStatus.P1
         self.turn = 0
@@ -60,11 +60,11 @@ class Game():
 
         if self.player1.is_dead():
                 self.player1.kill()
-                self.player1 = Player(GameStatus.P1, Color.WHITE, self.world.map.spawn_point[0], self.world)
+                self.player1 = Player(GameStatus.P1, Color.WHITE, self.world)
 
         if self.ai.is_dead():
             self.ai.kill()
-            self.ai = IA(GameStatus.P2, Color.BLACK, self.world.map.spawn_point[-1], self.world)
+            self.ai = IA(GameStatus.P2, Color.BLACK, self.world)
 
         if self.player1.is_hit():
             self.player1.life -= 1
