@@ -4,6 +4,7 @@ import pygame
 
 from data.map.Map import Map
 
+
 class GameWorld:
     def __init__(self):
         self.wall_group = pygame.sprite.Group()

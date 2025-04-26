@@ -5,7 +5,6 @@ import pygame
 
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
-    from data.map.Map import Map
     from core.Bomberman import GameStatus
 
 
