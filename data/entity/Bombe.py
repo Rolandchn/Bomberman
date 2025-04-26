@@ -29,6 +29,8 @@ class Bomb(pygame.sprite.Sprite):
         self.timer = timer
         self.spread = spread
 
+        self.world.map.update_grid_bomb(self)
+
 
     def update(self, game_turn:int):
         '''
@@ -70,4 +72,7 @@ class Bomb(pygame.sprite.Sprite):
                 elif collided_wall == None:
                     Explosion((nx, ny), self.world)
 
-                
+    def kill(self):
+        self.world.map.update_grid_bomb(self, remove=True)
+
+        super().kill()

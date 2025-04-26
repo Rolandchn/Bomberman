@@ -5,8 +5,9 @@ import pygame
 
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
-    from core.Bomberman import GameStatus
 
+
+from core.Bomberman import GameStatus
 
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
@@ -86,7 +87,11 @@ class IA(Entity):
         '''
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
-        pass
+        for position in self.world.map.grid.items():
+            if GameStatus.P1 in position or GameStatus.P2 in position:
+                return True
+        
+        return False
 
 
 

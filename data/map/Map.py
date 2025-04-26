@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from data.entity.Player import Player
     from data.entity.Entity import Entity
+    from data.entity.Bombe import Bomb
     from data.entity.GameWord import GameWorld
 
 
@@ -132,6 +133,16 @@ class Map:
             if len(self.grid[(obstacle.grid_x, obstacle.grid_y)]) == 0:
                 del self.grid[(obstacle.grid_x, obstacle.grid_y)]
 
+
+    def update_grid_bomb(self, bomb: Bomb, remove = False):
+        if remove:
+            self.grid[(bomb.grid_y, bomb.grid_x)].remove(bomb)
+        
+            if len(self.grid[(bomb.grid_y, bomb.grid_x)]) == 0:
+                del self.grid[(bomb.grid_y, bomb.grid_x)]
+        else:
+            self.grid[(bomb.grid_y, bomb.grid_x)].append(bomb)
+        
 
     def is_walkable(self, player:Player, nx:int, ny:int) -> bool:
         '''
