@@ -21,9 +21,6 @@ class Game():
         pygame.display.set_caption("Bomberman")
         self.clock = pygame.time.Clock()
 
-        self.ia_move_delay = 500  # millisecondes
-        self.last_ia_move_time = pygame.time.get_ticks()
-
         # Initialize Game
         self.world = GameWorld()
 
@@ -42,14 +39,13 @@ class Game():
         if self.turn_status == GameStatus.P1:
             if self.player1.input():
                 self.turn_status = GameStatus.P2
-                print(self.world.map.grid)
+                
 
         elif self.turn_status == GameStatus.P2:
             if self.ai.input():
                 self.turn_status = GameStatus.P1
 
                 self.turn += 1
-
 
 
     def handle_event(self):
@@ -93,6 +89,6 @@ class Game():
 
             pygame.display.update()
             
-            self.clock.tick(10)
+            self.clock.tick(40)
         
         pygame.quit()

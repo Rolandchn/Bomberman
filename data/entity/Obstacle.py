@@ -1,3 +1,10 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from data.entity.GameWord import GameWorld
+
 
 import pygame
 
@@ -18,3 +25,8 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.grid_x * size
         self.rect.y = self.grid_y * size
+
+    def kill(self, world: GameWorld):
+        world.map.update_grid_explosion(self)
+
+        super().kill()
