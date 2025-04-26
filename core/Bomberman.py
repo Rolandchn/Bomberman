@@ -21,9 +21,6 @@ class Game():
         pygame.display.set_caption("Bomberman")
         self.clock = pygame.time.Clock()
 
-        self.ia_move_delay = 500  # millisecondes
-        self.last_ia_move_time = pygame.time.get_ticks()
-
         # Initialize Game
         self.world = GameWorld()
 
