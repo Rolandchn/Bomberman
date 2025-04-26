@@ -110,8 +110,8 @@ class Map:
 
 
     def update_grid_position(self, entity:Entity, nx:int, ny:int):
-        if entity.status in self.grid[(entity.grid_x, entity.grid_y)]:
-            self.grid[(entity.grid_x, entity.grid_y)].remove(entity.status)
+        if entity in self.grid[(entity.grid_x, entity.grid_y)]:
+            self.grid[(entity.grid_x, entity.grid_y)].remove(entity)
 
         self.grid[(nx, ny)].append(entity)
 
