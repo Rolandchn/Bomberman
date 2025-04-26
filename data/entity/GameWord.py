@@ -2,8 +2,9 @@
 
 import pygame
 
+from data.map.Map import Map
 
-class EntityManager:
+class GameWorld:
     def __init__(self):
         self.wall_group = pygame.sprite.Group()
         self.floor_group = pygame.sprite.Group()
@@ -12,6 +13,8 @@ class EntityManager:
     
         self.bomb_group = pygame.sprite.Group()
         self.explosion_group = pygame.sprite.Group()
+        
+        self.map = Map(self)
 
 
     def update(self, game_turn):

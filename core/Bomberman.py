@@ -4,7 +4,7 @@ from enum import Enum
 
 from data.map.Map import Map
 from data.entity.Player import Player
-from data.entity.EntityManager import EntityManager
+from data.entity.GameWord import GameWorld
 from data.texture.Color import Color
 from data.entity.IA import IA
 
@@ -27,12 +27,10 @@ class Game():
         self.last_ia_move_time = pygame.time.get_ticks()
 
         # Initialize Game
-        self.entities = EntityManager()
+        self.world = GameWorld()
 
-        self.map = Map(self.entities)
-
-        self.player1 = Player(GameStatus.P1, Color.WHITE, self.map.spawn_point[0], self.entities)
-        self.ai = IA(GameStatus.P2, Color.BLACK, self.map.spawn_point[-1], self.entities, self.map)
+        self.player1 = Player(GameStatus.P1, Color.WHITE, self.world.map.spawn_point[0], self.world)
+        self.ai = IA(GameStatus.P2, Color.BLACK, self.world.map.spawn_point[-1], self.world)
         
         self.turn_status = GameStatus.P1
         self.turn = 0
@@ -44,7 +42,7 @@ class Game():
         ''' 
 
         if self.turn_status == GameStatus.P1:
-            if self.player1.input(self.map):
+            if self.player1.input():
                 self.turn_status = GameStatus.P2
 
         elif self.turn_status == GameStatus.P2:
@@ -62,11 +60,11 @@ class Game():
 
         if self.player1.is_dead():
                 self.player1.kill()
-                self.player1 = Player(GameStatus.P1, Color.WHITE, self.map.spawn_point[0], self.entities)
+                self.player1 = Player(GameStatus.P1, Color.WHITE, self.world.map.spawn_point[0], self.world)
 
         if self.ai.is_dead():
             self.ai.kill()
-            self.ai = IA(GameStatus.P2, Color.BLACK, self.map.spawn_point[-1], self.entities, self.map)
+            self.ai = IA(GameStatus.P2, Color.BLACK, self.world.map.spawn_point[-1], self.world)
 
         if self.player1.is_hit():
             self.player1.life -= 1
@@ -91,8 +89,8 @@ class Game():
             self.handle_input()
             self.handle_event()
 
-            self.entities.update(self.turn)
-            self.entities.draw(self.screen)
+            self.world.update(self.turn)
+            self.world.draw(self.screen)
 
             pygame.display.update()
             

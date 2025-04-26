@@ -4,12 +4,14 @@ from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from data.entity.Player import Player
     from data.entity.Entity import Entity
-    from data.entity.EntityManager import EntityManager
+    from data.entity.GameWord import GameWorld
 
 
 import pygame
 import random
 import math
+
+from collections import defaultdict
 
 from data.entity.Wall import Wall
 from data.entity.Floor import Floor
@@ -20,48 +22,43 @@ from data.texture.config import TILE_SIZE
 
 
 class Map:
-    def __init__(self, entities:EntityManager):
-        self.grid = []
+    def __init__(self, world:GameWorld):
+        self.grid = defaultdict(dict)
         self.valued_grid = []
         self.spawn_point = []
 
-        self.entities = entities
+        self.world = world
 
         self.generate_map()
         self.generate_valued_grid()
 
 
-    def read_map(self):
-        ''''
-        Output: Lis le fichier map.txt et enregistre le contenue dans la grille
+    def generate_map(self):
         '''
+        Output: Generate wall, floor and obstacle, and store them inside a sprite group in self.world  
+        ''' 
+        buff = []
+
         with open("./data/map/map.txt", "r") as map:
             lines = map.read().splitlines()
             for line in lines:
-                self.grid.append(list(line))
+                buff.append(list(line))
 
-
-    def generate_map(self):
-        '''
-        Output: Generate wall, floor and obstacle, and store them inside a sprite group in self.entities  
-        ''' 
-        self.read_map()
-
-        for row, tiles in enumerate(self.grid):
+        for row, tiles in enumerate(buff):
             for col, tile in enumerate(tiles):
                 if tile == "#":
-                    self.entities.wall_group.add(Wall(col, row, Color.WALL.value, TILE_SIZE))
+                    self.world.wall_group.add(Wall(col, row, Color.WALL.value, TILE_SIZE))
 
                 elif tile == ".":
-                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
+                    self.world.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
                 
                 elif tile == "S":
-                    self.entities.floor_group.add(Floor(col, row, Color.SPAWN.value, TILE_SIZE))
+                    self.world.floor_group.add(Floor(col, row, Color.SPAWN.value, TILE_SIZE))
                     self.spawn_point.append((col, row))
         
                 elif tile == "X":
-                    self.entities.wall_group.add(Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE))
-                    self.entities.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
+                    self.world.wall_group.add(Obstacle(col, row, Color.OBSTACLE.value, TILE_SIZE))
+                    self.world.floor_group.add(Floor(col, row, Color.GREEN.value, TILE_SIZE))
 
 
     def generate_valued_grid(self):
@@ -102,13 +99,17 @@ class Map:
         '''
         Output: Update the valued grid with obstacle
         '''
-        for wall in self.entities.wall_group:
+        for wall in self.world.wall_group:
             if isinstance(wall, Wall):
                 self.valued_grid[wall.grid_y][wall.grid_x] = 0
 
             elif isinstance(wall, Obstacle):
                 self.valued_grid[wall.grid_y][wall.grid_x] = 50
-        
+    
+
+    def update_grid(self):
+        pass
+
 
 
     def is_walkable(self, player:Player, dx:int, dy:int) -> bool:
@@ -119,7 +120,7 @@ class Map:
         future_rect = player.rect.copy()
         future_rect.topleft = (dx * TILE_SIZE, dy * TILE_SIZE)
 
-        return not pygame.sprite.spritecollideany(player, self.entities.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
+        return not pygame.sprite.spritecollideany(player, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
 
 
     def respawn(self) -> Tuple[int, int]:
@@ -128,18 +129,20 @@ class Map:
         '''
         return random.choice(self.spawn_point)
     
+
     def get_players_pos(self):
         players_pos = []
 
-        for player in self.entities.player_group:
+        for player in self.world.player_group:
             players_pos.append((player.grid_x, player.grid_y))
             
         return players_pos
     
+    
     def get_enemies_pos(self, player: Entity):
         enemies_pos = []
 
-        for p in self.entities.player_group:
+        for p in self.world.player_group:
             if p != player:
                 enemies_pos.append((p.grid_x, p.grid_y))
 
