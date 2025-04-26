@@ -5,6 +5,7 @@ import pygame
 from data.map.Map import Map
 
 
+
 class GameWorld:
     def __init__(self):
         self.wall_group = pygame.sprite.Group()
@@ -33,3 +34,23 @@ class GameWorld:
 
         self.bomb_group.draw(screen)
         self.explosion_group.draw(screen)
+
+
+    def clone(self):
+        new_world = GameWorld()
+
+        for pos, entity_list in self.map.grid.items():
+            new_entities = []
+
+            for entity in entity_list:
+                copy_entity = entity.clone(new_world)
+
+                for group_name in entity.groups_to_add():
+                    getattr(new_world, group_name).add(entity)
+
+                new_entities.append(copy_entity)
+
+            new_world.map.grid[pos] = new_entities
+
+        return new_world
+

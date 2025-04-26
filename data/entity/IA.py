@@ -12,7 +12,6 @@ from core.Bomberman import GameStatus
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
 
-from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
@@ -21,12 +20,12 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, status:GameStatus, color:Color, world:GameWorld, difficulty="facile"):
+    def __init__(self, status:GameStatus, world:GameWorld, difficulty="facile"):
         self.status = status
-        super().__init__(world.map.respawn(self), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
+        super().__init__(world.map.respawn(self), world.player_group)
 
         self.world = world
-        self.image.fill(color.value)
+        self.image.fill(self.status.value.value)
 
         self.difficulty = difficulty
         
@@ -140,6 +139,19 @@ class IA(Entity):
 
         return pygame.sprite.spritecollideany(self, self.world.explosion_group)
     
+
+    def clone(self, new_world):
+        copy = IA(self.status, new_world)
+        
+        copy.grid_x = self.grid_x
+        copy.grid_y = self.grid_y
+        copy.rect = self.rect
+
+        return copy
+    
+    def groups_to_add(self):
+        return ["player_group"]
+
 
     def __eq__(self, other):
         return isinstance(other, IA) and other.status == self.status

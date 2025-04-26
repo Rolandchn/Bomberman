@@ -31,3 +31,6 @@ class Explosion(pygame.sprite.Sprite):
 
         if self.duration <= 0:
             self.kill()
+
+    def groups_to_add(self):
+        return ["explosion_group"]

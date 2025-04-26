@@ -76,3 +76,9 @@ class Bomb(pygame.sprite.Sprite):
         self.world.map.update_grid_bomb(self, remove=True)
 
         super().kill()
+
+    def clone(self, new_world):
+        return Bomb((self.grid_x, self.grid_y), new_world)
+    
+    def groups_to_add(self):
+        return ["bomb_group"]

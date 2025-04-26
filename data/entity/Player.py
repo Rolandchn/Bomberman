@@ -11,19 +11,16 @@ import pygame
 from data.entity.Entity import Entity
 from data.entity.Bombe import Bomb
 
-from data.texture.Color import Color
-from data.texture.config import TILE_SIZE
-
 
 
 class Player(Entity):
-    def __init__(self, status:GameStatus, color:Color, world:GameWorld):
+    def __init__(self, status:GameStatus, world:GameWorld):
         self.status = status
-        super().__init__(world.map.respawn(self), pygame.Surface((TILE_SIZE, TILE_SIZE)), world.player_group)
+        super().__init__(world.map.respawn(self), world.player_group)
         
         self.world = world
 
-        self.image.fill(color.value)
+        self.image.fill(self.status.value.value)
 
 
     
@@ -99,7 +96,20 @@ class Player(Entity):
         self.world.map.update_grid_position(self)
 
         super().kill()
+
+
+    def clone(self, new_world):
+        copy = Player(self.status, new_world)
+
+        copy.grid_x = self.grid_x
+        copy.grid_y = self.grid_y
+        copy.rect = self.rect
+
+        return copy
         
+    def groups_to_add(self):
+        return ["player_group"]
+
 
     def __eq__(self, other):
         return isinstance(other, Player) and other.status == self.status
