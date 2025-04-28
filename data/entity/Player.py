@@ -8,8 +8,9 @@ if TYPE_CHECKING:
 
 import pygame
 
+from data.entity.GameLogic import GameLogic
+from data.entity.Action import Action
 from data.entity.Entity import Entity
-from data.entity.Bombe import Bomb
 
 
 
@@ -25,66 +26,29 @@ class Player(Entity):
 
     
     def input(self) -> bool:
-        if self.move() : return True
-        elif self.bomb() : return True
-
-        return False
-    
-
-    def move(self) -> bool:
-        '''
-        Output: check player key input (up, down, left, right) and move
-        ''' 
-
-        has_moved = False
         keys = pygame.key.get_pressed()
-        
-        nx, ny = self.grid_x, self.grid_y
 
-        if keys[pygame.K_LEFT]: 
-            nx -= 1
-            has_moved = True
-
-        if keys[pygame.K_RIGHT]: 
-            nx += 1
-            has_moved = True
+        action = None
 
         if keys[pygame.K_UP]: 
-            ny -= 1
-            has_moved = True
+            action = Action.MOVE_UP
 
-        if keys[pygame.K_DOWN]: 
-            ny += 1
-            has_moved = True
-
-        if has_moved and self.world.map.is_walkable(self, nx, ny):
-            self.world.map.update_grid_position(self, nx, ny)
-            
-            self.grid_x = nx
-            self.grid_y = ny
-
-            self.update_rect()
-
-            return True
-
-        return False
+        elif keys[pygame.K_DOWN]: 
+            action = Action.MOVE_DOWN
         
+        elif keys[pygame.K_LEFT]: 
+            action = Action.MOVE_LEFT
 
-    def bomb(self) -> bool:
-        '''
-        Output: check player key input (space) and drop bomb  
-        ''' 
+        elif keys[pygame.K_RIGHT]: 
+            action = Action.MOVE_RIGHT
 
-        keys = pygame.key.get_pressed()
+        elif keys[pygame.K_SPACE]:
+            action = Action.PLACE_BOMB
 
-        if keys[pygame.K_SPACE]:
-            Bomb((self.grid_x, self.grid_y), self.world)
-
-            return True
-        
+        if action is not None and GameLogic.apply_action(self.world, self, action): return True
         return False
 
-
+    
     def is_hit(self):
         '''
         Output: check player sprite collides with any explosion. Return True if collides, otherwise False

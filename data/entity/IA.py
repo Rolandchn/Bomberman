@@ -8,11 +8,12 @@ if TYPE_CHECKING:
 
 
 from core.Bomberman import GameStatus
+from data.entity.GameLogic import GameLogic
 
 from data.entity.Entity import Entity
+from data.entity.Action import Action
 from data.entity.Bombe import Bomb
 
-from data.texture.config import TILE_SIZE
 
 
 class IA(Entity):
@@ -86,8 +87,8 @@ class IA(Entity):
         '''
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
-        for position in simulated_world.map.grid.items():
-            if GameStatus.P1 in position or GameStatus.P2 in position:
+        for player in simulated_world.player_group:
+            if GameStatus.P1 in player.status or GameStatus.P2 in player.status:
                 return True
         
         return False
@@ -101,7 +102,6 @@ class IA(Entity):
 
 
 
-
     '''
     Méthode pour l'IA random
     '''
@@ -109,35 +109,13 @@ class IA(Entity):
         '''
         IA Random : déplacement aléatoire + pose bombe aléatoire
         '''
-        action = random.choice([self.move, self.bomb])
+        action = random.choice([Action.MOVE_UP,
+                                Action.MOVE_DOWN,
+                                Action.MOVE_LEFT,
+                                Action.MOVE_RIGHT,
+                                Action.PLACE_BOMB])
         
-        return action()
-
-
-    def move(self) -> bool:
-        #Retourne une direction valide aléatoire
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        random.shuffle(directions)
-
-        for dx, dy in directions:
-            nx = self.grid_x + dx
-            ny = self.grid_y + dy
-
-            if self.world.map.is_walkable(self, nx, ny):
-                self.world.map.update_grid_position(self, nx, ny)
-                self.grid_x = nx
-                self.grid_y = ny
-
-                self.update_rect()
-                return True
-            
-        return False
-
-
-    def bomb(self):
-        #Pose une bombe sur la position actuelle
-        Bomb((self.grid_x, self.grid_y), self.world)
-        return True
+        return GameLogic.apply_action(self.world, self, action)
     
 
     def is_hit(self):

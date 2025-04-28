@@ -13,6 +13,8 @@ import math
 
 from collections import defaultdict
 
+from data.entity.Action import Action
+
 from core.GameStatus import GameStatus
 
 from data.entity.Wall import Wall
@@ -25,7 +27,7 @@ from data.texture.config import TILE_SIZE
 
 class Map:
     def __init__(self, world:GameWorld):
-        self.grid = defaultdict(list)
+        self.grid = defaultdict(tuple)
         self.valued_grid = []
         self.spawn_point = []
 
@@ -64,7 +66,7 @@ class Map:
                     self.world.wall_group.add(obstacle)
                     self.world.floor_group.add(Floor(col, row))
 
-                    self.grid[(col, row)].append(obstacle)
+                    self.grid[obstacle] = (col, row)
 
 
     def generate_valued_grid(self):
@@ -113,46 +115,46 @@ class Map:
                 self.valued_grid[wall.grid_y][wall.grid_x] = 50
     
 
-    def update_grid_position(self, entity:Entity, nx:int=None, ny:int=None):
-        try:
-            self.grid[(entity.grid_x, entity.grid_y)].remove(entity)
-        
-            if len(self.grid[(entity.grid_x, entity.grid_y)]) == 0:
-                del self.grid[(entity.grid_x, entity.grid_y)]
-        
-        except(ValueError):
-            pass
+    def update_grid_position(self, entity:Entity):
+        self.grid[entity] = (entity.grid_x, entity.grid_y)
 
-        if nx is not None and ny is not None:
-            self.grid[(nx, ny)].append(entity)
-    
 
     def update_grid_explosion(self, obstacle:Obstacle):
-            self.grid[(obstacle.grid_x, obstacle.grid_y)].remove(obstacle)
-            
-            if len(self.grid[(obstacle.grid_x, obstacle.grid_y)]) == 0:
-                del self.grid[(obstacle.grid_x, obstacle.grid_y)]
+        if obstacle in self.grid: 
+            del self.grid[obstacle]
 
 
     def update_grid_bomb(self, bomb: Bomb, remove = False):
-        if remove:
-            self.grid[(bomb.grid_y, bomb.grid_x)].remove(bomb)
+        if remove and bomb in self.grid:
+            del self.grid[bomb]
         
-            if len(self.grid[(bomb.grid_y, bomb.grid_x)]) == 0:
-                del self.grid[(bomb.grid_y, bomb.grid_x)]
         else:
-            self.grid[(bomb.grid_y, bomb.grid_x)].append(bomb)
+            self.grid[bomb] = (bomb.grid_y, bomb.grid_x)
         
 
-    def is_walkable(self, player:Player, nx:int, ny:int) -> bool:
+    def is_walkable(self, entity:Entity, action:Action) -> bool:
         '''
         Output: Check if a tile is walkable for the player, return True if it's possible, otherwhise False. 
         '''
 
-        future_rect = player.rect.copy()
+        nx, ny = entity.grid_x, entity.grid_y
+        
+        if action == Action.MOVE_UP:
+            ny -= 1
+
+        elif action == Action.MOVE_DOWN:
+            ny += 1
+
+        elif action == Action.MOVE_LEFT:
+            nx -= 1
+
+        elif action == Action.MOVE_RIGHT:
+            nx += 1
+
+        future_rect = entity.rect.copy()
         future_rect.topleft = (nx * TILE_SIZE, ny * TILE_SIZE)
 
-        return not pygame.sprite.spritecollideany(player, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
+        return not pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
 
 
     def respawn(self, entity) -> Tuple[int, int]:
@@ -160,12 +162,12 @@ class Map:
         Output: return a random spawn point on the map. 
         '''
         if entity.status == GameStatus.P1:
-            self.grid[(self.spawn_point[0])].append(entity)
+            self.grid[entity] = self.spawn_point[0]
 
             return self.spawn_point[0]
         
         elif entity.status == GameStatus.P2:
-            self.grid[(self.spawn_point[-1])].append(entity)
+            self.grid[entity] = self.spawn_point[-1]
 
             return self. spawn_point[-1]
         
