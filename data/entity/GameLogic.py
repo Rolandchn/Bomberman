@@ -13,11 +13,9 @@ from data.entity.Bombe import Bomb
 class GameLogic:
     @staticmethod
     def apply_action(world: GameWorld, entity: Entity, action: Action) -> bool:
-        has_acted = False
 
         if action in Action.MOVE:
             if world.map.is_walkable(entity, action):
-                has_acted = True
             
                 if action == Action.MOVE_UP: entity.grid_y -= 1
                 elif action == Action.MOVE_DOWN: entity.grid_y += 1
@@ -27,13 +25,11 @@ class GameLogic:
                 entity.update_rect()
                 
                 world.map.update_grid_position(entity)
-                
 
+            else:
+                return False # if player is struck
+                
         elif action == Action.PLACE_BOMB:
-            has_acted = True
-            
             world.map.update_grid_bomb(Bomb((entity.grid_x, entity.grid_y), world))
 
-
-        return has_acted
-        
+        return True
