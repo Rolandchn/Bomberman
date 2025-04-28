@@ -5,7 +5,6 @@ if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
     from core.Bomberman import GameStatus
 
-
 import pygame
 
 from data.entity.GameLogic import GameLogic

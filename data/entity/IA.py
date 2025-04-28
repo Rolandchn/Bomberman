@@ -5,7 +5,6 @@ import random
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
 
-
 from core.Bomberman import GameStatus
 from data.entity.GameLogic import GameLogic
 

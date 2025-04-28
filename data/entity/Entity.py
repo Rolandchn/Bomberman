@@ -4,9 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
 
-
 import pygame
-
 
 from data.texture.config import TILE_SIZE
 
@@ -19,7 +17,7 @@ class Entity(pygame.sprite.Sprite):
         self.world = world
 
         self.life = 1
-        # Position inside the grip in Map
+
         self.spawn_point = position
         self.grid_x, self.grid_y = self.spawn_point
 
@@ -48,4 +46,5 @@ class Entity(pygame.sprite.Sprite):
         self.life = 1
         self.grid_x, self.grid_y = self.spawn_point
 
-        self.world.map.update_grid_position(self)    
+        self.world.map.update_grid_position(self)   
+        self.update_rect() 

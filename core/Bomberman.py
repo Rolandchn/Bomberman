@@ -1,5 +1,4 @@
 import pygame
-import copy
 
 from core.GameStatus import GameStatus
 
@@ -44,11 +43,6 @@ class Game():
                 self.turn_status = GameStatus.P1
 
                 self.turn += 1
-
-                for key in self.world.map.grid.keys():
-                    if isinstance(key, Player):
-                        print(key, self.player1)
-
 
 
     def handle_event(self):

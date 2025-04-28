@@ -20,15 +20,14 @@ from data.entity.Wall import Wall
 from data.entity.Floor import Floor
 from data.entity.Obstacle import Obstacle
 
-from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
 class Map:
-    def __init__(self, world:GameWorld):
+    def __init__(self, world: GameWorld):
         self.grid = defaultdict(tuple)
         self.valued_grid = []
-        self.spawn_point = []
+        self.spawn_points = []
 
         self.world = world
 
@@ -57,7 +56,7 @@ class Map:
                 
                 elif tile == "S":
                     self.world.floor_group.add(Floor(col, row))
-                    self.spawn_point.append((col, row))
+                    self.spawn_points.append((col, row))
         
                 elif tile == "X":
                     obstacle = Obstacle(col, row)
@@ -114,11 +113,11 @@ class Map:
                 self.valued_grid[wall.grid_y][wall.grid_x] = 50
     
 
-    def update_grid_position(self, entity:Entity):
+    def update_grid_position(self, entity: Entity):
         self.grid[entity] = (entity.grid_x, entity.grid_y)
 
 
-    def update_grid_explosion(self, obstacle:Obstacle):
+    def update_grid_explosion(self, obstacle: Obstacle):
         if obstacle in self.grid: 
             del self.grid[obstacle]
 
@@ -131,7 +130,7 @@ class Map:
             self.grid[bomb] = (bomb.grid_y, bomb.grid_x)
         
 
-    def is_walkable(self, entity:Entity, action:Action) -> bool:
+    def is_walkable(self, entity: Entity, action: Action) -> bool:
         '''
         Output: Check if a tile is walkable for the player, return True if it's possible, otherwhise False. 
         '''
@@ -160,8 +159,8 @@ class Map:
         '''
         Output: return a random spawn point on the map. 
         '''
-        if status == GameStatus.P1: return self.spawn_point[0]
-        elif status == GameStatus.P2: return self. spawn_point[-1]
+        if status == GameStatus.P1: return self.spawn_points[0]
+        elif status == GameStatus.P2: return self. spawn_points[-1]
         
 
     def get_players_pos(self):
