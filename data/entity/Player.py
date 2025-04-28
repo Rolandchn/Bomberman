@@ -17,10 +17,8 @@ from data.entity.Entity import Entity
 class Player(Entity):
     def __init__(self, status:GameStatus, world:GameWorld):
         self.status = status
-        super().__init__(world.map.respawn(self), world.player_group)
+        super().__init__(world.map.get_respawn(self.status), world, world.player_group)
         
-        self.world = world
-
         self.image.fill(self.status.value.value)
 
 
@@ -29,7 +27,6 @@ class Player(Entity):
         keys = pygame.key.get_pressed()
 
         action = None
-
         if keys[pygame.K_UP]: 
             action = Action.MOVE_UP
 
@@ -45,22 +42,9 @@ class Player(Entity):
         elif keys[pygame.K_SPACE]:
             action = Action.PLACE_BOMB
 
-        if action is not None and GameLogic.apply_action(self.world, self, action): return True
-        return False
+        return GameLogic.apply_action(self.world, self, action)
 
     
-    def is_hit(self):
-        '''
-        Output: check player sprite collides with any explosion. Return True if collides, otherwise False
-        ''' 
-
-        return pygame.sprite.spritecollideany(self, self.world.explosion_group)
-
-    def kill(self):
-        self.world.map.update_grid_position(self)
-
-        super().kill()
-
 
     def clone(self, new_world):
         copy = Player(self.status, new_world)

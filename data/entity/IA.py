@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 import random
-import pygame
 
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
@@ -23,9 +22,8 @@ class IA(Entity):
 
     def __init__(self, status:GameStatus, world:GameWorld, difficulty="facile"):
         self.status = status
-        super().__init__(world.map.respawn(self), world.player_group)
+        super().__init__(world.map.get_respawn(self.status), world, world.player_group)
 
-        self.world = world
         self.image.fill(self.status.value.value)
 
         self.difficulty = difficulty
@@ -116,14 +114,6 @@ class IA(Entity):
                                 Action.PLACE_BOMB])
         
         return GameLogic.apply_action(self.world, self, action)
-    
-
-    def is_hit(self):
-        '''
-        Output: check player sprite collides with any explosion. Return True if collides, otherwise False
-        ''' 
-
-        return pygame.sprite.spritecollideany(self, self.world.explosion_group)
     
 
     def clone(self, new_world):

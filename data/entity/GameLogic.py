@@ -13,7 +13,9 @@ from data.entity.Bombe import Bomb
 class GameLogic:
     @staticmethod
     def apply_action(world: GameWorld, entity: Entity, action: Action) -> bool:
-
+        if action is None:
+            return False
+        
         if action in Action.MOVE:
             if world.map.is_walkable(entity, action):
             

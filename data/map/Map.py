@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
-    from data.entity.Player import Player
     from data.entity.Entity import Entity
     from data.entity.Bombe import Bomb
     from data.entity.GameWord import GameWorld
@@ -157,19 +156,12 @@ class Map:
         return not pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
 
 
-    def respawn(self, entity) -> Tuple[int, int]:
+    def get_respawn(self, status: GameStatus) -> Tuple[int, int]:
         '''
         Output: return a random spawn point on the map. 
         '''
-        if entity.status == GameStatus.P1:
-            self.grid[entity] = self.spawn_point[0]
-
-            return self.spawn_point[0]
-        
-        elif entity.status == GameStatus.P2:
-            self.grid[entity] = self.spawn_point[-1]
-
-            return self. spawn_point[-1]
+        if status == GameStatus.P1: return self.spawn_point[0]
+        elif status == GameStatus.P2: return self. spawn_point[-1]
         
 
     def get_players_pos(self):
