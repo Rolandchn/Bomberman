@@ -86,7 +86,7 @@ class IA(Entity):
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
         for player in simulated_world.player_group:
-            if GameStatus.P1 in player.status or GameStatus.P2 in player.status:
+            if simulated_world.map.grid.get(player) is None:
                 return True
         
         return False
