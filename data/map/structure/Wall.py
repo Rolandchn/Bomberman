@@ -8,7 +8,7 @@ from data.texture.Color import Color
 
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, x:int, y:int):
+    def __init__(self, x: int, y: int):
         super().__init__()
 
         self.grid_x = x

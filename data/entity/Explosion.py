@@ -11,7 +11,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Explosion(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world:GameWorld, duration=3):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, duration=3):
         self.world = world
         super().__init__(self.world.explosion_group)
 

@@ -13,7 +13,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world:GameWorld, timer=2, spread=2):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, timer=2, spread=2):
         self.world = world
         super().__init__(self.world.bomb_group)
 
@@ -30,7 +30,7 @@ class Bomb(pygame.sprite.Sprite):
         self.spread = spread
 
 
-    def update(self, game_turn:int):
+    def update(self, game_turn: int):
         '''
         Output: update sprite by turn 
         ''' 

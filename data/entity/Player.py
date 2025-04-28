@@ -14,7 +14,7 @@ from data.entity.Entity import Entity
 
 
 class Player(Entity):
-    def __init__(self, status:GameStatus, world:GameWorld):
+    def __init__(self, status: GameStatus, world: GameWorld):
         self.status = status
         super().__init__(world.map.get_respawn(self.status), world, world.player_group)
         

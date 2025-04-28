@@ -19,7 +19,7 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, status:GameStatus, world:GameWorld, difficulty="facile"):
+    def __init__(self, status: GameStatus, world: GameWorld, difficulty="facile"):
         self.status = status
         super().__init__(world.map.get_respawn(self.status), world, world.player_group)
 
@@ -80,7 +80,7 @@ class IA(Entity):
         '''
         pass
 
-    def terminal(self, simulated_world:GameWorld):
+    def terminal(self, simulated_world: GameWorld):
         '''
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
