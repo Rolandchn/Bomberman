@@ -4,9 +4,9 @@ import pygame
 from typing import Tuple
 
 
-from data.entity.Obstacle import Obstacle
+from data.map.structure.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
-from data.entity.GameWord import GameWorld
+from game.GameWord import GameWorld
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE

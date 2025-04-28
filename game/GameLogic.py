@@ -3,9 +3,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from data.entity.Entity import Entity
-    from data.entity.GameWord import GameWorld
+    from game.GameWord import GameWorld
 
-from data.entity.Action import Action
+from game.GameAction import Action
 from data.entity.Bombe import Bomb
 
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from data.entity.GameWord import GameWorld
+    from game.GameWord import GameWorld
 
 
 import pygame

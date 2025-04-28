@@ -33,7 +33,7 @@ Phase 1 : Conception du jeu
 	
 	
 	3.	Définir la structure des données 			
-	3.1	Représentation de l’état du jeu (plateau, positions, scores, etc.).
+	3.1	Représentation de l’état du jeu (plateau, positions, sgames, etc.).
 			- plateau = graphe (x, y) de (0, 0) à (130, -130)
 			
 			- Vivant = état Joueur 

@@ -1,9 +1,9 @@
 import pygame
 
-from core.GameStatus import GameStatus
+from game.GameStatus import GameStatus
 
 from data.entity.Player import Player
-from data.entity.GameWord import GameWorld
+from game.GameWord import GameWorld
 from data.entity.IA import IA
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
@@ -15,8 +15,10 @@ from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 class Game():
     def __init__(self):
         # Initialize general
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.init()
+
         pygame.display.set_caption("Bomberman")
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
         # Initialize Game

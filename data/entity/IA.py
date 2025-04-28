@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 import random
 
 if TYPE_CHECKING:
-    from data.entity.GameWord import GameWorld
+    from game.GameWord import GameWorld
 
-from core.Bomberman import GameStatus
-from data.entity.GameLogic import GameLogic
+from game.BombermanGame import GameStatus
+from game.GameLogic import GameLogic
 
 from data.entity.Entity import Entity
-from data.entity.Action import Action
+from game.GameAction import Action
 from data.entity.Bombe import Bomb
 
 
@@ -62,10 +62,10 @@ class IA(Entity):
         ai_x, ai_y = self.grid_x, self.grid_y
         player_x, player_y = self.world.map.get_enemies_pos(self)
         
-        ai_score = self.world.map.valued_grid[ai_y][ai_x]
-        player_score = self.world.map.valued_grid[player_y][player_x]
+        ai_sgame = self.world.map.valued_grid[ai_y][ai_x]
+        player_sgame = self.world.map.valued_grid[player_y][player_x]
 
-        return ai_score - player_score
+        return ai_sgame - player_sgame
 
 
     def value(self):
