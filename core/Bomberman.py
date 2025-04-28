@@ -1,5 +1,4 @@
 import pygame
-import copy
 
 from core.GameStatus import GameStatus
 
@@ -52,12 +51,10 @@ class Game():
         ''' 
 
         if self.player1.is_dead():
-                self.player1.kill()
-                self.player1 = Player(GameStatus.P1, self.world)
+            self.player1.respawn()
 
         if self.ai.is_dead():
-            self.ai.kill()
-            self.ai = IA(GameStatus.P2, self.world)
+            self.ai.respawn()
 
         if self.player1.is_hit():
             self.player1.life -= 1

@@ -29,8 +29,6 @@ class Bomb(pygame.sprite.Sprite):
         self.timer = timer
         self.spread = spread
 
-        self.world.map.update_grid_bomb(self)
-
 
     def update(self, game_turn:int):
         '''

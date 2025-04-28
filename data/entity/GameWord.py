@@ -1,5 +1,3 @@
-
-
 import pygame
 
 from data.map.Map import Map

@@ -1,18 +1,17 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 import random
-import pygame
 
 if TYPE_CHECKING:
     from data.entity.GameWord import GameWorld
 
-
 from core.Bomberman import GameStatus
+from data.entity.GameLogic import GameLogic
 
 from data.entity.Entity import Entity
+from data.entity.Action import Action
 from data.entity.Bombe import Bomb
 
-from data.texture.config import TILE_SIZE
 
 
 class IA(Entity):
@@ -22,9 +21,8 @@ class IA(Entity):
 
     def __init__(self, status:GameStatus, world:GameWorld, difficulty="facile"):
         self.status = status
-        super().__init__(world.map.respawn(self), world.player_group)
+        super().__init__(world.map.get_respawn(self.status), world, world.player_group)
 
-        self.world = world
         self.image.fill(self.status.value.value)
 
         self.difficulty = difficulty
@@ -82,15 +80,22 @@ class IA(Entity):
         '''
         pass
 
-    def terminal(self):
+    def terminal(self, simulated_world:GameWorld):
         '''
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
-        for position in self.world.map.grid.items():
-            if GameStatus.P1 in position or GameStatus.P2 in position:
+        for player in simulated_world.player_group:
+            if simulated_world.map.grid.get(player) is None:
                 return True
         
         return False
+
+
+    def minmax(self):
+        simulated_world = self.world.clone()
+
+        if self.terminal(simulated_world):
+            pass
 
 
 
@@ -101,43 +106,13 @@ class IA(Entity):
         '''
         IA Random : déplacement aléatoire + pose bombe aléatoire
         '''
-        action = random.choice([self.move, self.bomb])
+        action = random.choice([Action.MOVE_UP,
+                                Action.MOVE_DOWN,
+                                Action.MOVE_LEFT,
+                                Action.MOVE_RIGHT,
+                                Action.PLACE_BOMB])
         
-        return action()
-
-
-    def move(self) -> bool:
-        #Retourne une direction valide aléatoire
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        random.shuffle(directions)
-
-        for dx, dy in directions:
-            nx = self.grid_x + dx
-            ny = self.grid_y + dy
-
-            if self.world.map.is_walkable(self, nx, ny):
-                self.world.map.update_grid_position(self, nx, ny)
-                self.grid_x = nx
-                self.grid_y = ny
-
-                self.update_rect()
-                return True
-            
-        return False
-
-
-    def bomb(self):
-        #Pose une bombe sur la position actuelle
-        Bomb((self.grid_x, self.grid_y), self.world)
-        return True
-    
-
-    def is_hit(self):
-        '''
-        Output: check player sprite collides with any explosion. Return True if collides, otherwise False
-        ''' 
-
-        return pygame.sprite.spritecollideany(self, self.world.explosion_group)
+        return GameLogic.apply_action(self.world, self, action)
     
 
     def clone(self, new_world):
