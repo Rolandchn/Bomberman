@@ -16,6 +16,9 @@ class GameWorld:
         
         self.map = Map(self)
 
+        self.turn_status = None
+        self.turn = None
+
 
     def update(self, game_turn):
         self.player_group.update()
@@ -36,6 +39,8 @@ class GameWorld:
 
     def clone(self):
         new_world = GameWorld()
+        new_world.turn = self.turn
+        new_world.turn_status = self.turn_status
 
         for sprite, position in self.map.grid.items():
             copy_sprite = sprite.clone(new_world)

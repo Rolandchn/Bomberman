@@ -11,14 +11,14 @@ from game.GameLogic import GameLogic
 
 from data.entity.Entity import Entity
 from game.GameAction import Action
-from data.entity.Bombe import Bomb
 
 
 
 class IA(Entity):
     # difficulty:
     #   easy: random
-    #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
+    #   moderate:  min max td4 (strategie: take the center, destroy obstacle)
+    #   strong:  min max td4 (strategie: corner the player, reaction to player following, reaction to player fleeing ...)
 
     def __init__(self, position, status: GameStatus, world: GameWorld, difficulty="facile"):
         self.status = status
@@ -41,20 +41,20 @@ class IA(Entity):
             pass #à implementer (minMax)
 
 
-    def turn(self):
+    def turn(self, simulated_world: GameWorld):
         '''
         retourne le joueur qui va joue en fonction de la difficulté
         '''
-
-        pass
+        return simulated_world.turn_status
 
 
     def action(self):
         '''
         Output: return all the available actions in one state.
         '''
-
+        actions = [Action.MOVE, Action.PLACE_BOMB]
         pass
+
 
     def eval(self, game_state):
         '''
