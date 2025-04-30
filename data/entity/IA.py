@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 import random
+import pygame
 
 if TYPE_CHECKING:
     from game.GameWord import GameWorld
@@ -85,7 +86,7 @@ class IA(Entity):
         Output détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
         for player in simulated_world.player_group:
-            if simulated_world.map.grid.get(player) is None:
+            if pygame.sprite.spritecollideany(player, simulated_world.explosion_group) is not None:
                 return True
         
         return False

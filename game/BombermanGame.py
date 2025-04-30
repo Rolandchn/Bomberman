@@ -37,7 +37,7 @@ class Game():
                 self.turn_status = GameStatus.P2
 
         elif self.turn_status == GameStatus.P2:
-            if self.ai.input():
+            if self.player2.input():
                 self.turn_status = GameStatus.P1
 
                 self.turn += 1
@@ -50,17 +50,17 @@ class Game():
 
         if self.player1.is_dead():
             self.game_over = True
-            self.winner = "Player 2 (IA)"
+            self.winner = GameStatus.P2
 
-        if self.ai.is_dead():
+        if self.player2.is_dead():
             self.game_over = True
-            self.winner = "Player 1"
+            self.winner = GameStatus.P1
 
         if self.player1.is_hit():
             self.player1.life -= 1
         
-        if self.ai.is_hit():
-            self.ai.life -= 1
+        if self.player2.is_hit():
+            self.player2.life -= 1
 
 
     def run(self):
@@ -86,7 +86,6 @@ class Game():
             else :
                 self.display_game_over()
 
-
             pygame.display.update()
             
             self.clock.tick(40)
@@ -101,7 +100,12 @@ class Game():
         small_font= pygame.font.SysFont(None, 40)
 
         #texte pour gagnant
-        text = font.render(f"{self.winner} wins!", True, (255, 0, 0))
+        if self.winner == GameStatus.P1: 
+            winner_name = "Player 1"
+        else: 
+            winner_name = "Player 2"
+        
+        text = font.render(f"{winner_name} wins!", True, (255, 0, 0))
         rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2-100))
 
         #bouton rejouer
@@ -117,8 +121,6 @@ class Game():
         #Bouton
         pygame.draw.rect(self.screen, (0, 128, 0), button_rect)
         self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
-
-        print(button_rect, pygame.mouse.get_pos(), button_rect.collidepoint(pygame.mouse.get_pos()))
 
         # Gérer clic
         for event in pygame.event.get():
@@ -137,7 +139,7 @@ class Game():
         self.world = GameWorld()
 
         self.player1 = Player(GameStatus.P1, self.world)
-        self.ai = IA(GameStatus.P2, self.world, difficulty=self.selected_difficulty)
+        self.player2 = IA(GameStatus.P2, self.world, difficulty=self.selected_difficulty)
 
         self.turn_status = GameStatus.P1
         self.turn = 0
