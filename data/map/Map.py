@@ -32,9 +32,6 @@ class Map:
 
         self.world = world
 
-        self.generate_map()
-        self.generate_valued_grid()
-
 
     def generate_map(self):
         '''
@@ -50,22 +47,19 @@ class Map:
         for row, tiles in enumerate(buff):
             for col, tile in enumerate(tiles):
                 if tile == "#":
-                    self.world.wall_group.add(Wall(col, row))
+                    Wall(col, row, self.world)
 
                 elif tile == ".":
-                    self.world.floor_group.add(Floor(col, row))
+                    Floor(col, row, self.world)
                 
                 elif tile == "S":
-                    self.world.floor_group.add(Floor(col, row))
+                    Floor(col, row, self.world)
                     self.spawn_points.append((col, row))
         
                 elif tile == "X":
-                    obstacle = Obstacle(col, row)
+                    Floor(col, row, self.world)
                     
-                    self.world.wall_group.add(obstacle)
-                    self.world.floor_group.add(Floor(col, row))
-
-                    self.grid[obstacle] = (col, row)
+                    self.grid[Obstacle(col, row, self.world)] = (col, row)
 
 
     def generate_valued_grid(self):
@@ -164,7 +158,7 @@ class Map:
         return not pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
 
 
-    def get_respawn(self, status: GameStatus) -> Tuple[int, int]:
+    def get_spawn(self, status: GameStatus) -> Tuple[int, int]:
         '''
         Output: return a random spawn point on the map. 
         '''

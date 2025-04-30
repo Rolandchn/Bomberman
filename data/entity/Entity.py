@@ -11,7 +11,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, position: int, world: GameWorld, *groups):
+    def __init__(self, position, world: GameWorld, *groups):
         super().__init__(*groups)
 
         self.world = world

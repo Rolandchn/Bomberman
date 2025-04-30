@@ -37,18 +37,10 @@ class GameWorld:
     def clone(self):
         new_world = GameWorld()
 
-        for pos, entity_list in self.map.grid.items():
-            new_entities = []
-
-            for entity in entity_list:
-                copy_entity = entity.clone(new_world)
-
-                for group_name in entity.groups_to_add():
-                    getattr(new_world, group_name).add(entity)
-
-                new_entities.append(copy_entity)
-
-            new_world.map.grid[pos] = new_entities
+        for sprite, position in self.map.grid.items():
+            copy_sprite = sprite.clone(new_world)
+            
+            new_world.map.grid[copy_sprite] = position
 
         return new_world
 

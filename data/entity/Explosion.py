@@ -35,5 +35,5 @@ class Explosion(pygame.sprite.Sprite):
             self.world.map.update_grid_explosion(self, remove=True)
             self.kill()
 
-    def groups_to_add(self):
-        return ["explosion_group"]
+    def clone(self, new_world):
+        return Explosion((self.grid_x, self.grid_y), new_world)

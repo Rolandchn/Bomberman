@@ -20,9 +20,9 @@ class IA(Entity):
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle, corner the player, ...)
 
-    def __init__(self, status: GameStatus, world: GameWorld, difficulty="facile"):
+    def __init__(self, position, status: GameStatus, world: GameWorld, difficulty="facile"):
         self.status = status
-        super().__init__(world.map.get_respawn(self.status), world, world.player_group)
+        super().__init__(position, world, world.player_group)
 
         self.image.fill(self.status.value.value)
 
@@ -117,16 +117,7 @@ class IA(Entity):
     
 
     def clone(self, new_world):
-        copy = IA(self.status, new_world)
-        
-        copy.grid_x = self.grid_x
-        copy.grid_y = self.grid_y
-        copy.rect = self.rect
-
-        return copy
-    
-    def groups_to_add(self):
-        return ["player_group"]
+        return IA((self. grid_x, self.grid_y), self.status, new_world)
 
 
     def __eq__(self, other):

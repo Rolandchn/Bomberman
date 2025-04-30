@@ -14,9 +14,9 @@ from data.entity.Entity import Entity
 
 
 class Player(Entity):
-    def __init__(self, status: GameStatus, world: GameWorld):
+    def __init__(self, position, status: GameStatus, world: GameWorld):
         self.status = status
-        super().__init__(world.map.get_respawn(self.status), world, world.player_group)
+        super().__init__(position, world, world.player_group)
         
         self.image.fill(self.status.value.value)
 
@@ -47,17 +47,8 @@ class Player(Entity):
     
 
     def clone(self, new_world):
-        copy = Player(self.status, new_world)
-
-        copy.grid_x = self.grid_x
-        copy.grid_y = self.grid_y
-        copy.rect = self.rect
-
-        return copy
+        return Player((self. grid_x, self.grid_y), self.status, new_world)
         
-    def groups_to_add(self):
-        return ["player_group"]
-
 
     def __eq__(self, other):
         return isinstance(other, Player) and other.status == self.status
