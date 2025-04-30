@@ -22,17 +22,8 @@ class Game():
         self.show_menu()
 
         # Initialize Game
-        self.world = GameWorld()
+        self.restart_game()
 
-        self.player1 = Player(GameStatus.P1, self.world)
-        self.ai = IA(GameStatus.P2, self.world, difficulty=self.selected_difficulty)
-        
-        self.turn_status = GameStatus.P1
-        self.turn = 0
-
-        # Pour determiner fin de partie et gagnant
-        self.game_over = False
-        self.winner = None
 
     def handle_input(self):
         '''
@@ -81,7 +72,8 @@ class Game():
         while RUNNING:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    RUNNING = False
+                    pygame.quit()
+                    sys.exit()
 
             if not self.game_over:
                 self.handle_input()
@@ -97,8 +89,6 @@ class Game():
             
             self.clock.tick(40)
         
-        pygame.quit()
-
 
     def display_game_over(self):
 
@@ -126,6 +116,8 @@ class Game():
         pygame.draw.rect(self.screen, (0, 128, 0), button_rect)
         self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
 
+        print(button_rect, pygame.mouse.get_pos(), button_rect.collidepoint(pygame.mouse.get_pos()))
+
         # Gérer clic
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -147,6 +139,7 @@ class Game():
 
         self.turn_status = GameStatus.P1
         self.turn = 0
+
         self.game_over = False
         self.winner = None
 
@@ -169,12 +162,12 @@ class Game():
 
             # Boutons
             buttons = [
-                ("Facile", GameStatus.P2, "facile", SCREEN_HEIGHT // 2 - 20),
-                ("Moyen", GameStatus.P2, "moyen", SCREEN_HEIGHT // 2 + 40),
-                ("Difficile", GameStatus.P2, "difficile", SCREEN_HEIGHT // 2 + 100),
+                ("Facile", "facile", SCREEN_HEIGHT // 2 - 20),
+                ("Moyen", "moyen", SCREEN_HEIGHT // 2 + 40),
+                ("Difficile", "difficile", SCREEN_HEIGHT // 2 + 100),
             ]
 
-            for label, status, difficulty, y in buttons:
+            for label, difficulty, y in buttons:
                 btn_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, y, 200, 40)
                 pygame.draw.rect(self.screen, (50, 150, 50), btn_rect)
                 text = small_font.render(label, True, (255, 255, 255))
