@@ -34,6 +34,7 @@ class Bomb(pygame.sprite.Sprite):
         '''
         Output: update sprite by turn 
         ''' 
+        self.world.map.update_grid_bomb(self)
 
         if self.start_turn is None:
             self.start_turn = game_turn
@@ -77,6 +78,3 @@ class Bomb(pygame.sprite.Sprite):
 
     def clone(self, new_world):
         return Bomb((self.grid_x, self.grid_y), new_world)
-    
-    def groups_to_add(self):
-        return ["bomb_group"]

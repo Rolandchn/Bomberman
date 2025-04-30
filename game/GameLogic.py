@@ -26,12 +26,10 @@ class GameLogic:
 
                 entity.update_rect()
                 
-                world.map.update_grid_position(entity)
-
             else:
                 return False # if player is struck
                 
         elif action == Action.PLACE_BOMB:
-            world.map.update_grid_bomb(Bomb((entity.grid_x, entity.grid_y), world))
+            Bomb((entity.grid_x, entity.grid_y), world)
 
         return True

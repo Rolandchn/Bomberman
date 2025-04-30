@@ -13,8 +13,8 @@ from data.texture.Color import Color
 
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int):
-        super().__init__()
+    def __init__(self, x: int, y: int, world: GameWorld):
+        super().__init__(world.wall_group)
 
         self.grid_x = x
         self.grid_y = y
@@ -28,13 +28,10 @@ class Obstacle(pygame.sprite.Sprite):
 
 
     def kill(self, world: GameWorld):
-        world.map.update_grid_explosion(self)
+        world.map.update_grid_obstacle(self)
 
         super().kill()
 
 
-    def clone(self):
-        return Obstacle(self.grid_x, self.grid_y)
-    
-    def groups_to_add(self):
-        return ["wall_group"]
+    def clone(self, new_world):
+        return Obstacle(self.grid_x, self.grid_y, new_world)

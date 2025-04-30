@@ -34,13 +34,14 @@ class Game():
 
         if self.turn_status == GameStatus.P1:
             if self.player1.input():
-                self.turn_status = GameStatus.P2
+                self.turn_status = GameStatus.P1
+
+                self.turn += 1
 
         elif self.turn_status == GameStatus.P2:
             if self.player2.input():
                 self.turn_status = GameStatus.P1
 
-                self.turn += 1
 
 
     def handle_event(self):
@@ -83,6 +84,7 @@ class Game():
 
                 self.world.update(self.turn)
                 self.world.draw(self.screen)
+
             else :
                 self.display_game_over()
 
@@ -137,9 +139,10 @@ class Game():
             Réinitialise la partie (remet tout à zéro)
         '''
         self.world = GameWorld()
+        self.world.map.generate_map()
 
-        self.player1 = Player(GameStatus.P1, self.world)
-        self.player2 = IA(GameStatus.P2, self.world, difficulty=self.selected_difficulty)
+        self.player1 = Player(self.world.map.get_spawn(GameStatus.P1), GameStatus.P1, self.world)
+        self.player2 = IA(self.world.map.get_spawn(GameStatus.P2), GameStatus.P2, self.world, difficulty=self.selected_difficulty)
 
         self.turn_status = GameStatus.P1
         self.turn = 0

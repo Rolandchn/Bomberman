@@ -11,7 +11,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, position: int, world: GameWorld, *groups):
+    def __init__(self, position, world: GameWorld, *groups):
         super().__init__(*groups)
 
         self.world = world
@@ -23,6 +23,10 @@ class Entity(pygame.sprite.Sprite):
 
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
+
+
+    def update(self):
+        self.world.map.update_grid_position(self)
 
 
     def update_rect(self):
