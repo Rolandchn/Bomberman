@@ -26,6 +26,8 @@ class Game():
         # Initialize Game
         self.restart_game()
 
+        self.once= True
+
 
     def handle_input(self):
         '''
@@ -84,6 +86,10 @@ class Game():
 
                 self.world.update(self.world.turn)
                 self.world.draw(self.screen)
+
+                if self.once:
+                    self.player2.minmax()
+                    self.once = False
 
             else :
                 self.display_game_over()

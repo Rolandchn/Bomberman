@@ -43,28 +43,35 @@ class IA(Entity):
 
     def turn(self, simulated_world: GameWorld):
         '''
-        retourne le joueur qui va joue en fonction de la difficulté
+        Output: retourne le joueur qui va joue
         '''
-        return simulated_world.turn_status
+        for player in simulated_world.player_group:
+            if player.status == simulated_world.turn_status:
+                return player
 
 
-    def action(self):
+    def action(self, simulated_world: GameWorld):
         '''
         Output: return all the available actions in one state.
         '''
-        actions = [Action.MOVE, Action.PLACE_BOMB]
-        pass
+        actions = [Action.PLACE_BOMB]
+
+        for move in Action.MOVE:
+            if simulated_world.map.is_walkable(self.turn(simulated_world), move):
+                actions.append(move)
+
+        return actions
 
 
-    def eval(self, game_state):
+    def eval(self, simulated_world: GameWorld):
         '''
         Output: evaluate the game state depending on the AI position.
         '''
         ai_x, ai_y = self.grid_x, self.grid_y
-        player_x, player_y = self.world.map.get_enemies_pos(self)
+        player_x, player_y = simulated_world.map.get_enemies_pos(self)
         
-        ai_sgame = self.world.map.valued_grid[ai_y][ai_x]
-        player_sgame = self.world.map.valued_grid[player_y][player_x]
+        ai_sgame = simulated_world.map.valued_grid[ai_y][ai_x]
+        player_sgame = simulated_world.map.valued_grid[player_y][player_x]
 
         return ai_sgame - player_sgame
 
@@ -75,15 +82,17 @@ class IA(Entity):
         '''
         pass
 
+
     def result(self):
         '''
         Output: retourne l'état de la partie après une action donnée
         '''
         pass
 
+
     def terminal(self, simulated_world: GameWorld):
         '''
-        Output détermine si la partie est terminée (gagnant, perdant, égalité)
+        Output: détermine si la partie est terminée (gagnant, perdant, égalité)
         '''
         for player in simulated_world.player_group:
             if pygame.sprite.spritecollideany(player, simulated_world.explosion_group) is not None:
@@ -95,9 +104,13 @@ class IA(Entity):
     def minmax(self):
         simulated_world = self.world.clone()
 
-        if self.terminal(simulated_world):
-            pass
+        player = self.turn(simulated_world)
 
+        GameLogic.apply_action(simulated_world, player, self.action(simulated_world)[1])
+
+        print((player.grid_x, player.grid_y))
+
+        pass
 
 
     '''

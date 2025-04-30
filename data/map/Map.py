@@ -47,7 +47,7 @@ class Map:
         for row, tiles in enumerate(buff):
             for col, tile in enumerate(tiles):
                 if tile == "#":
-                    Wall(col, row, self.world)
+                    self.grid[Wall(col, row, self.world)] = (col, row)
 
                 elif tile == ".":
                     Floor(col, row, self.world)
