@@ -34,6 +34,7 @@ class Bomb(pygame.sprite.Sprite):
         '''
         Output: update sprite by turn 
         ''' 
+        self.world.map.update_grid_bomb(self)
 
         if self.start_turn is None:
             self.start_turn = game_turn

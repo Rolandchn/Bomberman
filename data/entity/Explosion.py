@@ -27,9 +27,12 @@ class Explosion(pygame.sprite.Sprite):
 
 
     def update(self):
+        self.world.map.update_grid_explosion(self)
+        
         self.duration -= 1
 
         if self.duration <= 0:
+            self.world.map.update_grid_explosion(self, remove=True)
             self.kill()
 
     def groups_to_add(self):

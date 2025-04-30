@@ -34,13 +34,14 @@ class Game():
 
         if self.turn_status == GameStatus.P1:
             if self.player1.input():
-                self.turn_status = GameStatus.P2
+                self.turn_status = GameStatus.P1
+
+                self.turn += 1
 
         elif self.turn_status == GameStatus.P2:
             if self.player2.input():
                 self.turn_status = GameStatus.P1
 
-                self.turn += 1
 
 
     def handle_event(self):
@@ -83,6 +84,11 @@ class Game():
 
                 self.world.update(self.turn)
                 self.world.draw(self.screen)
+
+                print("=========new grid=========")
+                for key, value in self.world.map.grid.items():
+                    print(key, value)
+
             else :
                 self.display_game_over()
 

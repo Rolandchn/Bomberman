@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from data.entity.Entity import Entity
     from data.entity.Bombe import Bomb
+    from data.entity.Explosion import Explosion
     from game.GameWord import GameWorld
 
 
@@ -117,9 +118,17 @@ class Map:
         self.grid[entity] = (entity.grid_x, entity.grid_y)
 
 
-    def update_grid_explosion(self, obstacle: Obstacle):
+    def update_grid_obstacle(self, obstacle: Obstacle):
         if obstacle in self.grid: 
             del self.grid[obstacle]
+
+
+    def update_grid_explosion(self, explosion: Explosion, remove = False):
+        if remove and explosion in self.grid:
+            del self.grid[explosion]
+
+        else:
+            self.grid[explosion] = (explosion.grid_x, explosion.grid_y)
 
 
     def update_grid_bomb(self, bomb: Bomb, remove = False):

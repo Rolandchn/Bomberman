@@ -25,6 +25,10 @@ class Entity(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
 
 
+    def update(self):
+        self.world.map.update_grid_position(self)
+
+
     def update_rect(self):
         self.rect.topleft = (self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE)
 

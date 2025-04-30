@@ -20,6 +20,7 @@ class Player(Entity):
         
         self.image.fill(self.status.value.value)
 
+        self.world.map.update_grid_position(self)
 
     
     def input(self) -> bool:

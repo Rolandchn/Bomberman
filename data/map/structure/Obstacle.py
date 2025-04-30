@@ -28,7 +28,7 @@ class Obstacle(pygame.sprite.Sprite):
 
 
     def kill(self, world: GameWorld):
-        world.map.update_grid_explosion(self)
+        world.map.update_grid_obstacle(self)
 
         super().kill()
 
