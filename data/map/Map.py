@@ -47,7 +47,7 @@ class Map:
         for row, tiles in enumerate(buff):
             for col, tile in enumerate(tiles):
                 if tile == "#":
-                    Wall(col, row, self.world)
+                    self.grid[Wall(col, row, self.world)] = (col, row)
 
                 elif tile == ".":
                     Floor(col, row, self.world)
@@ -164,23 +164,10 @@ class Map:
         '''
         if status == GameStatus.P1: return self.spawn_points[0]
         elif status == GameStatus.P2: return self. spawn_points[-1]
-        
-
-    def get_players_pos(self):
-        players_pos = []
-
-        for player in self.world.player_group:
-            players_pos.append((player.grid_x, player.grid_y))
-            
-        return players_pos
     
 
-    def get_enemies_pos(self, player: Entity):
-        enemies_pos = []
-
+    def get_enemie_pos(self, player: Entity):
         for p in self.world.player_group:
             if p != player:
-                enemies_pos.append((p.grid_x, p.grid_y))
-
-        return enemies_pos
+                return(p.grid_x, p.grid_y)
 

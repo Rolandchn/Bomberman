@@ -26,21 +26,23 @@ class Game():
         # Initialize Game
         self.restart_game()
 
+        self.once= True
+
 
     def handle_input(self):
         '''
         Output: check turn state and wait for player1 input before switching turn.  
         ''' 
 
-        if self.turn_status == GameStatus.P1:
+        if self.world.turn_status == GameStatus.P1:
             if self.player1.input():
-                self.turn_status = GameStatus.P1
+                self.world.turn_status = GameStatus.P1
 
-                self.turn += 1
+                self.world.turn += 1
 
-        elif self.turn_status == GameStatus.P2:
+        elif self.world.turn_status == GameStatus.P2:
             if self.player2.input():
-                self.turn_status = GameStatus.P1
+                self.world.turn_status = GameStatus.P1
 
 
 
@@ -69,7 +71,7 @@ class Game():
         Output: game loop  
         ''' 
 
-        self.turn = 0
+        self.world.turn = 0
 
         RUNNING = True
         while RUNNING:
@@ -82,8 +84,11 @@ class Game():
                 self.handle_input()
                 self.handle_event()
 
-                self.world.update(self.turn)
+                self.world.update(self.world.turn)
                 self.world.draw(self.screen)
+
+                if self.once:
+                    print(self.player2.minmax(self.world))
 
             else :
                 self.display_game_over()
@@ -144,8 +149,8 @@ class Game():
         self.player1 = Player(self.world.map.get_spawn(GameStatus.P1), GameStatus.P1, self.world)
         self.player2 = IA(self.world.map.get_spawn(GameStatus.P2), GameStatus.P2, self.world, difficulty=self.selected_difficulty)
 
-        self.turn_status = GameStatus.P1
-        self.turn = 0
+        self.world.turn_status = GameStatus.P1
+        self.world.turn = 0
 
         self.game_over = False
         self.winner = None

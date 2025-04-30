@@ -25,3 +25,7 @@ class Wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.grid_x * TILE_SIZE
         self.rect.y = self.grid_y * TILE_SIZE
+
+
+    def clone(self, new_world):
+        return Wall(self.grid_x, self.grid_y, new_world)
