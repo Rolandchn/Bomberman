@@ -2,19 +2,19 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from data.entity.GameWord import GameWorld
-    from core.Bomberman import GameStatus
+    from game.GameWord import GameWorld
+    from game.BombermanGame import GameStatus
 
 import pygame
 
-from data.entity.GameLogic import GameLogic
-from data.entity.Action import Action
+from game.GameLogic import GameLogic
+from game.GameAction import Action
 from data.entity.Entity import Entity
 
 
 
 class Player(Entity):
-    def __init__(self, status:GameStatus, world:GameWorld):
+    def __init__(self, status: GameStatus, world: GameWorld):
         self.status = status
         super().__init__(world.map.get_respawn(self.status), world, world.player_group)
         

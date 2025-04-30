@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from data.entity.Entity import Entity
     from data.entity.Bombe import Bomb
-    from data.entity.GameWord import GameWorld
+    from game.GameWord import GameWorld
 
 
 import pygame
@@ -12,13 +12,13 @@ import math
 
 from collections import defaultdict
 
-from data.entity.Action import Action
+from game.GameAction import Action
 
-from core.GameStatus import GameStatus
+from game.GameStatus import GameStatus
 
-from data.entity.Wall import Wall
-from data.entity.Floor import Floor
-from data.entity.Obstacle import Obstacle
+from data.map.structure.Wall import Wall
+from data.map.structure.Floor import Floor
+from data.map.structure.Obstacle import Obstacle
 
 from data.texture.config import TILE_SIZE
 
@@ -69,7 +69,7 @@ class Map:
 
     def generate_valued_grid(self):
         '''
-        Output: Generate a valued map with score increasing as we go to the center of the map
+        Output: Generate a valued map with sgame increasing as we go to the center of the map
         '''
 
         nb_grid = (13, 13)

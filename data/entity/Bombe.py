@@ -4,16 +4,16 @@ import pygame
 from typing import Tuple
 
 
-from data.entity.Obstacle import Obstacle
+from data.map.structure.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
-from data.entity.GameWord import GameWorld
+from game.GameWord import GameWorld
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world:GameWorld, timer=2, spread=2):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, timer=2, spread=2):
         self.world = world
         super().__init__(self.world.bomb_group)
 
@@ -30,7 +30,7 @@ class Bomb(pygame.sprite.Sprite):
         self.spread = spread
 
 
-    def update(self, game_turn:int):
+    def update(self, game_turn: int):
         '''
         Output: update sprite by turn 
         ''' 

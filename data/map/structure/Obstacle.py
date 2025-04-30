@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from data.entity.GameWord import GameWorld
+    from game.GameWord import GameWorld
 
 
 import pygame
@@ -13,7 +13,7 @@ from data.texture.Color import Color
 
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x:int, y:int):
+    def __init__(self, x: int, y: int):
         super().__init__()
 
         self.grid_x = x
@@ -33,7 +33,7 @@ class Obstacle(pygame.sprite.Sprite):
         super().kill()
 
 
-    def clone(self, world):
+    def clone(self):
         return Obstacle(self.grid_x, self.grid_y)
     
     def groups_to_add(self):

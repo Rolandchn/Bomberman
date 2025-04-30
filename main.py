@@ -1,11 +1,12 @@
 
-import pygame
+from game.BombermanGame import Game
 
-from core.Bomberman import Game
+
+
+def main():
+    game = Game()
+    game.run()
+
 
 if __name__ == "__main__":
-    pygame.init()
-
-    game = Game()
-
-    game.run()
+    main()
