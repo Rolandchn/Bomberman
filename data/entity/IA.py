@@ -50,7 +50,7 @@ class IA(Entity):
                 return player
 
 
-    def action(self, simulated_world: GameWorld):
+    def actions(self, simulated_world: GameWorld):
         '''
         Output: return all the available actions in one state.
         '''
@@ -68,19 +68,14 @@ class IA(Entity):
         Output: evaluate the game state depending on the AI position.
         '''
         ai_x, ai_y = self.grid_x, self.grid_y
-        player_x, player_y = simulated_world.map.get_enemies_pos(self)
+
+        simulated_world.map.generate_valued_grid()
+        player_x, player_y = simulated_world.map.get_enemie_pos(self)
         
         ai_sgame = simulated_world.map.valued_grid[ai_y][ai_x]
         player_sgame = simulated_world.map.valued_grid[player_y][player_x]
 
         return ai_sgame - player_sgame
-
-
-    def value(self):
-        '''
-        Output: retourne une value à une position de la partie (négatif perd, 0 neutre, positif gagne) 
-        '''
-        pass
 
 
     def result(self):
@@ -99,18 +94,38 @@ class IA(Entity):
                 return True
         
         return False
+    
+    def result(self, world: GameWorld, entity, action: Action):
+        new_world = world.clone()
+
+        GameLogic.apply_action(new_world,entity, action)
+
+        return new_world
 
 
-    def minmax(self):
-        simulated_world = self.world.clone()
+    def minmax(self, simulated_world: GameWorld, depth=3):
+        if depth >= 0 or self.terminal(simulated_world):
+            return self.eval(simulated_world)
 
         player = self.turn(simulated_world)
 
-        GameLogic.apply_action(simulated_world, player, self.action(simulated_world)[1])
+        # MAX
+        if player.status == GameStatus.P1:
+            value = -999
 
-        print((player.grid_x, player.grid_y))
+            for action in self.actions(simulated_world):
+                value = max(value, self.minmax(self.result(simulated_world, player, action), depth - 1))
+            
+            return value
+            
+        # MIN
+        elif player.status == GameStatus.P2:
+            value = 999
 
-        pass
+            for action in self.actions(simulated_world):
+                value = min(value, self.minmax(self.result(simulated_world, player, action), depth - 1))
+            
+            return value
 
 
     '''

@@ -88,8 +88,7 @@ class Game():
                 self.world.draw(self.screen)
 
                 if self.once:
-                    self.player2.minmax()
-                    self.once = False
+                    print(self.player2.minmax(self.world))
 
             else :
                 self.display_game_over()
