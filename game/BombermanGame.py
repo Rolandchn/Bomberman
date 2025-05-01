@@ -87,34 +87,38 @@ class Game():
         self.screen.fill((30, 30, 30))
 
         # Define buttons once
-        easy_btn = Button(SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2, "facile")
-        medium_btn = Button(SCREEN_HEIGHT // 2, easy_btn.rect.centery + easy_btn.rect.height + 10, "moyen")
-        hard_btn = Button(SCREEN_HEIGHT // 2, medium_btn.rect.centery + medium_btn.rect.height + 10, "difficile")
+        easy_btn = Button(SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2, "Facile")
+        medium_btn = Button(SCREEN_HEIGHT // 2, easy_btn.rect.centery + easy_btn.rect.height + 10, "Moyen")
+        hard_btn = Button(SCREEN_HEIGHT // 2, medium_btn.rect.centery + medium_btn.rect.height + 10, "Difficile")
 
         # Draw title
         title = font.render("Choisissez la difficulté", True, (255, 255, 255))
         self.screen.blit(title, title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100)))
 
         # Draw buttons
-        if easy_btn.draw(self.screen):
-            self.state = GameState.PLAYING
-            self.selected_difficulty = "facile"
-            self.restart_game()
-
-        elif medium_btn.draw(self.screen):
-            self.state = GameState.PLAYING
-            self.selected_difficulty = "moyen"
-            self.restart_game()
-
-        elif hard_btn.draw(self.screen):
-            self.state = GameState.PLAYING
-            self.selected_difficulty = "difficile"
-            self.restart_game()
+        easy_btn.draw(self.screen)
+        medium_btn.draw(self.screen)
+        hard_btn.draw(self.screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            if easy_btn.handle_event(event):
+                self.state = GameState.PLAYING
+                self.selected_difficulty = "facile"
+                self.restart_game()
+
+            elif medium_btn.handle_event(event):
+                self.state = GameState.PLAYING
+                self.selected_difficulty = "moyen"
+                self.restart_game()
+
+            elif hard_btn.handle_event(event):
+                self.state = GameState.PLAYING
+                self.selected_difficulty = "difficile"
+                self.restart_game()
 
             pygame.display.update()
 
@@ -130,8 +134,6 @@ class Game():
 
         self.handle_input()
         self.handle_event()
-
-        print(self.world.turn_status)
 
         self.world.update(self.world.turn)
         self.world.draw(self.screen)
@@ -150,43 +152,40 @@ class Game():
         Affiche l'écran de Game Over
         '''
         font = pygame.font.SysFont(None, 80)
-        small_font= pygame.font.SysFont(None, 40)
 
+        #affichage
+        self.screen.fill((0, 0, 0))
+        
         #texte pour gagnant
-        if self.winner == GameStatus.P1: 
-            winner_name = "Player 1"
-        else: 
-            winner_name = "Player 2"
+        if self.winner == GameStatus.P1: winner_name = "Player 1"
+        else: winner_name = "Player 2"
         
         text = font.render(f"{winner_name} wins!", True, (255, 0, 0))
         rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2-100))
 
-        #bouton rejouer
-        button_text = small_font.render("Rejouer", True, (255, 255, 255))
-        button_rect = pygame.Rect(SCREEN_WIDTH // 2 - 80, SCREEN_HEIGHT // 2, 160, 50)
-        pygame.draw.rect(self.screen, (0, 128, 0), button_rect)
-        self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
-
-        #affichage
-        self.screen.fill((0, 0, 0))
         self.screen.blit(text, rect)
+        
+        #bouton rejouer
+        replay_btn = Button(SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2, "Rejouer")
+        menu_btn = Button(SCREEN_HEIGHT // 2, replay_btn.rect.centery + replay_btn.rect.height + 10, "Menu")
 
         #Bouton
-        pygame.draw.rect(self.screen, (0, 128, 0), button_rect)
-        self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
+        replay_btn.draw(self.screen)
+        menu_btn.draw(self.screen)
 
-        # Gérer clic
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if button_rect.collidepoint(event.pos):
-                    self.restart_game()
-                    self.state = GameState.PLAYING
+
+            if replay_btn.handle_event(event):
+                self.state = GameState.PLAYING
+                self.restart_game()
+
+            if menu_btn.handle_event(event):
+                self.state = GameState.MENU
 
             pygame.display.update()
-            self.clock.tick(40)
 
 
     def restart_game(self):

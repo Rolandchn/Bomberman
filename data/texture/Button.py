@@ -21,20 +21,11 @@ class Button:
 
 
     def draw(self, surface: pygame.Surface):
-        active = False
-        
-        pos = pygame.mouse.get_pos()
-
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                active = True
-
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
-
-
         pygame.draw.rect(surface, self.bg_color, self.rect)
         surface.blit(self.text_surf, self.text_surf.get_rect(center=self.rect.center))
 
-        return active
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                return True
+        return False
