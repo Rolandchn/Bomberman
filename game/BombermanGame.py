@@ -143,7 +143,7 @@ class Game():
         self.world = GameWorld()
         self.world.map.generate_map()
 
-        self.player1 = Player(self.world.map.get_spawn(GameStatus.P1), GameStatus.P1, self.world)
+        self.player1 = IA(self.world.map.get_spawn(GameStatus.P1), GameStatus.P1, self.world, difficulty=self.selected_difficulty)
         self.player2 = IA(self.world.map.get_spawn(GameStatus.P2), GameStatus.P2, self.world, difficulty=self.selected_difficulty)
 
         self.world.turn_status = GameStatus.P1

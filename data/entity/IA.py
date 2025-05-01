@@ -110,6 +110,7 @@ class IA(Entity):
         
         return False
     
+    
     def result(self, world: GameWorld, action: Action):
         new_world = world.clone()
 
