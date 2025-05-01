@@ -34,11 +34,32 @@ class IA(Entity):
             return self.easy_mode()
 
         elif self.difficulty == "moyen":
-            pass #à implementer
+            return self.medium_mode()
 
         elif self.difficulty == "difficile":
             pass #à implementer (minMax)
 
+
+
+    '''
+    Méthode pour l'IA facile
+    '''
+    def easy_mode(self):
+        '''
+        IA Random : déplacement aléatoire + pose bombe aléatoire
+        '''
+        action = random.choice([Action.MOVE_UP,
+                                Action.MOVE_DOWN,
+                                Action.MOVE_LEFT,
+                                Action.MOVE_RIGHT,
+                                Action.PLACE_BOMB])
+        
+        return GameLogic.apply_action(self.world, self, action)
+    
+
+    '''
+    Méthode pour l'IA moyen
+    '''
 
     def turn(self, simulated_world: GameWorld):
         '''
@@ -145,27 +166,11 @@ class IA(Entity):
             return best_value, possible_action
 
 
-    '''
-    Méthode pour l'IA facile
-    '''
-    def easy_mode(self):
-        '''
-        IA Random : déplacement aléatoire + pose bombe aléatoire
-        '''
-        action = random.choice([Action.MOVE_UP,
-                                Action.MOVE_DOWN,
-                                Action.MOVE_LEFT,
-                                Action.MOVE_RIGHT,
-                                Action.PLACE_BOMB])
-        
-        return GameLogic.apply_action(self.world, self, action)
-    
-
-    '''
-    Méthode pour l'IA moyen
-    '''
     def medium_mode(self):
-        pass 
+        _, action =  self.minmax(self.world) 
+    
+        return GameLogic.apply_action(self.world, self, action)
+
 
 
     def clone(self, new_world):
