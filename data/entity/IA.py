@@ -139,7 +139,6 @@ class IA(Entity):
             return self.eval(simulated_world), None
 
         player = self.turn(simulated_world)
-        print("===call===", player, player.status)
 
         # MIN
         if player.status == GameStatus.P1:
@@ -148,7 +147,6 @@ class IA(Entity):
             for possible_action in self.actions(simulated_world, player):
                 value, _ = self.minmax(self.result(simulated_world, possible_action), depth - 1)
 
-                print(best_value, value)
                 best_value = min(best_value, value)
             
             return best_value, possible_action
@@ -159,7 +157,6 @@ class IA(Entity):
 
             for possible_action in self.actions(simulated_world, player):
                 value, _ = self.minmax(self.result(simulated_world, possible_action), depth - 1)
-                print(best_value, value)
 
                 best_value = max(best_value, value)
             
