@@ -76,6 +76,9 @@ class Game():
 
             elif self.state == GameState.GAME_OVER:
                 self.game_over()
+            
+            elif self.state == GameState.TOURNAMENT:
+                self.tournament()
 
 
     def menu(self):
@@ -90,6 +93,7 @@ class Game():
         easy_btn = Button(SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2, "Facile")
         medium_btn = Button(SCREEN_HEIGHT // 2, easy_btn.rect.centery + easy_btn.rect.height + 10, "Moyen")
         hard_btn = Button(SCREEN_HEIGHT // 2, medium_btn.rect.centery + medium_btn.rect.height + 10, "Difficile")
+        tournament_btn = Button(SCREEN_HEIGHT // 2, hard_btn.rect.centery + hard_btn.rect.height + 10, "Tournois Bot")
 
         # Draw title
         title = font.render("Choisissez la difficulté", True, (255, 255, 255))
@@ -99,6 +103,7 @@ class Game():
         easy_btn.draw(self.screen)
         medium_btn.draw(self.screen)
         hard_btn.draw(self.screen)
+        tournament_btn.draw(self.screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -119,6 +124,9 @@ class Game():
                 self.state = GameState.PLAYING
                 self.selected_difficulty = "difficile"
                 self.restart_game()
+
+            elif tournament_btn.handle_event(event):
+                self.state = GameState.TOURNAMENT
 
             pygame.display.update()
 
@@ -187,6 +195,19 @@ class Game():
 
             pygame.display.update()
 
+
+    def tournament(self):
+        self.screen.fill((30, 30, 30))
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        print("tournament")
+
+        pygame.display.update()
+        
 
     def restart_game(self):
         '''

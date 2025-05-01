@@ -12,7 +12,7 @@ class Button:
         self.text_surf = self.font.render(text, True, (255, 255, 255))
         
         text_rect = self.text_surf.get_rect()
-        text_rect.width = 100
+        text_rect.width = 200
         
         self.rect = pygame.Rect(x, y, text_rect.width + self.padding * 2, text_rect.height + self.padding * 2)
         self.rect.center = (x, y)  
