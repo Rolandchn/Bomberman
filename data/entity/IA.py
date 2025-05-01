@@ -100,13 +100,6 @@ class IA(Entity):
         return ai_sgame - player_sgame
 
 
-    def result(self):
-        '''
-        Output: retourne l'état de la partie après une action donnée
-        '''
-        pass
-
-
     def terminal(self, simulated_world: GameWorld):
         '''
         Output: détermine si la partie est terminée (gagnant, perdant, égalité)
