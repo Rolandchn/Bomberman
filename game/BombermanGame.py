@@ -21,12 +21,6 @@ class Game():
         self.clock = pygame.time.Clock()
 
         self.selected_difficulty = None
-        self.show_menu()
-
-        # Initialize Game
-        self.restart_game()
-
-        self.once= True
 
 
     def handle_input(self):
@@ -52,11 +46,11 @@ class Game():
         ''' 
 
         if self.player1.is_dead():
-            self.game_over = True
+            self.is_game_over = True
             self.winner = GameStatus.P2
 
         if self.player2.is_dead():
-            self.game_over = True
+            self.is_game_over = True
             self.winner = GameStatus.P1
 
         if self.player1.is_hit():
@@ -67,6 +61,13 @@ class Game():
 
 
     def run(self):
+        self.menu()
+        self.restart_game()
+        self.game()
+        self.game_over()
+
+
+    def game(self):
         '''
         Output: game loop  
         ''' 
@@ -80,7 +81,7 @@ class Game():
                     pygame.quit()
                     sys.exit()
 
-            if not self.game_over:
+            if not self.is_game_over:
                 self.handle_input()
                 self.handle_event()
 
@@ -88,14 +89,14 @@ class Game():
                 self.world.draw(self.screen)
 
             else :
-                self.display_game_over()
+                RUNNING = False
 
             pygame.display.update()
             
             self.clock.tick(40)
         
 
-    def display_game_over(self):
+    def game_over(self):
 
         '''
         Affiche l'écran de Game Over
@@ -127,13 +128,17 @@ class Game():
         self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
 
         # Gérer clic
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if button_rect.collidepoint(event.pos):
-                    self.restart_game()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_rect.collidepoint(event.pos):
+                        self.restart_game()
+
+                pygame.display.update()
+                self.clock.tick(40)
 
 
     def restart_game(self):
@@ -143,18 +148,18 @@ class Game():
         self.world = GameWorld()
         self.world.map.generate_map()
 
-        self.player1 = IA(self.world.map.get_spawn(GameStatus.P1), GameStatus.P1, self.world, difficulty=self.selected_difficulty)
+        self.player1 = Player(self.world.map.get_spawn(GameStatus.P1), GameStatus.P1, self.world)
         self.player2 = IA(self.world.map.get_spawn(GameStatus.P2), GameStatus.P2, self.world, difficulty=self.selected_difficulty)
 
         self.world.turn_status = GameStatus.P1
         self.world.turn = 0
 
-        self.game_over = False
+        self.is_game_over = False
         self.winner = None
 
 
 
-    def show_menu(self):
+    def menu(self):
         '''
         Affiche le menu de démarrage pour choisir la difficulté
         '''

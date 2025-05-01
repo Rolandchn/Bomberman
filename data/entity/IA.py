@@ -30,6 +30,7 @@ class IA(Entity):
 
 
     def input(self):
+        print(self.difficulty, self.difficulty == "facile")
         if self.difficulty == "facile":
             return self.easy_mode()
 
@@ -53,6 +54,7 @@ class IA(Entity):
                                 Action.MOVE_LEFT,
                                 Action.MOVE_RIGHT,
                                 Action.PLACE_BOMB])
+        print(action)
         
         return GameLogic.apply_action(self.world, self, action)
     
@@ -110,7 +112,7 @@ class IA(Entity):
         
         return False
     
-    
+
     def result(self, world: GameWorld, action: Action):
         new_world = world.clone()
 
