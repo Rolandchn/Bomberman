@@ -75,6 +75,52 @@ class Game():
             elif self.state == GameState.GAME_OVER:
                 self.game_over()
 
+    def menu(self):
+        """
+        Displays the start menu to choose difficulty.
+        """
+        font = pygame.font.SysFont(None, 60)
+        small_font = pygame.font.SysFont(None, 40)
+
+        # Define buttons once
+        buttons = [
+            {"label": "Facile", "difficulty": "facile", "y": SCREEN_HEIGHT // 2 - 20},
+            {"label": "Moyen", "difficulty": "moyen", "y": SCREEN_HEIGHT // 2 + 40},
+            {"label": "Difficile", "difficulty": "difficile", "y": SCREEN_HEIGHT // 2 + 100},
+        ]
+
+        self.screen.fill((30, 30, 30))
+
+        # Draw title
+        title = font.render("Choisissez la difficulté", True, (255, 255, 255))
+        self.screen.blit(title, title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100)))
+
+        # Draw buttons
+        for button in buttons:
+            rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, button["y"], 200, 40)
+            pygame.draw.rect(self.screen, (50, 150, 50), rect)
+            text = small_font.render(button["label"], True, (255, 255, 255))
+            self.screen.blit(text, text.get_rect(center=rect.center))
+            button["rect"] = rect  # store for click detection
+
+        # Event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for button in buttons:
+                    if button["rect"].collidepoint(event.pos):
+                        self.selected_difficulty = button["difficulty"]
+                        self.state = GameState.PLAYING
+                        self.restart_game()
+                        break
+
+            pygame.display.update()
+            self.clock.tick(60) 
+
+
 
     def game(self):
         '''
@@ -159,45 +205,3 @@ class Game():
 
         self.is_game_over = False
         self.winner = None
-
-
-
-    def menu(self):
-        '''
-        Affiche le menu de démarrage pour choisir la difficulté
-        '''
-        font = pygame.font.SysFont(None, 60)
-        small_font = pygame.font.SysFont(None, 40)
-
-        self.screen.fill((30, 30, 30))
-
-        title = font.render("Choisissez la difficulté", True, (255, 255, 255))
-        title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100))
-        self.screen.blit(title, title_rect)
-
-        # Boutons
-        buttons = [
-            ("Facile", "facile", SCREEN_HEIGHT // 2 - 20),
-            ("Moyen", "moyen", SCREEN_HEIGHT // 2 + 40),
-            ("Difficile", "difficile", SCREEN_HEIGHT // 2 + 100),
-        ]
-
-        for label, difficulty, y in buttons:
-            btn_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, y, 200, 40)
-            pygame.draw.rect(self.screen, (50, 150, 50), btn_rect)
-            text = small_font.render(label, True, (255, 255, 255))
-            self.screen.blit(text, text.get_rect(center=btn_rect.center))
-
-            # Gérer clic
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if btn_rect.collidepoint(event.pos):
-                        self.selected_difficulty = difficulty
-                        self.state = GameState.PLAYING
-                        self.restart_game()
-
-        pygame.display.update()
-        self.clock.tick(60)

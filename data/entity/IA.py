@@ -40,7 +40,6 @@ class IA(Entity):
             pass #à implementer (minMax)
 
 
-
     '''
     Méthode pour l'IA facile
     '''
