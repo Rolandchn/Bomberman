@@ -41,10 +41,6 @@ class Game():
                 self.world.turn += 1
 
         elif self.world.turn_status == GameStatus.P2:
-            if self.once:
-                print(self.player2.minmax(self.world))
-                self.once = False
-
             if self.player2.input():
                 self.world.turn_status = GameStatus.P1
 
