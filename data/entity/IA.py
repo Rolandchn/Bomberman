@@ -127,7 +127,7 @@ class IA(Entity):
         return new_world
 
 
-    def minmax(self, simulated_world: GameWorld, depth=1):
+    def minmax(self, simulated_world: GameWorld, depth=3):
         if depth < 0 or self.terminal(simulated_world):
             return self.eval(simulated_world), None
 
@@ -137,23 +137,27 @@ class IA(Entity):
         if player.status == GameStatus.P1:
             best_value = 999
 
-            for possible_action in self.actions(simulated_world, player):
-                value, _ = self.minmax(self.result(simulated_world, possible_action), depth - 1)
+            for action in self.actions(simulated_world, player):
+                value, _ = self.minmax(self.result(simulated_world, action), depth - 1)
 
-                best_value = min(best_value, value)
+                if value <= best_value:
+                    best_value = value
+                    best_action = action
             
-            return best_value, possible_action
+            return best_value, best_action
             
         # MAX
         elif player.status == GameStatus.P2:
             best_value = -999
 
-            for possible_action in self.actions(simulated_world, player):
-                value, _ = self.minmax(self.result(simulated_world, possible_action), depth - 1)
+            for action in self.actions(simulated_world, player):
+                value, _ = self.minmax(self.result(simulated_world, action), depth - 1)
+                
+                if best_value <= value:
+                    best_value = value
+                    best_action = action
 
-                best_value = max(best_value, value)
-            
-            return best_value, possible_action
+            return best_value, best_action
 
 
     def medium_mode(self):
