@@ -5,6 +5,8 @@ import pygame
 from game.GameStatus import GameStatus
 from game.GameState import GameState
 from game.GameWord import GameWorld
+from game.GameLogic import GameLogic
+from game.GameAction import Action
 
 
 from data.entity.Player import Player
@@ -151,7 +153,7 @@ class Game():
 
         pygame.display.update()
         
-        self.clock.tick(40)
+        self.clock.tick(60)
         
 
     def game_over(self):
@@ -224,3 +226,21 @@ class Game():
 
         self.is_game_over = False
         self.winner = None
+
+    @staticmethod
+    def test():
+        world = GameWorld()
+        world.map.generate_map()
+
+        player1 = Player(world.map.get_spawn(GameStatus.P1), GameStatus.P1, world)
+        player2 = IA(world.map.get_spawn(GameStatus.P2), GameStatus.P2, world, difficulty="moyen")
+
+        world.turn = 0
+        world.turn_status = GameStatus.P1
+        GameLogic.apply_action(world, player1, Action.MOVE_RIGHT)
+
+        world.turn_status = GameStatus.P2
+        
+        player2.input()
+
+        print("end")
