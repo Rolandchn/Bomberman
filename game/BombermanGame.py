@@ -6,9 +6,11 @@ from game.GameStatus import GameStatus
 from game.GameState import GameState
 from game.GameWord import GameWorld
 
+
 from data.entity.Player import Player
 from data.entity.IA import IA
 
+from data.texture.Button import Button
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
@@ -75,51 +77,46 @@ class Game():
             elif self.state == GameState.GAME_OVER:
                 self.game_over()
 
+
     def menu(self):
         """
         Displays the start menu to choose difficulty.
         """
         font = pygame.font.SysFont(None, 60)
-        small_font = pygame.font.SysFont(None, 40)
+        
+        self.screen.fill((30, 30, 30))
 
         # Define buttons once
-        buttons = [
-            {"label": "Facile", "difficulty": "facile", "y": SCREEN_HEIGHT // 2 - 20},
-            {"label": "Moyen", "difficulty": "moyen", "y": SCREEN_HEIGHT // 2 + 40},
-            {"label": "Difficile", "difficulty": "difficile", "y": SCREEN_HEIGHT // 2 + 100},
-        ]
-
-        self.screen.fill((30, 30, 30))
+        easy_btn = Button(SCREEN_HEIGHT // 2, SCREEN_HEIGHT // 2, "facile")
+        medium_btn = Button(SCREEN_HEIGHT // 2, easy_btn.rect.centery + easy_btn.rect.height + 10, "moyen")
+        hard_btn = Button(SCREEN_HEIGHT // 2, medium_btn.rect.centery + medium_btn.rect.height + 10, "difficile")
 
         # Draw title
         title = font.render("Choisissez la difficulté", True, (255, 255, 255))
         self.screen.blit(title, title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100)))
 
         # Draw buttons
-        for button in buttons:
-            rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, button["y"], 200, 40)
-            pygame.draw.rect(self.screen, (50, 150, 50), rect)
-            text = small_font.render(button["label"], True, (255, 255, 255))
-            self.screen.blit(text, text.get_rect(center=rect.center))
-            button["rect"] = rect  # store for click detection
+        if easy_btn.draw(self.screen):
+            self.state = GameState.PLAYING
+            self.selected_difficulty = "facile"
+            self.restart_game()
 
-        # Event handling
+        elif medium_btn.draw(self.screen):
+            self.state = GameState.PLAYING
+            self.selected_difficulty = "moyen"
+            self.restart_game()
+
+        elif hard_btn.draw(self.screen):
+            self.state = GameState.PLAYING
+            self.selected_difficulty = "difficile"
+            self.restart_game()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                for button in buttons:
-                    if button["rect"].collidepoint(event.pos):
-                        self.selected_difficulty = button["difficulty"]
-                        self.state = GameState.PLAYING
-                        self.restart_game()
-                        break
-
             pygame.display.update()
-            self.clock.tick(60) 
-
 
 
     def game(self):
@@ -133,6 +130,8 @@ class Game():
 
         self.handle_input()
         self.handle_event()
+
+        print(self.world.turn_status)
 
         self.world.update(self.world.turn)
         self.world.draw(self.screen)
