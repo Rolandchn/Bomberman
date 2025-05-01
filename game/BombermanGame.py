@@ -3,9 +3,10 @@ import sys
 import pygame
 
 from game.GameStatus import GameStatus
+from game.GameState import GameState
+from game.GameWord import GameWorld
 
 from data.entity.Player import Player
-from game.GameWord import GameWorld
 from data.entity.IA import IA
 
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
@@ -21,6 +22,7 @@ class Game():
         self.clock = pygame.time.Clock()
 
         self.selected_difficulty = None
+        self.state = GameState.MENU
 
 
     def handle_input(self):
@@ -32,12 +34,12 @@ class Game():
             if self.player1.input():
                 self.world.turn_status = GameStatus.P2
 
-                self.world.turn += 1
 
         elif self.world.turn_status == GameStatus.P2:
             if self.player2.input():
                 self.world.turn_status = GameStatus.P1
 
+                self.world.turn += 1
 
 
     def handle_event(self):
@@ -61,39 +63,40 @@ class Game():
 
 
     def run(self):
-        self.menu()
-        self.restart_game()
-        self.game()
-        self.game_over()
+        RUNNING = True
+
+        while RUNNING:
+            if self.state == GameState.MENU:
+                self.menu()
+
+            elif self.state == GameState.PLAYING:
+                self.game()
+
+            elif self.state == GameState.GAME_OVER:
+                self.game_over()
 
 
     def game(self):
         '''
         Output: game loop  
         ''' 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
-        self.world.turn = 0
+        self.handle_input()
+        self.handle_event()
 
-        RUNNING = True
-        while RUNNING:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+        self.world.update(self.world.turn)
+        self.world.draw(self.screen)
 
-            if not self.is_game_over:
-                self.handle_input()
-                self.handle_event()
+        if self.is_game_over:
+            self.state = GameState.GAME_OVER
 
-                self.world.update(self.world.turn)
-                self.world.draw(self.screen)
-
-            else :
-                RUNNING = False
-
-            pygame.display.update()
-            
-            self.clock.tick(40)
+        pygame.display.update()
+        
+        self.clock.tick(40)
         
 
     def game_over(self):
@@ -128,17 +131,17 @@ class Game():
         self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
 
         # Gérer clic
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos):
-                        self.restart_game()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if button_rect.collidepoint(event.pos):
+                    self.restart_game()
+                    self.state = GameState.PLAYING
 
-                pygame.display.update()
-                self.clock.tick(40)
+            pygame.display.update()
+            self.clock.tick(40)
 
 
     def restart_game(self):
@@ -166,36 +169,35 @@ class Game():
         font = pygame.font.SysFont(None, 60)
         small_font = pygame.font.SysFont(None, 40)
 
-        RUNNING = True
-        while RUNNING:
-            self.screen.fill((30, 30, 30))
+        self.screen.fill((30, 30, 30))
 
-            title = font.render("Choisissez la difficulté", True, (255, 255, 255))
-            title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100))
-            self.screen.blit(title, title_rect)
+        title = font.render("Choisissez la difficulté", True, (255, 255, 255))
+        title_rect = title.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100))
+        self.screen.blit(title, title_rect)
 
-            # Boutons
-            buttons = [
-                ("Facile", "facile", SCREEN_HEIGHT // 2 - 20),
-                ("Moyen", "moyen", SCREEN_HEIGHT // 2 + 40),
-                ("Difficile", "difficile", SCREEN_HEIGHT // 2 + 100),
-            ]
+        # Boutons
+        buttons = [
+            ("Facile", "facile", SCREEN_HEIGHT // 2 - 20),
+            ("Moyen", "moyen", SCREEN_HEIGHT // 2 + 40),
+            ("Difficile", "difficile", SCREEN_HEIGHT // 2 + 100),
+        ]
 
-            for label, difficulty, y in buttons:
-                btn_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, y, 200, 40)
-                pygame.draw.rect(self.screen, (50, 150, 50), btn_rect)
-                text = small_font.render(label, True, (255, 255, 255))
-                self.screen.blit(text, text.get_rect(center=btn_rect.center))
+        for label, difficulty, y in buttons:
+            btn_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, y, 200, 40)
+            pygame.draw.rect(self.screen, (50, 150, 50), btn_rect)
+            text = small_font.render(label, True, (255, 255, 255))
+            self.screen.blit(text, text.get_rect(center=btn_rect.center))
 
-                # Gérer clic
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
-                    elif event.type == pygame.MOUSEBUTTONDOWN:
-                        if btn_rect.collidepoint(event.pos):
-                            self.selected_difficulty = difficulty
-                            RUNNING = False
+            # Gérer clic
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if btn_rect.collidepoint(event.pos):
+                        self.selected_difficulty = difficulty
+                        self.state = GameState.PLAYING
+                        self.restart_game()
 
-            pygame.display.update()
-            self.clock.tick(60)
+        pygame.display.update()
+        self.clock.tick(60)
