@@ -36,12 +36,17 @@ class Game():
 
         if self.world.turn_status == GameStatus.P1:
             if self.player1.input():
-                self.world.turn_status = GameStatus.P1
+                self.world.turn_status = GameStatus.P2
 
                 self.world.turn += 1
 
         elif self.world.turn_status == GameStatus.P2:
-            if self.player2.input():
+            if self.once:
+                print(self.player2.minmax(self.world))
+                self.once = False
+
+            return
+            if self.player2.input() :
                 self.world.turn_status = GameStatus.P1
 
 
@@ -86,9 +91,6 @@ class Game():
 
                 self.world.update(self.world.turn)
                 self.world.draw(self.screen)
-
-                if self.once:
-                    print(self.player2.minmax(self.world))
 
             else :
                 self.display_game_over()

@@ -5,6 +5,7 @@ if TYPE_CHECKING:
     from data.entity.Entity import Entity
     from game.GameWord import GameWorld
 
+from game.GameStatus import GameStatus
 from game.GameAction import Action
 from data.entity.Bombe import Bomb
 
@@ -25,10 +26,7 @@ class GameLogic:
                 elif action == Action.MOVE_RIGHT: entity.grid_x += 1
 
                 entity.update_rect()
-                
-            else:
-                return False # if player is struck
-                
+                                
         elif action == Action.PLACE_BOMB:
             Bomb((entity.grid_x, entity.grid_y), world)
 

@@ -15,8 +15,7 @@ from data.entity.Entity import Entity
 
 class Player(Entity):
     def __init__(self, position, status: GameStatus, world: GameWorld):
-        self.status = status
-        super().__init__(position, world, world.player_group)
+        super().__init__(position, status, world, world.player_group)
         
         self.image.fill(self.status.value.value)
 
@@ -46,11 +45,3 @@ class Player(Entity):
 
     def clone(self, new_world):
         return Player((self. grid_x, self.grid_y), self.status, new_world)
-        
-
-    def __eq__(self, other):
-        return isinstance(other, Player) and other.status == self.status
-
-
-    def __hash__(self):
-        return hash(self.status)

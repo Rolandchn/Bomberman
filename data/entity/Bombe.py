@@ -13,9 +13,9 @@ from data.texture.config import TILE_SIZE
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world: GameWorld, timer=2, spread=2):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, timer=10, spread=2):
         self.world = world
-        super().__init__(self.world.bomb_group)
+        super().__init__(self.world.bomb_group, self.world.wall_group)
 
         # Position inside the grip in Map
         self.grid_x, self.grid_y = position

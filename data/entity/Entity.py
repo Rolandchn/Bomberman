@@ -11,7 +11,8 @@ from data.texture.config import TILE_SIZE
 
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, position, world: GameWorld, *groups):
+    def __init__(self, position, status, world: GameWorld, *groups):
+        self.status = status
         super().__init__(*groups)
 
         self.world = world
@@ -52,3 +53,11 @@ class Entity(pygame.sprite.Sprite):
 
         self.world.map.update_grid_position(self)   
         self.update_rect() 
+
+
+    def __eq__(self, other):
+        return isinstance(other, Entity) and other.status == self.status
+
+
+    def __hash__(self):
+        return hash(self.status)
