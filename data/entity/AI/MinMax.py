@@ -7,9 +7,10 @@ if TYPE_CHECKING:
 
 
 from game.GameStatus import GameStatus
+from data.entity.Explosion import Explosion
+from data.entity.Bombe import Bomb
 
 from data.entity.AI.Turn import turn
-from data.entity.AI.Terminal import terminal
 from data.entity.AI.Actions import actions
 from data.entity.AI.Result import result
 from data.entity.AI.Evaluation import eval
@@ -17,6 +18,11 @@ from data.entity.AI.Evaluation import eval
 
 def minmax(simulated_world: GameWorld, depth=3):
     player: Entity = turn(simulated_world)
+    print("===depth===", 3 - depth)
+
+    for _ in simulated_world.map.grid:
+        if isinstance(_, Explosion) or isinstance(_, Bomb):
+            print(_, _.start_turn)
 
     if depth < 0:
         return eval(simulated_world, player), None

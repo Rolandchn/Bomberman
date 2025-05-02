@@ -15,7 +15,8 @@ def value(simulated_world: GameWorld):
     '''
     Output: détermine si la partie terminée est gagnant pour P1 ou P2 ou null
     '''
-    player_collided = pygame.sprite.groupcollide(simulated_world.player_group, simulated_world.explosion_group)
+    player_collided = pygame.sprite.groupcollide(simulated_world.player_group, simulated_world.explosion_group,
+                                                 dokilla=False, dokillb=False)
 
     if 1 < len(player_collided):
         return 0
