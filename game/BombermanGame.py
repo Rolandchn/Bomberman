@@ -10,7 +10,7 @@ from game.GameAction import Action
 
 
 from data.entity.Player import Player
-from data.entity.IA import IA
+from data.entity.AI.IA import IA
 
 from data.texture.Button import Button
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
