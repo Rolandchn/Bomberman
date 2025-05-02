@@ -14,7 +14,6 @@ def eval(simulated_world: GameWorld, entity_playing: Entity):
         Output: evaluate the game state depending on the AI position.
         '''
         if terminal(simulated_world):
-            print("end")
             return value(simulated_world)
               
         simulated_world.map.generate_valued_grid()

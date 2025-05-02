@@ -11,7 +11,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Explosion(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world: GameWorld, duration=3):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, duration=1):
         self.world = world
         super().__init__(self.world.explosion_group)
 
@@ -23,15 +23,16 @@ class Explosion(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
 
+        self.start_turn = self.world.turn
         self.duration = duration
 
 
-    def update(self):
+    def update(self, game_turn: int):
         self.world.map.update_grid_explosion(self)
         
-        self.duration -= 1
+        turns_passed = game_turn - self.start_turn
 
-        if self.duration <= 0:
+        if self.duration <= turns_passed:
             self.world.map.update_grid_explosion(self, remove=True)
             self.kill()
 

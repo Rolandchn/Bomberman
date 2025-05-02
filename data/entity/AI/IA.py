@@ -64,8 +64,6 @@ class IA(Entity):
     def medium_mode(self):
         _, action =  minmax(self.world) 
 
-        print("=============================end of AI=============================")
-    
         return GameLogic.apply_action(self.world, self, action)
 
 

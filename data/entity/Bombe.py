@@ -28,7 +28,6 @@ class Bomb(pygame.sprite.Sprite):
         self.start_turn = self.world.turn
         self.timer = timer
         self.spread = spread
-        print("bomb added", self.start_turn)
 
 
     def update(self, game_turn: int):
@@ -40,7 +39,6 @@ class Bomb(pygame.sprite.Sprite):
         turns_passed = game_turn - self.start_turn
         
         if self.timer <= turns_passed:
-            print("boom !")
             self.kill()
             self.explode()
 
