@@ -5,12 +5,18 @@ if TYPE_CHECKING:
     from game.GameWord import GameWorld
     from data.entity.Entity import Entity
 
+from data.entity.AI.Terminal import terminal
+from data.entity.AI.Value import value
 
 
 def eval(simulated_world: GameWorld, entity_playing: Entity):
         '''
         Output: evaluate the game state depending on the AI position.
         '''
+        if terminal(simulated_world):
+            print("end")
+            return value(simulated_world)
+              
         simulated_world.map.generate_valued_grid()
 
         ai_x, ai_y = entity_playing.grid_x, entity_playing.grid_y
@@ -19,5 +25,6 @@ def eval(simulated_world: GameWorld, entity_playing: Entity):
         
         ai_sgame = simulated_world.map.valued_grid[ai_y][ai_x]
         player_sgame = simulated_world.map.valued_grid[player_y][player_x]
+
         
         return ai_sgame - player_sgame

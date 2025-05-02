@@ -18,12 +18,12 @@ from data.entity.AI.Evaluation import eval
 def minmax(simulated_world: GameWorld, depth=3):
     player: Entity = turn(simulated_world)
 
-    if depth < 0 or terminal(simulated_world):
+    if depth < 0:
         return eval(simulated_world, player), None
 
     # MIN
     if player.status == GameStatus.P1:
-        best_value = 999
+        best_value = float("inf")
 
         for action in actions(simulated_world, player):
             value, _ = minmax(result(simulated_world,  action), depth - 1)
@@ -36,7 +36,7 @@ def minmax(simulated_world: GameWorld, depth=3):
         
     # MAX
     elif player.status == GameStatus.P2:
-        best_value = -999
+        best_value = float("-inf")
 
         for action in actions(simulated_world, player):
             value, _ = minmax(result(simulated_world, action), depth - 1)
