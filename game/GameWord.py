@@ -24,7 +24,7 @@ class GameWorld:
         self.player_group.update()
 
         self.bomb_group.update(game_turn)
-        self.explosion_group.update()
+        self.explosion_group.update(game_turn)
 
 
     def draw(self, screen):

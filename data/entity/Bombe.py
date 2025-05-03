@@ -25,7 +25,7 @@ class Bomb(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(topleft=(self.grid_x * TILE_SIZE, self.grid_y * TILE_SIZE))
         
-        self.start_turn = None
+        self.start_turn = self.world.turn
         self.timer = timer
         self.spread = spread
 
@@ -36,12 +36,9 @@ class Bomb(pygame.sprite.Sprite):
         ''' 
         self.world.map.update_grid_bomb(self)
 
-        if self.start_turn is None:
-            self.start_turn = game_turn
-
         turns_passed = game_turn - self.start_turn
         
-        if self.timer < turns_passed:
+        if self.timer <= turns_passed:
             self.kill()
             self.explode()
 
@@ -68,7 +65,7 @@ class Bomb(pygame.sprite.Sprite):
                     collided_wall.kill(self.world)
 
                 # if explosion collides with nothing, add it to explosion_group in world         
-                elif collided_wall == None:
+                elif isinstance(collided_wall, Bomb) or collided_wall == None:
                     Explosion((nx, ny), self.world)
 
     def kill(self):
@@ -76,5 +73,8 @@ class Bomb(pygame.sprite.Sprite):
 
         super().kill()
 
-    def clone(self, new_world):
-        return Bomb((self.grid_x, self.grid_y), new_world)
+    def clone(self, new_world: GameWorld):
+        bomb = Bomb((self.grid_x, self.grid_y), new_world)
+        bomb.start_turn = self.start_turn
+        
+        return bomb
