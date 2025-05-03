@@ -20,23 +20,17 @@ def minmax(simulated_world: GameWorld, root_entity:GameStatus, depth=4):
     if depth < 0:
         return eval(simulated_world, root_entity), None
     
-    print(f"==============================depth {4 - depth}==============================")
-
     # MIN
     if player.status == GameStatus.P1:
         best_value = float("inf")
 
         for action in actions(simulated_world, player):
-            print("MIN", action, "from depth:", 4 - depth)
-                
             value, _ = minmax(result(simulated_world,  action), root_entity, depth - 1)
 
             if value <= best_value:
                 best_value = value
                 best_action = action
             
-        print("result depth:", 4 - depth, best_value, best_action)
-
         return best_value, best_action
         
     # MAX
@@ -44,14 +38,10 @@ def minmax(simulated_world: GameWorld, root_entity:GameStatus, depth=4):
         best_value = float("-inf")
 
         for action in actions(simulated_world, player):
-            print("MAX", action, "from depth:", 4 - depth)
-
             value, _ = minmax(result(simulated_world, action), root_entity, depth - 1)
 
             if best_value <= value:
                 best_value = value
                 best_action = action
             
-        print("result depth:", 4 - depth, best_value, best_action)
-
         return best_value, best_action

@@ -18,8 +18,6 @@ def value(simulated_world: GameWorld):
     player_collided = pygame.sprite.groupcollide(simulated_world.player_group, simulated_world.explosion_group,
                                                  dokilla=False, dokillb=False)
 
-    print("DEAD", player_collided)
-
     if 1 < len(player_collided):
         return 0
     
