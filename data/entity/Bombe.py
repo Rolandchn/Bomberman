@@ -65,7 +65,7 @@ class Bomb(pygame.sprite.Sprite):
                     collided_wall.kill(self.world)
 
                 # if explosion collides with nothing, add it to explosion_group in world         
-                elif collided_wall == None:
+                elif isinstance(collided_wall, Bomb) or collided_wall == None:
                     Explosion((nx, ny), self.world)
 
     def kill(self):

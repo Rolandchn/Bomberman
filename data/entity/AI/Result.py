@@ -19,6 +19,8 @@ def result(world: GameWorld, action: Action):
 
     GameLogic.apply_action(new_world, player, action)
 
+    print("action applied: ", (player.grid_x, player.grid_y))
+
     if world.turn_status == GameStatus.P1:
         new_world.turn_status = GameStatus.P2
 
