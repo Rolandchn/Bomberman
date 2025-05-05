@@ -1,6 +1,6 @@
 import pygame
 import sys
-from data.entity.AI.IA import IA
+from data.entity.AI.AI import IA
 from game.GameStatus import GameStatus
 from game.GameWorld import GameWorld
 

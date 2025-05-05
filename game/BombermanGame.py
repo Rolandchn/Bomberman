@@ -4,13 +4,13 @@ import pygame
 
 from game.GameStatus import GameStatus
 from game.GameState import GameState
-from game.GameWord import GameWorld
+from game.GameWorld import GameWorld
 from game.GameLogic import GameLogic
 from game.GameAction import Action
 
 
 from data.entity.Player import Player
-from data.entity.AI.IA import IA
+from data.entity.AI.AI import IA
 
 from data.texture.Button import Button
 from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH

@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from data.entity.Entity import Entity
     from data.entity.Bombe import Bomb
     from data.entity.Explosion import Explosion
-    from game.GameWord import GameWorld
+    from game.GameWorld import GameWorld
 
 
 import pygame
