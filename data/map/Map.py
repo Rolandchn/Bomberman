@@ -156,7 +156,20 @@ class Map:
         future_rect = entity.rect.copy()
         future_rect.topleft = (nx * TILE_SIZE, ny * TILE_SIZE)
 
-        return pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect)) is None
+        for wall in self.world.wall_group:
+            if future_rect.colliderect(wall.rect):
+                return False
+
+        # --- Vérification autre joueur / IA
+        for player in self.world.player_group:
+            if player == entity:
+                continue  # Ignore soi-même
+
+            if player.grid_x == nx and player.grid_y == ny:
+                return False  # Un autre joueur/IA est là
+
+
+        return True
 
 
     def is_bomb_placeable(self, entity):

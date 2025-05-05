@@ -5,11 +5,12 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
 
 
+from data.entity.AI.Turn import turn
+
 from game.GameAction import Action
 from game.GameLogic import GameLogic
 from game.GameStatus import GameStatus
 
-from data.entity.AI.Turn import turn
 
 
 def result(world: GameWorld, action: Action):

@@ -16,7 +16,7 @@ from data.entity.AI.MinMax import minmax
 
 
 class IA(Entity):
-    # difficulty:
+    #   difficulty:
     #   easy: random
     #   moderate:  min max td4 (strategie: take the center, destroy obstacle)
     #   strong:  min max td4 (strategie: corner the player, reaction to player following, reaction to player fleeing ...)
@@ -45,9 +45,9 @@ class IA(Entity):
     Méthode pour l'IA facile
     '''
     def easy_mode(self):
-        '''
+        """
         IA Random : déplacement aléatoire + pose bombe aléatoire
-        '''
+        """
         action = random.choice([Action.MOVE_UP,
                                 Action.MOVE_DOWN,
                                 Action.MOVE_LEFT,
@@ -71,7 +71,7 @@ class IA(Entity):
     '''
 
     def hard_mode(self):
-        _, action = minmax(self.world, self.status, depth=4)
+        _, action = minmax(self.world, self.status, depth=5)
 
         return GameLogic.apply_action(self.world, self, action)
 

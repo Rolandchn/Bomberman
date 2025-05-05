@@ -9,8 +9,10 @@ import pygame
 
 from typing import Tuple
 
+
 from data.map.structure.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
+from game.GameWorld import GameWorld
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
