@@ -1,24 +1,29 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.GameWord import GameWorld
+    from data.entity.Entity import Entity
 
 import pygame
 
 from typing import Tuple
 
-
 from data.map.structure.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
-from game.GameWord import GameWorld
 
 from data.texture.Color import Color
 from data.texture.config import TILE_SIZE
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world: GameWorld, timer=3, spread=2):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, owner: Entity, timer=3, spread=2):
         self.world = world
         super().__init__(self.world.bomb_group, self.world.wall_group)
 
         # Position inside the grip in Map
         self.grid_x, self.grid_y = position
+        self.owner = owner
 
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(Color.BOMBE.value)
@@ -74,7 +79,7 @@ class Bomb(pygame.sprite.Sprite):
         super().kill()
 
     def clone(self, new_world: GameWorld):
-        bomb = Bomb((self.grid_x, self.grid_y), new_world)
+        bomb = Bomb((self.grid_x, self.grid_y), new_world, self.owner)
         bomb.start_turn = self.start_turn
         
         return bomb

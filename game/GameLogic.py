@@ -28,6 +28,6 @@ class GameLogic:
                                 
         elif action == Action.PLACE_BOMB:
             if world.map.is_bomb_placeable(entity):
-                Bomb((entity.grid_x, entity.grid_y), world)
+                Bomb((entity.grid_x, entity.grid_y), world, entity)
 
         return True

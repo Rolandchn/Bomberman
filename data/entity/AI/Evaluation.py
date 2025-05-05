@@ -20,13 +20,29 @@ def eval(simulated_world: GameWorld, status: Entity):
 
         for player in simulated_world.player_group:
             if player.status == status:
-                entity_playing = player
+                ai: Entity = player
 
-        ai_x, ai_y = entity_playing.grid_x, entity_playing.grid_y
-
-        player_x, player_y = simulated_world.map.get_enemie_pos(entity_playing)
+        # Base score: distance to player (lower is better)
+        ai_x, ai_y = (ai.grid_x, ai.grid_y)
+        player_x, player_y = simulated_world.map.get_enemie_pos(ai)
         
         ai_sgame = simulated_world.map.valued_grid[ai_y][ai_x]
         player_sgame = simulated_world.map.valued_grid[player_y][player_x]
+        distance_score = ai_sgame - player_sgame
 
-        return ai_sgame
+        # Count obstacles between AI and player
+        obstacles_in_path = simulated_world.map.count_obstacles_between((ai_x, ai_y), (player_x, player_y))
+
+        # Reward the AI for destroying or planning to destroy obstacles
+        has_bomb = any(bomb.owner == ai for bomb in simulated_world.bomb_group)
+
+        obstacle_destruction_score = 0
+        if obstacles_in_path > 0:
+            if has_bomb:
+                # AI placed a bomb to destroy obstacles
+                obstacle_destruction_score = 100  # reward
+            else:
+                # Penalize being blocked without acting
+                obstacle_destruction_score = -10 * obstacles_in_path
+
+        return distance_score + obstacle_destruction_score

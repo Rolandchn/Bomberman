@@ -152,7 +152,7 @@ class Game():
 
         pygame.display.update()
         
-        self.clock.tick(10)
+        self.clock.tick(60)
         
 
     def game_over(self):

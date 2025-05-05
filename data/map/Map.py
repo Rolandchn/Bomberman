@@ -12,6 +12,7 @@ import pygame
 import math
 
 from collections import defaultdict
+from collections import deque
 
 from game.GameAction import Action
 
@@ -157,8 +158,50 @@ class Map:
 
         return pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect)) is None
 
+
     def is_bomb_placeable(self, entity):
         return pygame.sprite.spritecollideany(entity, self.world.bomb_group) is None
+
+
+    def entities_at_position(self, pos):
+        return [entity for entity, coord in self.grid.items() if coord == pos]
+
+
+    def count_obstacles_between(self, start_pos, end_pos):
+        visited = set()
+        queue = deque()
+        queue.append((start_pos, 0))  # (position, obstacle_count)
+
+        while queue:
+            (x, y), obstacle_count = queue.popleft()    
+
+            if (x, y) == end_pos:
+                return obstacle_count
+
+            visited.add((x, y))
+
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nx, ny = x + dx, y + dy
+                next_pos = (nx, ny)
+
+                if not (1 <= nx <= 13 and 1 <= ny <= 13):
+                    continue
+
+                if next_pos in visited:
+                    continue
+
+                entities = self.entities_at_position(next_pos)
+                is_solid = any(isinstance(e, Wall) for e in entities)
+                is_obstacle = any(isinstance(e, Obstacle) for e in entities)
+
+                if is_solid:
+                    continue  # cannot move through solid objects
+
+                new_count = obstacle_count + 1 if is_obstacle else obstacle_count
+                queue.append((next_pos, new_count))
+
+        return float('inf')  # No path found
+
 
     def get_spawn(self, status: GameStatus) -> Tuple[int, int]:
         '''
