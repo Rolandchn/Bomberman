@@ -30,27 +30,40 @@ def eval(simulated_world: GameWorld, status: Entity):
         player_sgame = simulated_world.map.valued_grid[player_y][player_x]
         distance_score = ai_sgame - player_sgame
         
-        # Get bomb positions owned by AI
+
+        # Bomb score: distance to Get bomb positions owned by AI
         ai_bombs = [bomb for bomb in simulated_world.bomb_group if bomb.owner == ai]
 
-        # Find if any bomb is in range of obstacle
-        bomb_threatens_obstacle = False
-        obstacle_positions = simulated_world.map.get_obstacles_between((ai_x, ai_y), (player_x, player_y))
-        
+        obstacle_destruction_score = 0
+
+        CENTER_POS = (7, 7)  # assuming 1-based grid and center of 13x13 map
+        MAX_SEARCH_RADIUS = 6
+
+        obstacle_destruction_score = 0
+
+        # Check path to player
+        player_distance = abs(player_x - ai_x) + abs(player_y - ai_y)
+
+        if player_distance < MAX_SEARCH_RADIUS:
+            target_pos = (player_x, player_y)
+        else:
+            target_pos = CENTER_POS  # fallback objective
+
+        # Count obstacles and check for bombs threatening them
+        obstacle_positions = simulated_world.map.get_obstacles_between((ai_x, ai_y), target_pos)
         obstacles_in_path = len(obstacle_positions)
+        bomb_threatens_obstacle = False
 
         for bomb in ai_bombs:
             bx, by = bomb.grid_x, bomb.grid_y
             for ox, oy in obstacle_positions:
-                # Check if bomb is in range (example: radius = 1)
-                if abs(bx - ox) + abs(by - oy) < bomb.spread:
+                if abs(bx - ox) + abs(by - oy) <= bomb.spread:
                     bomb_threatens_obstacle = True
                     break
             if bomb_threatens_obstacle:
                 break
 
-        # Adjust score
-        obstacle_destruction_score = 0
+        # Adjust score based on bomb placement
         if obstacles_in_path > 0:
             if bomb_threatens_obstacle:
                 obstacle_destruction_score = 100
