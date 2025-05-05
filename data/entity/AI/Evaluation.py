@@ -33,28 +33,32 @@ def eval(simulated_world: GameWorld, status: Entity):
         # Get bomb positions owned by AI
         ai_bombs = [bomb for bomb in simulated_world.bomb_group if bomb.owner == ai]
 
-        # Find if any bomb is in range of obstacle
-        bomb_threatens_obstacle = False
-        obstacle_positions = simulated_world.map.get_obstacles_between((ai_x, ai_y), (player_x, player_y))
-        
-        obstacles_in_path = len(obstacle_positions)
-
-        for bomb in ai_bombs:
-            bx, by = bomb.grid_x, bomb.grid_y
-            for ox, oy in obstacle_positions:
-                # Check if bomb is in range (example: radius = 1)
-                if abs(bx - ox) + abs(by - oy) < bomb.spread:
-                    bomb_threatens_obstacle = True
-                    break
-            if bomb_threatens_obstacle:
-                break
-
-        # Adjust score
         obstacle_destruction_score = 0
-        if obstacles_in_path > 0:
-            if bomb_threatens_obstacle:
-                obstacle_destruction_score = 100
-            else:
-                obstacle_destruction_score = -10 * obstacles_in_path
+
+        MAX_SEARCH_RADIUS = 6
+        if abs(player_x - ai_x) + abs(player_y - ai_y) <  MAX_SEARCH_RADIUS:
+            # If AI is near the player but is blocked by obstacle 
+            bomb_threatens_obstacle = False
+            obstacle_positions = simulated_world.map.get_obstacles_between((ai_x, ai_y), (player_x, player_y))
+            
+            obstacles_in_path = len(obstacle_positions)
+
+            for bomb in ai_bombs:
+                bx, by = bomb.grid_x, bomb.grid_y
+                for ox, oy in obstacle_positions:
+                    # Check if bomb is in range (example: radius = 1)
+                    if abs(bx - ox) + abs(by - oy) < bomb.spread:
+                        bomb_threatens_obstacle = True
+                        break
+                if bomb_threatens_obstacle:
+                    break
+
+            # Adjust score
+            obstacle_destruction_score = 0
+            if obstacles_in_path > 0:
+                if bomb_threatens_obstacle:
+                    obstacle_destruction_score = 100
+                else:
+                    obstacle_destruction_score = -10 * obstacles_in_path
 
         return distance_score + obstacle_destruction_score
