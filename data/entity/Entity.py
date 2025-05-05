@@ -35,15 +35,15 @@ class Entity(pygame.sprite.Sprite):
 
 
     def is_dead(self):
-        '''
+        """
         Output: check player life.
-        '''
+        """
         return self.life <= 0
     
     def is_hit(self):
-        '''
+        """
         Output: check player sprite collides with any explosion. Return True if collides, otherwise False
-        ''' 
+        """
 
         return pygame.sprite.spritecollideany(self, self.world.explosion_group)
 

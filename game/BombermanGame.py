@@ -7,6 +7,7 @@ from game.GameState import GameState
 from game.GameWorld import GameWorld
 from game.GameLogic import GameLogic
 from game.GameAction import Action
+from game.TournamentManager import TournamentManager
 
 
 from data.entity.Player import Player
@@ -198,16 +199,22 @@ class Game():
 
 
     def tournament(self):
+        # Afficher un fond + texte pendant le tournoi
         self.screen.fill((30, 30, 30))
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+
+        font = pygame.font.SysFont(None, 60)
+        text = font.render("Tournoi IA en cours...", True, (255, 255, 255))
+        self.screen.blit(text, text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)))
+
+        pygame.display.update()
+
+        tournament = TournamentManager(["facile", "moyen", "difficile"], nb_rounds=3)
+        tournament.start()
 
         print("tournament")
 
-        pygame.display.update()
+        # Une fois le tournoi terminé, retourner au menu
+        self.state = GameState.MENU
         
 
     def restart_game(self):
