@@ -38,11 +38,9 @@ class Game():
             if self.player1.input():
                 self.world.turn_status = GameStatus.P2
 
-
         elif self.world.turn_status == GameStatus.P2:
             if self.player2.input():
                 self.world.turn_status = GameStatus.P1
-
                 self.world.turn += 1
 
 
@@ -50,6 +48,11 @@ class Game():
         '''
         Output: check if player is hit or is dead. If player died, respawn.  
         ''' 
+        if self.player1.is_hit():
+            self.player1.life -= 1
+        
+        if self.player2.is_hit():
+            self.player2.life -= 1
 
         if self.player1.is_dead():
             self.is_game_over = True
@@ -58,12 +61,6 @@ class Game():
         if self.player2.is_dead():
             self.is_game_over = True
             self.winner = GameStatus.P1
-
-        if self.player1.is_hit():
-            self.player1.life -= 1
-        
-        if self.player2.is_hit():
-            self.player2.life -= 1
 
 
     def run(self):
@@ -143,9 +140,11 @@ class Game():
                 sys.exit()
 
         self.handle_input()
-        self.handle_event()
 
         self.world.update(self.world.turn)
+        
+        self.handle_event()
+        
         self.world.draw(self.screen)
 
         if self.is_game_over:
@@ -153,7 +152,7 @@ class Game():
 
         pygame.display.update()
         
-        self.clock.tick(60)
+        self.clock.tick(10)
         
 
     def game_over(self):

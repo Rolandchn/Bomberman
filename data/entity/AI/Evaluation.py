@@ -29,4 +29,4 @@ def eval(simulated_world: GameWorld, status: Entity):
         ai_sgame = simulated_world.map.valued_grid[ai_y][ai_x]
         player_sgame = simulated_world.map.valued_grid[player_y][player_x]
 
-        return ai_sgame - player_sgame
+        return ai_sgame

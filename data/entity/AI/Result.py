@@ -27,6 +27,6 @@ def result(world: GameWorld, action: Action):
         new_world.turn += 1
 
     new_world.bomb_group.update(new_world.turn)
-    
+    new_world.explosion_group.update(new_world.turn)
 
     return new_world

@@ -155,8 +155,10 @@ class Map:
         future_rect = entity.rect.copy()
         future_rect.topleft = (nx * TILE_SIZE, ny * TILE_SIZE)
 
-        return not pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect))
+        return pygame.sprite.spritecollideany(entity, self.world.wall_group, collided=lambda s1, s2: future_rect.colliderect(s2.rect)) is None
 
+    def is_bomb_placeable(self, entity):
+        return pygame.sprite.spritecollideany(entity, self.world.bomb_group) is None
 
     def get_spawn(self, status: GameStatus) -> Tuple[int, int]:
         '''
