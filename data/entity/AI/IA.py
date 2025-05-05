@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from game.GameWord import GameWorld
+    from game.GameWorld import GameWorld
 
 import random
 
@@ -38,7 +38,7 @@ class IA(Entity):
             return self.medium_mode()
 
         elif self.difficulty == "difficile":
-            pass #à implementer (minMax)
+            return self.hard_mode()
 
 
     '''
@@ -62,7 +62,16 @@ class IA(Entity):
     '''
 
     def medium_mode(self):
-        _, action =  minmax(self.world, self.status) 
+        _, action =  minmax(self.world, self.status, depth=2)
+
+        return GameLogic.apply_action(self.world, self, action)
+
+    '''
+        Méthode pour l'IA difficile
+    '''
+
+    def hard_mode(self):
+        _, action = minmax(self.world, self.status, depth=4)
 
         return GameLogic.apply_action(self.world, self, action)
 
