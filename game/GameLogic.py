@@ -27,6 +27,7 @@ class GameLogic:
                 entity.update_rect()
                                 
         elif action == Action.PLACE_BOMB:
-            Bomb((entity.grid_x, entity.grid_y), world)
+            if world.map.is_bomb_placeable(entity):
+                Bomb((entity.grid_x, entity.grid_y), world)
 
         return True
