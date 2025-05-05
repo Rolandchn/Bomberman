@@ -44,4 +44,7 @@ class Player(Entity):
     
 
     def clone(self, new_world):
-        return Player((self. grid_x, self.grid_y), self.status, new_world)
+        player = Player((self. grid_x, self.grid_y), self.status, new_world)
+        player.power_ups = self.power_ups
+        
+        return player

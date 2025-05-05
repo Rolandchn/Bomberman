@@ -9,7 +9,6 @@ import pygame
 
 from typing import Tuple
 
-
 from data.map.structure.Obstacle import Obstacle
 from data.entity.Explosion import Explosion
 from game.GameWorld import GameWorld
@@ -35,6 +34,7 @@ class Bomb(pygame.sprite.Sprite):
         self.start_turn = self.world.turn
         self.timer = timer
         self.spread = spread
+        self.on_explode_callback = None
 
 
     def update(self, game_turn: int):
@@ -47,6 +47,7 @@ class Bomb(pygame.sprite.Sprite):
         
         if self.timer <= turns_passed:
             self.kill()
+            self.on_explode_callback(self)
             self.explode()
 
 

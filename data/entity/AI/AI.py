@@ -78,4 +78,7 @@ class IA(Entity):
 
 
     def clone(self, new_world):
-        return IA((self. grid_x, self.grid_y), self.status, new_world)
+        ai = IA((self. grid_x, self.grid_y), self.status, new_world)
+        ai.power_ups = self.power_ups
+        
+        return ai 

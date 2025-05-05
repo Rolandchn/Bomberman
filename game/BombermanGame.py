@@ -37,12 +37,12 @@ class Game():
 
         if self.world.turn_status == GameStatus.P1:
             if self.player1.input():
-                self.world.turn_status = GameStatus.P2
+                self.world.turn_status = GameStatus.P1
+                self.world.turn += 1
 
         elif self.world.turn_status == GameStatus.P2:
             if self.player2.input():
                 self.world.turn_status = GameStatus.P1
-                self.world.turn += 1
 
 
     def handle_event(self):
@@ -153,7 +153,7 @@ class Game():
 
         pygame.display.update()
         
-        self.clock.tick(60)
+        self.clock.tick(10)
         
 
     def game_over(self):

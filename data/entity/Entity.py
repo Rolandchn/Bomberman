@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 import pygame
 
 from data.texture.config import TILE_SIZE
-
+from data.entity.BombManager import BombManager
 
 
 class Entity(pygame.sprite.Sprite):
@@ -18,6 +18,10 @@ class Entity(pygame.sprite.Sprite):
         self.world = world
 
         self.life = 1
+        self.power_ups = []
+
+        #Bomb properties default
+        self. bomb_manager = BombManager(self)
 
         self.spawn_point = position
         self.grid_x, self.grid_y = self.spawn_point

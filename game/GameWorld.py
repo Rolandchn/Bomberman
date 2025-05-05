@@ -10,6 +10,7 @@ class GameWorld:
         self.floor_group = pygame.sprite.Group()
         
         self.player_group = pygame.sprite.Group()
+        self.powerup_group = pygame.sprite.Group()
     
         self.bomb_group = pygame.sprite.Group()
         self.explosion_group = pygame.sprite.Group()

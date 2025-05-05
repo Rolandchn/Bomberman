@@ -172,10 +172,6 @@ class Map:
         return True
 
 
-    def is_bomb_placeable(self, entity):
-        return pygame.sprite.spritecollideany(entity, self.world.bomb_group) is None
-
-
     def entities_at_position(self, pos):
         return [entity for entity, coord in self.grid.items() if coord == pos]
 
