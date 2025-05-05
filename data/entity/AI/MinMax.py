@@ -12,12 +12,12 @@ from data.entity.AI.Turn import turn
 from data.entity.AI.Actions import actions
 from data.entity.AI.Result import result
 from data.entity.AI.Evaluation import eval
+from data.entity.AI.Terminal import terminal
 
-
-def minmax(simulated_world: GameWorld, root_entity:GameStatus, depth=4):
+def minmax(simulated_world: GameWorld, root_entity:GameStatus, depth=3):
     player: Entity = turn(simulated_world)
-
-    if depth < 0:
+    
+    if terminal(simulated_world) or depth <= 0:
         return eval(simulated_world, root_entity), None
     
     # MIN
@@ -30,7 +30,7 @@ def minmax(simulated_world: GameWorld, root_entity:GameStatus, depth=4):
             if value <= best_value:
                 best_value = value
                 best_action = action
-            
+
         return best_value, best_action
         
     # MAX
