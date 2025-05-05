@@ -180,16 +180,16 @@ class Map:
         return [entity for entity, coord in self.grid.items() if coord == pos]
 
 
-    def count_obstacles_between(self, start_pos, end_pos):
+    def get_obstacles_between(self, start_pos, end_pos):
         visited = set()
         queue = deque()
-        queue.append((start_pos, 0))  # (position, obstacle_count)
+        queue.append((start_pos, [], []))  # (position, path, obstacles)
 
         while queue:
-            (x, y), obstacle_count = queue.popleft()    
+            (x, y), path, obstacles = queue.popleft()
 
             if (x, y) == end_pos:
-                return obstacle_count
+                return obstacles  # return list of obstacle positions
 
             visited.add((x, y))
 
@@ -199,7 +199,6 @@ class Map:
 
                 if not (1 <= nx <= 13 and 1 <= ny <= 13):
                     continue
-
                 if next_pos in visited:
                     continue
 
@@ -208,12 +207,15 @@ class Map:
                 is_obstacle = any(isinstance(e, Obstacle) for e in entities)
 
                 if is_solid:
-                    continue  # cannot move through solid objects
+                    continue
 
-                new_count = obstacle_count + 1 if is_obstacle else obstacle_count
-                queue.append((next_pos, new_count))
+                new_obstacles = obstacles.copy()
+                if is_obstacle:
+                    new_obstacles.append(next_pos)
 
-        return float('inf')  # No path found
+                queue.append((next_pos, path + [next_pos], new_obstacles))
+
+        return []  # No path found
 
 
     def get_spawn(self, status: GameStatus) -> Tuple[int, int]:

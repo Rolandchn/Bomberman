@@ -29,20 +29,32 @@ def eval(simulated_world: GameWorld, status: Entity):
         ai_sgame = simulated_world.map.valued_grid[ai_y][ai_x]
         player_sgame = simulated_world.map.valued_grid[player_y][player_x]
         distance_score = ai_sgame - player_sgame
+        
+        # Get bomb positions owned by AI
+        ai_bombs = [bomb for bomb in simulated_world.bomb_group if bomb.owner == ai]
 
-        # Count obstacles between AI and player
-        obstacles_in_path = simulated_world.map.count_obstacles_between((ai_x, ai_y), (player_x, player_y))
+        # Find if any bomb is in range of obstacle
+        bomb_threatens_obstacle = False
+        obstacle_positions = simulated_world.map.get_obstacles_between((ai_x, ai_y), (player_x, player_y))
+        
+        obstacles_in_path = len(obstacle_positions)
 
-        # Reward the AI for destroying or planning to destroy obstacles
-        has_bomb = any(bomb.owner == ai for bomb in simulated_world.bomb_group)
+        for bomb in ai_bombs:
+            bx, by = bomb.grid_x, bomb.grid_y
+            for ox, oy in obstacle_positions:
+                # Check if bomb is in range (example: radius = 1)
+                if abs(bx - ox) + abs(by - oy) < bomb.spread:
+                    bomb_threatens_obstacle = True
+                    break
+            if bomb_threatens_obstacle:
+                break
 
+        # Adjust score
         obstacle_destruction_score = 0
         if obstacles_in_path > 0:
-            if has_bomb:
-                # AI placed a bomb to destroy obstacles
-                obstacle_destruction_score = 100  # reward
+            if bomb_threatens_obstacle:
+                obstacle_destruction_score = 100
             else:
-                # Penalize being blocked without acting
                 obstacle_destruction_score = -10 * obstacles_in_path
 
         return distance_score + obstacle_destruction_score
