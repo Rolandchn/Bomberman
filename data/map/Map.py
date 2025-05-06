@@ -8,7 +8,6 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
 
 
-import pygame
 import math
 
 from collections import defaultdict
@@ -17,6 +16,8 @@ from collections import deque
 from game.GameAction import Action
 
 from game.GameStatus import GameStatus
+
+from data.entity.PowerUp import ExtraBomb, BombRange
 
 from data.map.structure.Wall import Wall
 from data.map.structure.Floor import Floor
@@ -40,7 +41,7 @@ class Map:
         ''' 
         buff = []
 
-        with open("./data/map/map.txt", "r") as map:
+        with open("./data/map/map3.txt", "r") as map:
             lines = map.read().splitlines()
             for line in lines:
                 buff.append(list(line))
@@ -61,6 +62,18 @@ class Map:
                     Floor(col, row, self.world)
                     
                     self.grid[Obstacle(col, row, self.world)] = (col, row)
+
+                elif tile == "R":
+                    Floor(col, row, self.world)
+                    
+                    self.grid[BombRange((col, row), self.world)] = (col, row)
+                    self.grid[Obstacle(col, row, self.world, has_powerup=True)] = (col, row)
+
+                elif tile == "E":
+                    Floor(col, row, self.world)
+
+                    self.grid[ExtraBomb((col, row), self.world)] = (col, row)
+                    self.grid[Obstacle(col, row, self.world, has_powerup=True)] = (col, row)
 
 
     def generate_valued_grid(self):

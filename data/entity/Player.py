@@ -46,5 +46,6 @@ class Player(Entity):
     def clone(self, new_world):
         player = Player((self. grid_x, self.grid_y), self.status, new_world)
         player.power_ups = self.power_ups
+        player.bomb_manager = self.bomb_manager
         
         return player

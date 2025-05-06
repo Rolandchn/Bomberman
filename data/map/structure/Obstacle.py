@@ -13,14 +13,19 @@ from data.texture.Color import Color
 
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, world: GameWorld):
+    def __init__(self, x: int, y: int, world: GameWorld, has_powerup=False):
         super().__init__(world.wall_group)
 
         self.grid_x = x
         self.grid_y = y
 
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
-        self.image.fill(Color.OBSTACLE.value)
+
+        if has_powerup:
+            self.image.fill(Color.OBSTACLE_HIDDEN.value)
+
+        else:
+            self.image.fill(Color.OBSTACLE.value)
 
         self.rect = self.image.get_rect()
         self.rect.x = self.grid_x * TILE_SIZE

@@ -10,6 +10,7 @@ import pygame
 from typing import Tuple
 
 from data.map.structure.Obstacle import Obstacle
+from data.map.structure.Wall import Wall
 from data.entity.Explosion import Explosion
 from game.GameWorld import GameWorld
 
@@ -18,7 +19,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world: GameWorld, owner: Entity, timer=3, spread=2):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, owner: Entity, timer=6, spread=2):
         self.world = world
         super().__init__(self.world.bomb_group, self.world.wall_group)
 
@@ -26,6 +27,7 @@ class Bomb(pygame.sprite.Sprite):
         self.grid_x, self.grid_y = position
         self.owner = owner
 
+        self.font = pygame.font.SysFont(None, 24)
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(Color.BOMBE.value)
 
@@ -51,6 +53,15 @@ class Bomb(pygame.sprite.Sprite):
             self.explode()
 
 
+    def draw(self, game_turn, screen):
+        screen.blit(self.image, self.rect)
+        
+        # Draw timer text on bomb
+        timer_text = self.font.render(str(self.timer - (game_turn - self.start_turn)), True, (255, 255, 255)) 
+        text_rect = timer_text.get_rect(center=self.rect.center)
+        screen.blit(timer_text, text_rect)
+
+
     def explode(self):
         '''
         Output: spread the explosion to all direction (up, down, left, right)  
@@ -71,6 +82,10 @@ class Bomb(pygame.sprite.Sprite):
                 # if explosion collides with obstacle, destroy it and remove it from wall_group in world         
                 if isinstance(collided_wall, Obstacle):
                     collided_wall.kill(self.world)
+                    break
+
+                elif isinstance(collided_wall, Wall):
+                    break
 
                 # if explosion collides with nothing, add it to explosion_group in world         
                 elif isinstance(collided_wall, Bomb) or collided_wall == None:

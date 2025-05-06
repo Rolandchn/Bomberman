@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from data.entity.Entity import Entity
     from game.GameWorld import GameWorld
-    from data.entity.PowerUp import PowerUp, PowerUpType
 
+from data.entity.PowerUp import PowerUp, BombRange, ExtraBomb
 
 from game.GameAction import Action
 
@@ -37,16 +37,16 @@ class GameLogic:
 
     @staticmethod
     def apply_powerup(entity: Entity, powerup: PowerUp):
-        if powerup.type == PowerUpType.RANGE:
+        if isinstance(powerup, BombRange):
             entity.bomb_manager.bomb_range += 1
 
-        elif powerup.type == PowerUpType.EXTRA_BOMB:
+        elif isinstance(powerup, ExtraBomb):
             entity.bomb_manager.max_bombs += 1
 
 
     @staticmethod
     def handle_powerup_pickup(world: GameWorld, entity: Entity):
         for powerup in world.powerup_group:
-            if (powerup.x, powerup.y) == (entity.grid_x, entity.grid_y):
+            if (powerup.grid_x, powerup.grid_y) == (entity.grid_x, entity.grid_y):
                 GameLogic.apply_powerup(entity, powerup)
                 world.powerup_group.remove(powerup)
