@@ -49,6 +49,14 @@ class Bomb(pygame.sprite.Sprite):
             self.kill()
             self.explode()
 
+    def draw(self, game_turn, screen):
+        screen.blit(self.image, self.rect)
+        
+        # Draw timer text on bomb
+        timer_text = self.font.render(str(self.timer - (game_turn - self.start_turn)), True, (255, 255, 255)) 
+        text_rect = timer_text.get_rect(center=self.rect.center)
+        screen.blit(timer_text, text_rect)
+
 
     def explode(self):
         '''

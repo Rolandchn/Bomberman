@@ -34,11 +34,11 @@ def minmax(simulated_world: GameWorld, root_entity: GameStatus, depth=3, alpha=f
                 best_value = value
                 best_action = action
 
-            beta = min(beta, best_value)
+            """ beta = min(beta, best_value)
 
             # ELAGAGE
             if beta <= alpha:
-                break
+                break """
 
         return best_value, best_action
 
@@ -54,10 +54,10 @@ def minmax(simulated_world: GameWorld, root_entity: GameStatus, depth=3, alpha=f
                 best_value = value
                 best_action = action
 
-            alpha = max(alpha, best_value)
+            """ alpha = max(alpha, best_value)
 
             #  ELAGAGE
             if beta <= alpha:
-                break
+                break """
 
         return best_value, best_action

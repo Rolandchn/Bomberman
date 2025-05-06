@@ -33,7 +33,8 @@ class GameWorld:
         
         self.player_group.draw(screen)
 
-        self.bomb_group.draw(screen)
+        for bomb in self.bomb_group:
+            bomb.draw(self.turn, screen)
         self.explosion_group.draw(screen)
 
 
