@@ -27,6 +27,7 @@ class Bomb(pygame.sprite.Sprite):
         self.grid_x, self.grid_y = position
         self.owner = owner
 
+        self.font = pygame.font.SysFont(None, 24)
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image.fill(Color.BOMBE.value)
 
