@@ -39,10 +39,9 @@ def eval(simulated_world: GameWorld, status: Entity):
 
         if player_distance <= ENEMY_DETECTION_RANGE:
             raw_score = evaluate_attack_behavior(simulated_world, ai, (player_x, player_y))
-            print("attack", raw_score)
+
         else:
             raw_score = evaluate_center_behavior(simulated_world, ai, CENTER_POS)
-            print("center", raw_score)
 
         # Flip score if current player is MIN
         return raw_score if status == GameStatus.P2 else -raw_score
