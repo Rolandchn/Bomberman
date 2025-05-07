@@ -11,7 +11,7 @@ from game.GameStatus import GameStatus
 from data.entity.AI.Turn import turn
 from data.entity.AI.Actions import actions
 from data.entity.AI.Result import result
-from data.entity.AI.Evaluation import eval
+from data.entity.AI.Evaluation.Evaluation import eval
 from data.entity.AI.Terminal import terminal
 
 

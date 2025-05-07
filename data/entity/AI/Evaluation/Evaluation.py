@@ -18,9 +18,15 @@ def eval(simulated_world: GameWorld, status: Entity):
               
         simulated_world.map.generate_valued_grid()
 
+        ai = None
         for player in simulated_world.player_group:
             if player.status == status:
-                ai: Entity = player
+                ai = player
+                break
+
+        if ai is None:
+            raise ValueError("MINMAX caller was not found")
+
 
         # Base score: distance to player (lower is better)
         ai_x, ai_y = (ai.grid_x, ai.grid_y)
