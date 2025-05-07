@@ -8,12 +8,14 @@ if TYPE_CHECKING:
 import math
 
 from game.GameStatus import GameStatus
-from data.entity.AI.Terminal import terminal
-from data.entity.AI.Value import value
+from data.entity.AI.decision.terminal import terminal
+from data.entity.AI.decision.value import value
 
-from data.entity.AI.Evaluation.EvaluateBehavior import evaluate_center_behavior, evaluate_attack_behavior
+from data.entity.AI.evaluation.behavior.attack import evaluate_attack_behavior
+from data.entity.AI.evaluation.behavior.center import evaluate_center_behavior
 
-def eval(simulated_world: GameWorld, status: Entity):
+
+def eval(simulated_world: GameWorld, status: GameStatus):
         '''
         Output: evaluate the game state depending on the AI position.
         '''

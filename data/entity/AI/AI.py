@@ -10,9 +10,11 @@ from game.BombermanGame import GameStatus
 from game.GameLogic import GameLogic
 
 from data.entity.Entity import Entity
-from game.GameAction import Action
 
-from data.entity.AI.MinMax import minmax
+from data.entity.AI.decision.minMax import minmax
+from data.entity.AI.difficulty import HARD
+from data.entity.AI.difficulty import MEDIUM
+from data.entity.AI.utils import get_random_action
 
 
 class IA(Entity):
@@ -32,49 +34,15 @@ class IA(Entity):
 
     def input(self):
         if self.difficulty == "facile":
-            return self.easy_mode()
+            action = get_random_action()
 
         elif self.difficulty == "moyen":
-            return self.medium_mode()
+            _, action = minmax(self.world, self.status, MEDIUM.depth, MEDIUM.eval_fn)
 
         elif self.difficulty == "difficile":
-            return self.hard_mode()
-
-
-    '''
-    Méthode pour l'IA facile
-    '''
-    def easy_mode(self):
-        """
-        IA Random : déplacement aléatoire + pose bombe aléatoire
-        """
-        action = random.choice([Action.MOVE_UP,
-                                Action.MOVE_DOWN,
-                                Action.MOVE_LEFT,
-                                Action.MOVE_RIGHT,
-                                Action.PLACE_BOMB])
-        
-        return GameLogic.apply_action(self.world, self, action)
-    
-
-    '''
-    Méthode pour l'IA moyen
-    '''
-
-    def medium_mode(self):
-        _, action =  minmax(self.world, self.status, depth=3)
+            _, action = minmax(self.world, self.status, HARD.depth, HARD.eval_fn)
 
         return GameLogic.apply_action(self.world, self, action)
-
-    '''
-        Méthode pour l'IA difficile
-    '''
-
-    def hard_mode(self):
-        _, action = minmax(self.world, self.status, depth=3)
-
-        return GameLogic.apply_action(self.world, self, action)
-
 
 
     def clone(self, new_world):
