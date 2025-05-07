@@ -6,6 +6,11 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
     from data.entity.Entity import Entity
 
+def get_danger_penalty(world: GameWorld, x, y):
+    if world.map.is_in_explosion_range(x, y):
+        return float("-inf")  # or -inf to signify certain death
+    return 0
+
 
 
 def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
@@ -13,9 +18,9 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
     cx, cy = center_pos
 
     distance = abs(ax - cx) + abs(ay - cy)
-    danger_penalty = -300 if world.map.is_in_explosion_range(ax, ay) else 0
     # Base score: closer to center is better
-    score = -distance * 5 + danger_penalty
+    score = -distance * 5
+    score += get_danger_penalty(world, ax, ay)
 
     # --- Obstacle Analysis ---
     path_obstacles = world.map.get_obstacles_between((ax, ay), center_pos)
@@ -23,8 +28,8 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
 
     # Check if any of AI's bombs can destroy them
     ai_bombs = [bomb for bomb in world.bomb_group if bomb.owner == ai]
-    bomb_threatens_obstacle = False
 
+    bomb_threatens_obstacle = False
     for bomb in ai_bombs:
         bx, by = bomb.grid_x, bomb.grid_y
         for ox, oy in path_obstacles:
@@ -40,10 +45,10 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
         else:
             score -= 5 * num_obstacles  # mildly penalize if no bomb yet
 
-    if bomb_threatens_obstacle:
-        safe_tiles = world.map.get_safe_tiles_around(ax, ay)
-        if not safe_tiles:
-            score -= 200
+     # Penalize if bomb threatens but no safe tile
+    if bomb_threatens_obstacle and not world.map.get_safe_tiles_around(ax, ay):
+        score -= 200
+
 
     return score
 
@@ -54,6 +59,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     distance_to_enemy = abs(ax - ex) + abs(ay - ey)
 
     attack_score = max(0, 50 - distance_to_enemy * 10)
+    attack_score += get_danger_penalty(world, ax, ay)
 
     # Bomb placement bonus if enemy is in bomb range
     for bomb in world.bomb_group:
