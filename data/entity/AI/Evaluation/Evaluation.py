@@ -38,7 +38,6 @@ def eval(simulated_world: GameWorld, status: Entity):
         player_distance = abs(player_x - ai_x) + abs(player_y - ai_y)
 
         if player_distance <= ENEMY_DETECTION_RANGE:
-            print("attack")
             raw_score = evaluate_attack_behavior(simulated_world, ai, (player_x, player_y))
 
         else:
