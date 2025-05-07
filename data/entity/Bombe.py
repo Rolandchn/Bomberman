@@ -11,6 +11,7 @@ from typing import Tuple
 
 
 from data.map.structure.Obstacle import Obstacle
+from data.map.structure.Wall import Wall
 from data.entity.Explosion import Explosion
 from game.GameWorld import GameWorld
 
@@ -77,9 +78,13 @@ class Bomb(pygame.sprite.Sprite):
 
                 collided_wall = pygame.sprite.spritecollideany(self, self.world.wall_group, collided=lambda s1, s2: tile_rect.colliderect(s2.rect))
 
+                if isinstance(collided_wall, Wall):
+                    break
+
                 # if explosion collides with obstacle, destroy it and remove it from wall_group in world         
                 if isinstance(collided_wall, Obstacle):
                     collided_wall.kill(self.world)
+                    break
 
                 # if explosion collides with nothing, add it to explosion_group in world         
                 elif isinstance(collided_wall, Bomb) or collided_wall == None:
