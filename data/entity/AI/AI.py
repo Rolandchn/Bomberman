@@ -71,7 +71,7 @@ class IA(Entity):
     '''
 
     def hard_mode(self):
-        _, action = minmax(self.world, self.status, depth=5)
+        _, action = minmax(self.world, self.status, depth=3)
 
         return GameLogic.apply_action(self.world, self, action)
 
