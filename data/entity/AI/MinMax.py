@@ -17,7 +17,7 @@ from data.entity.AI.Terminal import terminal
 
 def minmax(simulated_world: GameWorld, root_entity: GameStatus, depth=3, alpha=float('-inf'), beta=float('inf')):
     player: Entity = turn(simulated_world)
-
+    
     if terminal(simulated_world) or depth <= 0:
         return eval(simulated_world, root_entity), None
 

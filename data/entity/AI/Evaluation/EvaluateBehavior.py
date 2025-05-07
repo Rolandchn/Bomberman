@@ -13,8 +13,7 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
     cx, cy = center_pos
 
     distance = abs(ax - cx) + abs(ay - cy)
-    danger_penalty = -100 if world.map.is_in_explosion_range(ax, ay) else 0
-
+    danger_penalty = -300 if world.map.is_in_explosion_range(ax, ay) else 0
     # Base score: closer to center is better
     score = -distance * 5 + danger_penalty
 
@@ -37,30 +36,48 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
 
     if num_obstacles > 0:
         if bomb_threatens_obstacle:
-            score += 50 + 10 * num_obstacles  # reward breaking path
+            score += 30 + 5 * num_obstacles  # reward breaking path
         else:
             score -= 5 * num_obstacles  # mildly penalize if no bomb yet
+
+    if bomb_threatens_obstacle:
+        safe_tiles = world.map.get_safe_tiles_around(ax, ay)
+        if not safe_tiles:
+            score -= 200
 
     return score
 
 
-def evaluate_attack_behavior(world:GameWorld, ai: Entity, enemy_pos):
+def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     ax, ay = ai.grid_x, ai.grid_y
     ex, ey = enemy_pos
     distance_to_enemy = abs(ax - ex) + abs(ay - ey)
 
-    # Closer is better (aggression)
-    attack_score = -distance_to_enemy * 10
+    # Base: Encourage moving closer (but not sitting still right next to the enemy)
+    attack_score = max(0, 50 - distance_to_enemy * 10)
 
-    # Reward bomb placement if enemy is in range
+    # Bomb placement bonus if enemy is already in danger zone
     for bomb in world.bomb_group:
         if bomb.owner == ai:
             if abs(bomb.grid_x - ex) + abs(bomb.grid_y - ey) <= bomb.spread:
-                attack_score += 100
+                attack_score += 120  # stronger reward for effective bombs
 
-    # Reward trapping the enemy (limited escape)
+    # Encourage placing a bomb if close enough to hit enemy
+    if distance_to_enemy <= 3:
+        attack_score += 40  # suggests bomb opportunity is good
+
+    # Reward for threatening escape routes (trapping behavior)
     escape_routes = world.map.get_safe_tiles_around(ex, ey)
-    if len(escape_routes) <= 1:
-        attack_score += 50
+    if len(escape_routes) == 0:
+        attack_score += 100  # enemy is trapped
+    elif len(escape_routes) == 1:
+        attack_score += 50   # partially trapped
+    elif len(escape_routes) == 2:
+        attack_score += 20   # low mobility
+
+    # Slight bonus for approaching from safe tiles
+    if not world.map.is_in_explosion_range(ax, ay):
+        attack_score += 10
 
     return attack_score
+
