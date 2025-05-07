@@ -31,4 +31,7 @@ class GameLogic:
             if world.map.is_bomb_placeable(entity):
                 Bomb((entity.grid_x, entity.grid_y), world, entity)
 
+        elif action == Action.WAIT:
+            return True
+
         return True

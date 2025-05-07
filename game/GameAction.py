@@ -10,3 +10,5 @@ class Action(Flag):
     MOVE = MOVE_UP | MOVE_DOWN | MOVE_LEFT | MOVE_RIGHT
     
     PLACE_BOMB = auto()
+
+    WAIT = auto()
