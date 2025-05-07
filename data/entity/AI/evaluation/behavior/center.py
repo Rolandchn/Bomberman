@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from data.entity.Entity import Entity
 
 
-from data.entity.AI.utils import get_danger_penalty
+from data.entity.AI.utils import get_danger_penalty, get_safe_tiles_around, get_obstacles_between
 
 
 
@@ -21,7 +21,7 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
     score += get_danger_penalty(world, ax, ay)
 
     # --- Obstacle Analysis ---
-    path_obstacles = world.map.get_obstacles_between((ax, ay), center_pos)
+    path_obstacles = get_obstacles_between((ax, ay), center_pos, world)
     num_obstacles = len(path_obstacles)
 
     # Check if any of AI's bombs can destroy them
@@ -44,7 +44,7 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
             score -= 5 * num_obstacles  # mildly penalize if no bomb yet
 
      # Penalize if bomb threatens but no safe tile
-    if bomb_threatens_obstacle and not world.map.get_safe_tiles_around(ax, ay):
+    if bomb_threatens_obstacle and not get_safe_tiles_around(ax, ay, world):
         score -= 200
 
 

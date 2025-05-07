@@ -1,5 +1,9 @@
 from __future__ import annotations
+from collections import deque
 from typing import TYPE_CHECKING
+
+from data.map.structure.Obstacle import Obstacle
+from data.map.structure.Wall import Wall
 
 if TYPE_CHECKING:
     from game.GameWorld import GameWorld
@@ -32,12 +36,12 @@ def action_priority(act):
 
 
 def get_danger_penalty(world: GameWorld, x, y):
-    if world.map.is_in_explosion_range(x, y):
+    if is_in_explosion_range(x, y, world):
         return float("-inf")  # or -inf to signify certain death
     return 0
 
 
-def get_safe_tiles_around(x, y, simulated_world: GameWorld, max_timer=3):
+def get_safe_tiles_around(x, y, simulated_world: GameWorld, max_timer=5):
         """
         Returns a list of (x, y) positions around the given tile that are walkable and not in explosion range.
         - `world` is used to access bombs and danger info.
@@ -57,14 +61,51 @@ def get_safe_tiles_around(x, y, simulated_world: GameWorld, max_timer=3):
                 continue
 
             # Check explosion range using world's helper
-            if not is_in_explosion_range(nx, ny, max_timer=max_timer):
+            if not is_in_explosion_range(nx, ny, simulated_world, max_timer=max_timer):
                 safe_tiles.append((nx, ny))
 
         return safe_tiles
 
 
+def get_obstacles_between(start_pos, end_pos, world: GameWorld):
+        visited = set()
+        queue = deque()
+        queue.append((start_pos, [], []))  # (position, path, obstacles)
 
-def is_in_explosion_range(x, y, simulated_world: GameWorld, max_timer=3):
+        while queue:
+            (x, y), path, obstacles = queue.popleft()
+
+            if (x, y) == end_pos:
+                return obstacles  # return list of obstacle positions
+
+            visited.add((x, y))
+
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nx, ny = x + dx, y + dy
+                next_pos = (nx, ny)
+
+                if not (1 <= nx <= 13 and 1 <= ny <= 13):
+                    continue
+                if next_pos in visited:
+                    continue
+
+                entities = world.map.entities_at_position(next_pos)
+                is_solid = any(isinstance(e, Wall) for e in entities)
+                is_obstacle = any(isinstance(e, Obstacle) for e in entities)
+
+                if is_solid:
+                    continue
+
+                new_obstacles = obstacles.copy()
+                if is_obstacle:
+                    new_obstacles.append(next_pos)
+
+                queue.append((next_pos, path + [next_pos], new_obstacles))
+
+        return []  # No path found
+
+
+def is_in_explosion_range(x, y, simulated_world: GameWorld, max_timer=5):
     """
     Returns True if tile (x, y) is in the explosion range of any active bomb.
     """

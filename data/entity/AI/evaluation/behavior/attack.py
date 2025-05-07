@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from data.entity.Entity import Entity
 
 
-from data.entity.AI.utils import get_danger_penalty
+from data.entity.AI.utils import get_danger_penalty, is_in_explosion_range, get_obstacles_between, get_safe_tiles_around
 
 
 
@@ -30,7 +30,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
         attack_score += 40
 
     # --- Obstacle Between AI and Enemy ---
-    path_obstacles = world.map.get_obstacles_between((ax, ay), (ex, ey))
+    path_obstacles = get_obstacles_between((ax, ay), (ex, ey), world)
     num_obstacles = len(path_obstacles)
 
     # Check if existing AI bombs threaten those obstacles
@@ -55,7 +55,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
                 attack_score += 30  # encourage placing bomb to open a path
 
     # Trapping logic
-    escape_routes = world.map.get_safe_tiles_around(ex, ey)
+    escape_routes = get_safe_tiles_around(ex, ey, world)
     if len(escape_routes) == 0:
         attack_score += 100
     elif len(escape_routes) == 1:
@@ -64,7 +64,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
         attack_score += 20
 
     # Encourage moving if safe
-    if not world.map.is_in_explosion_range(ax, ay):
+    if not is_in_explosion_range(ax, ay, world):
         attack_score += 10
 
     return attack_score

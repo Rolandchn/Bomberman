@@ -14,7 +14,7 @@ from data.entity.AI.decision.result import result
 from data.entity.AI.decision.terminal import terminal
 
 from data.entity.AI.actions import actions
-from data.entity.AI.utils import action_priority
+from data.entity.AI.utils import action_priority, get_safe_tiles_around
 
 
 
@@ -33,7 +33,7 @@ def minmax(simulated_world: GameWorld, root_entity: GameStatus, depth, eval_fn, 
     # Fallback: if only PLACE_BOMB is returned, and we want to avoid suicides
     if possible_actions == [Action.PLACE_BOMB]:
         # Only allow it if the AI has an escape route
-        safe_tiles = simulated_world.map.get_safe_tiles_around(player.grid_x, player.grid_y)
+        safe_tiles = get_safe_tiles_around(player.grid_x, player.grid_y, simulated_world)
         if not safe_tiles:
             possible_actions = [Action.WAIT]
 

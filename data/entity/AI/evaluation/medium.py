@@ -11,9 +11,7 @@ from game.GameStatus import GameStatus
 from data.entity.AI.decision.terminal import terminal
 from data.entity.AI.decision.value import value
 
-from data.entity.AI.evaluation.behavior.attack import evaluate_attack_behavior
-from data.entity.AI.evaluation.behavior.center import evaluate_center_behavior
-
+from data.entity.AI.utils import is_in_explosion_range
 
 
 def eval(simulated_world: GameWorld, status: GameStatus):
@@ -34,7 +32,7 @@ def eval(simulated_world: GameWorld, status: GameStatus):
     distance_to_center = abs(ax - center[0]) + abs(ay - center[1])
     center_score = max(0, 20 - distance_to_center * 3)
 
-    danger_penalty = -40 if simulated_world.map.is_in_explosion_range(ax, ay) else 0
+    danger_penalty = -40 if is_in_explosion_range(ax, ay, simulated_world) else 0
 
     bomb_bonus = 0
     for bomb in simulated_world.bomb_group:
