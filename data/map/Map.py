@@ -43,7 +43,7 @@ class Map:
         ''' 
         buff = []
 
-        with open("./data/map/map.txt", "r") as map:
+        with open("./data/map/map2.txt", "r") as map:
             lines = map.read().splitlines()
             for line in lines:
                 buff.append(list(line))
@@ -65,40 +65,6 @@ class Map:
                     
                     self.grid[Obstacle(col, row, self.world)] = (col, row)
 
-
-    def generate_valued_grid(self):
-        '''
-        Output: Generate a valued map with sgame increasing as we go to the center of the map
-        '''
-
-        nb_grid = (13, 13)
-        nb_row, nb_column = nb_grid
-
-        # add map border = 0
-        self.valued_grid.append([0 for i in range(nb_row + 2)])
-        self.valued_grid.append([0 for i in range(nb_row + 2)])
-
-        column_increment = 0
-
-        for row in range(math.ceil(nb_row / 2)):
-            # add map border = 0
-            buff = [0, 0]
-            
-            for column_value in range(math.ceil(nb_column / 2)):
-                buff.insert(len(buff) // 2, column_value * 100 + column_increment)
-                buff.insert(len(buff) // 2, column_value * 100 + column_increment)
-
-            if nb_column % 2 != 0:
-                buff.pop(len(buff) // 2)
-
-            self.valued_grid.insert(len(self.valued_grid) // 2, buff)
-            self.valued_grid.insert(len(self.valued_grid) // 2, buff)
-
-            column_increment += 100
-
-        if nb_row % 2 != 0:
-            self.valued_grid.pop(len(self.valued_grid) // 2)
-        
 
     def update_valued_grid(self):
         '''
@@ -181,59 +147,6 @@ class Map:
 
     def entities_at_position(self, pos):
         return [entity for entity, coord in self.grid.items() if coord == pos]
-
-    def is_in_explosion_range(self, x, y, max_timer=3):
-        """
-        Returns True if tile (x, y) is in the explosion range of any active bomb.
-        """
-        for bomb in self.world.bomb_group:
-            if bomb.tick < max_timer:
-                continue  # Skip bombs that are too far from exploding
-            
-            bx, by = bomb.grid_x, bomb.grid_y
-            spread = bomb.spread
-
-            # Include bomb's own tile
-            if bx == x and by == y:
-                return True
-
-            # Check 4 directions
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                for distance in range(1, spread + 1):
-                    nx, ny = bx + dx * distance, by + dy * distance
-                    if any(e in self.world.wall_group for e in self.entities_at_position((nx, ny))):
-                        break  # Explosion stops at walls and obstacle
-
-                    if nx == x and ny == y:
-                        return True
-
-        return False
-
-
-    def get_safe_tiles_around(self, x, y, max_timer=3):
-        """
-        Returns a list of (x, y) positions around the given tile that are walkable and not in explosion range.
-        - `world` is used to access bombs and danger info.
-        - `max_timer` defines how far in the future we consider danger.
-        """
-        safe_tiles = []
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # left, right, up, down
-
-        for dx, dy in directions:
-            nx, ny = x + dx, y + dy
-
-            # Check if tile is walkable
-            entities = self.entities_at_position((nx, ny))
-            is_blocked = any(e in self.world.wall_group for e in entities)
-            
-            if is_blocked:
-                continue
-
-            # Check explosion range using world's helper
-            if not self.is_in_explosion_range(nx, ny, max_timer=max_timer):
-                safe_tiles.append((nx, ny))
-
-        return safe_tiles
 
 
     def get_obstacles_between(self, start_pos, end_pos):
