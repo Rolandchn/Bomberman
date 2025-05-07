@@ -19,7 +19,7 @@ from data.texture.config import TILE_SIZE
 
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, position: Tuple[int, int], world: GameWorld, owner: Entity, timer=3, spread=2):
+    def __init__(self, position: Tuple[int, int], world: GameWorld, owner: Entity, timer=6, spread=1):
         self.world = world
         super().__init__(self.world.bomb_group, self.world.wall_group)
 
@@ -36,6 +36,7 @@ class Bomb(pygame.sprite.Sprite):
         self.start_turn = self.world.turn
         self.timer = timer
         self.spread = spread
+        self.tick = 1
 
 
     def update(self, game_turn: int):
@@ -44,9 +45,9 @@ class Bomb(pygame.sprite.Sprite):
         ''' 
         self.world.map.update_grid_bomb(self)
 
-        turns_passed = game_turn - self.start_turn
+        self.tick = game_turn - self.start_turn
         
-        if self.timer <= turns_passed:
+        if self.timer <= self.tick:
             self.kill()
             self.explode()
 
@@ -68,7 +69,7 @@ class Bomb(pygame.sprite.Sprite):
 
         # up, down, right, left
         for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            for spread in range(1, self.spread):
+            for spread in range(1, self.spread + 1):
                 nx, ny = self.grid_x + dx * spread, self.grid_y + dy * spread
 
                 tile_rect = self.rect.copy()

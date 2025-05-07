@@ -42,3 +42,25 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
             score -= 5 * num_obstacles  # mildly penalize if no bomb yet
 
     return score
+
+
+def evaluate_attack_behavior(world:GameWorld, ai: Entity, enemy_pos):
+    ax, ay = ai.grid_x, ai.grid_y
+    ex, ey = enemy_pos
+    distance_to_enemy = abs(ax - ex) + abs(ay - ey)
+
+    # Closer is better (aggression)
+    attack_score = -distance_to_enemy * 10
+
+    # Reward bomb placement if enemy is in range
+    for bomb in world.bomb_group:
+        if bomb.owner == ai:
+            if abs(bomb.grid_x - ex) + abs(bomb.grid_y - ey) <= bomb.spread:
+                attack_score += 100
+
+    # Reward trapping the enemy (limited escape)
+    escape_routes = world.map.get_safe_tiles_around(ex, ey)
+    if len(escape_routes) <= 1:
+        attack_score += 50
+
+    return attack_score

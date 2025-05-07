@@ -31,6 +31,9 @@ class Map:
         self.valued_grid = []
         self.spawn_points = []
 
+        self.width = 13
+        self.height = 13
+
         self.world = world
 
 
@@ -178,6 +181,59 @@ class Map:
 
     def entities_at_position(self, pos):
         return [entity for entity, coord in self.grid.items() if coord == pos]
+
+    def is_in_explosion_range(self, x, y, max_timer=3):
+        """
+        Returns True if tile (x, y) is in the explosion range of any active bomb.
+        """
+        for bomb in self.world.bomb_group:
+            if bomb.tick < max_timer:
+                continue  # Skip bombs that are too far from exploding
+            
+            bx, by = bomb.grid_x, bomb.grid_y
+            spread = bomb.spread
+
+            # Include bomb's own tile
+            if bx == x and by == y:
+                return True
+
+            # Check 4 directions
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                for distance in range(1, spread + 1):
+                    nx, ny = bx + dx * distance, by + dy * distance
+                    if any(e in self.world.wall_group for e in self.entities_at_position((nx, ny))):
+                        break  # Explosion stops at walls and obstacle
+
+                    if nx == x and ny == y:
+                        return True
+
+        return False
+
+
+    def get_safe_tiles_around(self, x, y, max_timer=3):
+        """
+        Returns a list of (x, y) positions around the given tile that are walkable and not in explosion range.
+        - `world` is used to access bombs and danger info.
+        - `max_timer` defines how far in the future we consider danger.
+        """
+        safe_tiles = []
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # left, right, up, down
+
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+
+            # Check if tile is walkable
+            entities = self.entities_at_position((nx, ny))
+            is_blocked = any(e in self.world.wall_group for e in entities)
+            
+            if is_blocked:
+                continue
+
+            # Check explosion range using world's helper
+            if not self.is_in_explosion_range(nx, ny, max_timer=max_timer):
+                safe_tiles.append((nx, ny))
+
+        return safe_tiles
 
 
     def get_obstacles_between(self, start_pos, end_pos):
