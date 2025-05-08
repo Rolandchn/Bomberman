@@ -14,7 +14,7 @@ from data.entity.Player import Player
 from data.entity.AI.AI import IA
 
 from data.texture.Button import Button
-from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH
+from data.texture.config import SCREEN_HEIGHT, SCREEN_WIDTH, MAX_TURN, SHRINK_INTERVAL
 
 
 class Game():
@@ -62,6 +62,10 @@ class Game():
         if self.player2.is_dead():
             self.is_game_over = True
             self.winner = GameStatus.P1
+
+        if self.world.turn > MAX_TURN and (self.world.turn - MAX_TURN) % SHRINK_INTERVAL == 0:
+            self.SHRINK_MARGIN = (self.world.turn - MAX_TURN) // SHRINK_INTERVAL
+            self.world.map.shrink_boundary(self.SHRINK_MARGIN)
 
 
     def run(self):
@@ -232,6 +236,8 @@ class Game():
         self.world.turn = 0
 
         self.world.update(self.world.turn)
+
+        self.SHRINK_MARGIN = (self.world.turn - MAX_TURN) // SHRINK_INTERVAL
         
         self.is_game_over = False
         self.winner = None

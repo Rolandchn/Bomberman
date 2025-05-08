@@ -38,6 +38,14 @@ def action_priority(act):
 def get_danger_penalty(world: GameWorld, x, y):
     if is_in_explosion_range(x, y, world):
         return float("-inf")  # or -inf to signify certain death
+    
+    # Danger from shrink zone (if tile is now outside the safe zone)
+    margin = world.map.current_margin  # You should track this as it increases
+    width, height = world.map.width, world.map.height
+
+    if x < 1 + margin or x >= width - 1 - margin or y < 1 + margin or y >= height - 1 - margin:
+        return -500  # Arbitrary high penalty — not instant death, but strongly discouraged
+    
     return 0
 
 

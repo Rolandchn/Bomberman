@@ -4,37 +4,35 @@ from typing import TYPE_CHECKING, Tuple
 if TYPE_CHECKING:
     from data.entity.Entity import Entity
     from data.entity.Bombe import Bomb
-    from data.entity.Explosion import Explosion
     from game.GameWorld import GameWorld
+    from data.entity.Explosion import Explosion
 
 
 import pygame
-import math
 
 from collections import defaultdict
-from collections import deque
 
 from game.GameAction import Action
-
 from game.GameStatus import GameStatus
 
 from data.map.structure.Wall import Wall
+from data.map.structure.Fire import Fire
 from data.map.structure.Floor import Floor
 from data.map.structure.Obstacle import Obstacle
 
-from data.texture.config import TILE_SIZE
+from data.texture.config import TILE_SIZE, GRID_WIDTH, GRID_HEIGHT
 
 
 class Map:
     def __init__(self, world: GameWorld):
         self.grid = defaultdict(tuple)
-        self.valued_grid = []
         self.spawn_points = []
 
-        self.width = 13
-        self.height = 13
+        self.width = GRID_WIDTH
+        self.height = GRID_HEIGHT
 
         self.world = world
+        self.current_margin = 0
 
 
     def generate_map(self):
@@ -66,17 +64,24 @@ class Map:
                     self.grid[Obstacle(col, row, self.world)] = (col, row)
 
 
-    def update_valued_grid(self):
-        '''
-        Output: Update the valued grid with obstacle
-        '''
-        for wall in self.world.wall_group:
-            if isinstance(wall, Wall):
-                self.valued_grid[wall.grid_y][wall.grid_x] = 0
+    def shrink_boundary(self, margin: int):
+        self.current_margin = margin
+        
+        width, height = self.width, self.height
 
-            elif isinstance(wall, Obstacle):
-                self.valued_grid[wall.grid_y][wall.grid_x] = 50
-    
+        # Define bounds of the playable area
+        min_bound = 1 + self.current_margin
+        max_bound_x = width - 1 - self.current_margin  # exclude outer wall
+        max_bound_y = height - 1 - self.current_margin
+
+        for x in range(1, width - 1):  # Only within (1, 13)
+            for y in range(1, height - 1):
+                if x < min_bound or x >= max_bound_x or y < min_bound or y >= max_bound_y:
+                    # Place an obstacle to shrink the play area
+                    if (x, y) not in self.grid:  # Avoid duplicating
+                        self.grid[Fire(x, y, self.world)] = (x, y)
+
+
 
     def update_grid_position(self, entity: Entity):
         self.grid[entity] = (entity.grid_x, entity.grid_y)
