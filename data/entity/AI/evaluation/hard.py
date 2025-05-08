@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from game.GameWorld import GameWorld
-    from data.entity.Entity import Entity
 
 import math
 

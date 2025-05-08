@@ -30,13 +30,6 @@ def minmax(simulated_world: GameWorld, root_entity: GameStatus, depth, eval_fn, 
     # TRI des actions (déplacements > bombe > rien)
     possible_actions.sort(key=action_priority)
 
-    # Fallback: if only PLACE_BOMB is returned, and we want to avoid suicides
-    if possible_actions == [Action.PLACE_BOMB]:
-        # Only allow it if the AI has an escape route
-        safe_tiles = get_safe_tiles_around(player.grid_x, player.grid_y, simulated_world)
-        if not safe_tiles:
-            possible_actions = [Action.WAIT]
-
     # MIN
     if player.status == GameStatus.P1:
         best_value = float("inf")
