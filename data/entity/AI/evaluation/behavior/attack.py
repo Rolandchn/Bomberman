@@ -40,7 +40,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     for bomb in ai_bombs:
         bx, by = bomb.grid_x, bomb.grid_y
         for ox, oy in path_obstacles:
-            if abs(bx - ox) + abs(by - oy) <= bomb.spread:
+            if (bx == ox and abs(by - oy) <= bomb.spread) or (by == oy and abs(bx - ox) <= bomb.spread):
                 bomb_threatens_obstacle = True
                 break
         if bomb_threatens_obstacle:
