@@ -36,17 +36,17 @@ def action_priority(act):
 
 
 def get_danger_penalty(world: GameWorld, x, y):
-    if is_in_explosion_range(x, y, world):
-        return float("-inf")  # or -inf to signify certain death
-    
-    # Danger from shrink zone (if tile is now outside the safe zone)
-    margin = world.map.current_margin  
+    margin = world.map.current_margin
     width, height = world.map.width, world.map.height
 
-    if x < 1 + margin or x >= width - 1 - margin or y < 1 + margin or y >= height - 1 - margin:
-        return -500
+    in_explosion = is_in_explosion_range(x, y, world)
+    in_shrinking_zone = x <= margin or x >= width - margin - 1 or y <= margin or y >= height - margin - 1
+
+    if in_explosion or in_shrinking_zone:
+        return float("-inf")  
     
     return 0
+
 
 
 def get_safe_tiles_around(x, y, simulated_world: GameWorld, max_timer=5):
