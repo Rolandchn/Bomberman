@@ -1,4 +1,6 @@
 #Taille
+from game.GameStatus import GameStatus
+from collections import defaultdict
 
 TILE_SIZE = 40
 GRID_WIDTH = 15
@@ -8,3 +10,11 @@ SCREEN_HEIGHT = TILE_SIZE * GRID_HEIGHT
 
 MAX_TURN = 200
 SHRINK_INTERVAL = 20
+
+DESTINATION_POS = {
+    GameStatus.P1: [(3, 3), (10, 3), (7, 7)],
+    GameStatus.P2: [(11, 11), (3, 11), (7, 7)]
+}
+
+
+current_destination_index = defaultdict(lambda: 0)

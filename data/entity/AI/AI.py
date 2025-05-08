@@ -12,9 +12,7 @@ from game.GameLogic import GameLogic
 from data.entity.Entity import Entity
 
 from data.entity.AI.decision.minMax import minmax
-from data.entity.AI.difficulty import HARD
-from data.entity.AI.difficulty import MEDIUM
-from data.entity.AI.utils import get_random_action
+from data.entity.AI.difficulty import EASY, MEDIUM, HARD
 
 
 class IA(Entity):
@@ -34,7 +32,7 @@ class IA(Entity):
 
     def input(self):
         if self.difficulty == "facile":
-            action = get_random_action()
+            _, action = minmax(self.world, self.status, EASY.depth, EASY.eval_fn)
 
         elif self.difficulty == "moyen":
             _, action = minmax(self.world, self.status, MEDIUM.depth, MEDIUM.eval_fn)

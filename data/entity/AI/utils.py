@@ -1,28 +1,63 @@
 from __future__ import annotations
-from collections import deque
 from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from game.GameWorld import GameWorld
+    from data.entity.Entity import Entity
 
 from data.map.structure.Obstacle import Obstacle
 from data.map.structure.Wall import Wall
 
-if TYPE_CHECKING:
-    from game.GameWorld import GameWorld
+from data.texture.config import DESTINATION_POS, current_destination_index
+from collections import deque
 
 import random
 
 
-from game.GameAction import Action
+def choose_best_or_next(ai: Entity):
+    destinations = DESTINATION_POS[ai.status]
+    idx = current_destination_index[ai.status]
+    target = destinations[idx % len(destinations)]
+    print(ai.status, destinations, idx, target)
+
+    if (ai.grid_x, ai.grid_y) == target:
+        # Arrived: move to next destination
+        current_destination_index[ai.status] = (idx + 1) % len(destinations)
+        target = destinations[current_destination_index[ai.status]]
+
+    return target
 
 
+def get_obstacles_around(x, y, simulated_world: GameWorld):
+    obstacles = []
 
-def get_random_action():
-    return random.choice([
-        Action.MOVE_UP,
-        Action.MOVE_DOWN,
-        Action.MOVE_LEFT,
-        Action.MOVE_RIGHT,
-        Action.PLACE_BOMB
-    ])
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        nx, ny = x + dx, y + dy
+        entities = simulated_world.map.entities_at_position((nx, ny))
+        
+        for entity in entities:
+            if isinstance(entity, Obstacle):
+                obstacles.append((entity.grid_x, entity.grid_y))
+
+    return obstacles
+
+
+def get_random_point_around(ai: Entity, world: GameWorld, radius=5):
+    ax, ay = ai.grid_x, ai.grid_y
+    width, height = world.map.width, world.map.height
+
+    for _ in range(20):  # Try up to 20 times to find a valid point
+        dx = random.randint(-radius, radius)
+        dy = random.randint(-radius, radius)
+
+        nx = ax + dx
+        ny = ay + dy
+
+        if 0 <= nx < width and 0 <= ny < height:
+            return nx, ny
+
+    # Fallback: return the original position if no valid point is found
+    return ax, ay
 
 
 def action_priority(act):
