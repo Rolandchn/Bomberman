@@ -203,16 +203,10 @@ class Game():
 
 
     def tournament(self):
-        # Afficher un fond + texte pendant le tournoi
-        self.screen.fill((30, 30, 30))
 
-        font = pygame.font.SysFont(None, 60)
-        text = font.render("Tournoi IA en cours...", True, (255, 255, 255))
-        self.screen.blit(text, text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)))
+        ia_config = {"facile": 1,"moyen": 1,"difficile": 1}
 
-        pygame.display.update()
-
-        tournament = TournamentManager(["facile", "moyen", "difficile"], nb_rounds=3)
+        tournament = TournamentManager(self.screen, ia_config, nb_rounds=1)
         tournament.start()
 
         print("tournament")

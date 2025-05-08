@@ -20,6 +20,9 @@ from data.entity.AI.utils import action_priority, get_safe_tiles_around
 
 def minmax(simulated_world: GameWorld, root_entity: GameStatus, depth, eval_fn, alpha=float('-inf'), beta=float('inf')):
     player: Entity = turn(simulated_world)
+
+    if player is None:
+        return 0, Action.WAIT  # On retourne un score neutre + action d'attente pour ne pas planter
     
     if terminal(simulated_world) or depth <= 0:
         return eval_fn(simulated_world, root_entity), Action.WAIT

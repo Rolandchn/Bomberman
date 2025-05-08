@@ -45,3 +45,6 @@ class IA(Entity):
 
     def clone(self, new_world):
         return IA((self. grid_x, self.grid_y), self.status, new_world)
+
+    def groups_to_add(self):
+        return ["player_group"]
