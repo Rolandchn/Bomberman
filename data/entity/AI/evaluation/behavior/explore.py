@@ -11,25 +11,18 @@ import random
 from data.entity.AI.utils import get_danger_penalty, get_safe_tiles_around, get_obstacles_between, is_in_explosion_range
 
 
-
-def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
+def evaluate_explore_behavior(world: GameWorld, ai: Entity, destination_pos):
     ax, ay = ai.grid_x, ai.grid_y
-    cx, cy = center_pos
+    cx, cy = destination_pos
 
     # Base score: closer to center is better
     distance = abs(ax - cx) + abs(ay - cy)
     score = -distance * 5
 
-    safe = not is_in_explosion_range(ax, ay, world)
     score += get_danger_penalty(world, ax, ay)
 
-    margin = world.map.current_margin
-    is_inside_playable_zone = margin <= ax < world.map.width - margin and margin <= ay < world.map.height - margin
-    if safe and is_inside_playable_zone:
-        score += random.randint(-1, 1)  # Small movement noise
-
     # --- Obstacle Analysis ---
-    path_obstacles = get_obstacles_between((ax, ay), center_pos, world)
+    path_obstacles = get_obstacles_between((ax, ay), (cx, cy), world)
     num_obstacles = len(path_obstacles)
 
     # Check if any of AI's bombs can destroy them
@@ -54,6 +47,5 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
      # Penalize if bomb threatens but no safe tile
     if bomb_threatens_obstacle and not get_safe_tiles_around(ax, ay, world):
         score -= 200
-
 
     return score
