@@ -29,7 +29,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     if distance_to_enemy <= 3:
         attack_score += 40
 
-    # --- Obstacle Between AI and Enemy ---
+    # Obstacle Between AI and Enemy
     path_obstacles = get_obstacles_between((ax, ay), (ex, ey), world)
     num_obstacles = len(path_obstacles)
 

@@ -90,6 +90,8 @@ class TournamentManager:
         ia2 = IA(self.world.map.get_spawn(GameStatus.P2), GameStatus.P2, self.world, difficulty=ia2_diff)
 
         self.world.player_group.add(ia1, ia2)
+        self.world.update(self.world.turn)
+
 
         self.world.turn = 0
         self.world.turn_status = GameStatus.P1
@@ -114,7 +116,7 @@ class TournamentManager:
             self.world.update(self.world.turn)
             self.world.draw(self.screen)
 
-            # ✅ Affichage du match en live
+            # Affichage du match en live
             font = pygame.font.SysFont(None, 30)
             info = f"{ia1_diff} VS {ia2_diff} - Coups joués : {self.world.turn}"
             text_surface = font.render(info, True, (255, 255, 255))

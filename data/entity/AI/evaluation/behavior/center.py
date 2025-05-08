@@ -6,8 +6,6 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
     from data.entity.Entity import Entity
 
-import random
-
 from data.entity.AI.utils import get_danger_penalty, get_safe_tiles_around, get_obstacles_between, is_in_explosion_range
 
 
@@ -20,13 +18,7 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
     distance = abs(ax - cx) + abs(ay - cy)
     score = -distance * 5
 
-    safe = not is_in_explosion_range(ax, ay, world)
     score += get_danger_penalty(world, ax, ay)
-
-    margin = world.map.current_margin
-    is_inside_playable_zone = margin <= ax < world.map.width - margin and margin <= ay < world.map.height - margin
-    if safe and is_inside_playable_zone:
-        score += random.randint(-1, 1)  # Small movement noise
 
     # --- Obstacle Analysis ---
     path_obstacles = get_obstacles_between((ax, ay), center_pos, world)
