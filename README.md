@@ -39,7 +39,7 @@ git clone https://github.com/Rolandchn/Bomberman.git
 cd Bomberman
 ```
 
-**Installation**
+**Installation**<br>
 Install the project dependencies using pip:
 ```bash
 pip install pygame
