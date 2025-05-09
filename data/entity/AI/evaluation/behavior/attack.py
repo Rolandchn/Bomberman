@@ -29,7 +29,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     if distance_to_enemy <= 3:
         attack_score += 40
 
-    # Obstacle Between AI and Enemy
+    # --- Obstacle Between AI and Enemy ---
     path_obstacles = get_obstacles_between((ax, ay), (ex, ey), world)
     num_obstacles = len(path_obstacles)
 
@@ -40,7 +40,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     for bomb in ai_bombs:
         bx, by = bomb.grid_x, bomb.grid_y
         for ox, oy in path_obstacles:
-            if (bx == ox and abs(by - oy) <= bomb.spread) or (by == oy and abs(bx - ox) <= bomb.spread):
+            if abs(bx - ox) + abs(by - oy) <= bomb.spread:
                 bomb_threatens_obstacle = True
                 break
         if bomb_threatens_obstacle:
