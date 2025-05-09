@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from game.GameWorld import GameWorld
+    from data.entity.Entity import Entity
 
 import math
 
@@ -21,28 +22,30 @@ def eval(simulated_world: GameWorld, status: GameStatus):
     if terminal(simulated_world):
         return value(simulated_world)
             
-    ai = None
-    for player in simulated_world.player_group:
-        if player.status == status:
-            ai = player
-            break
+    player: Entity = None
+    opponent: Entity = None
+    for p in simulated_world.player_group:
+        if p.status == status:
+            player = p
+        else:
+            opponent = p
 
-    if ai is None:
+    if player is None or opponent is None:
         raise ValueError("MINMAX caller was not found")
 
-    ai_x, ai_y = ai.grid_x, ai.grid_y
-    player_x, player_y = simulated_world.map.get_enemie_pos(ai)
+    player_x, player_y = (player.grid_x, player.grid_y)
+    opponent_x, opponent_y = (opponent.grid_x, opponent.grid_y)
 
     CENTER_POS = (math.floor(simulated_world.map.width / 2), math.floor(simulated_world.map.height / 2) - 1)
     ENEMY_DETECTION_RANGE = 8
     
-    player_distance = abs(player_x - ai_x) + abs(player_y - ai_y)
+    opponent_distance = abs(opponent_x - player_x) + abs(opponent_y - player_y)
 
-    if player_distance <= ENEMY_DETECTION_RANGE:
-        raw_score = evaluate_attack_behavior(simulated_world, ai, (player_x, player_y))
+    if opponent_distance <= ENEMY_DETECTION_RANGE:
+        raw_score = evaluate_attack_behavior(simulated_world, player, opponent)
 
     else:
-        raw_score = evaluate_center_behavior(simulated_world, ai, CENTER_POS)
+        raw_score = evaluate_center_behavior(simulated_world, player, CENTER_POS)
 
     # Flip score if current player is MIN
     return raw_score if status == GameStatus.P2 else -raw_score

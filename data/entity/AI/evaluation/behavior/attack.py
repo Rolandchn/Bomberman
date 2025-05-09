@@ -11,9 +11,10 @@ from data.entity.AI.utils import get_danger_penalty, is_in_explosion_range, get_
 
 
 
-def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
-    ax, ay = ai.grid_x, ai.grid_y
-    ex, ey = enemy_pos
+def evaluate_attack_behavior(world: GameWorld, player: Entity, opponent: Entity):
+    ax, ay = player.grid_x, player.grid_y
+    ex, ey = (opponent.grid_x, opponent.grid_y)
+    
     distance_to_enemy = abs(ax - ex) + abs(ay - ey)
 
     attack_score = max(0, 50 - distance_to_enemy * 10)
@@ -21,7 +22,7 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
 
     # Bomb placement bonus if enemy is in bomb range
     for bomb in world.bomb_group:
-        if bomb.owner == ai:
+        if bomb.owner == player:
             if abs(bomb.grid_x - ex) + abs(bomb.grid_y - ey) <= bomb.spread:
                 attack_score += 120
 
@@ -34,10 +35,10 @@ def evaluate_attack_behavior(world: GameWorld, ai: Entity, enemy_pos):
     num_obstacles = len(path_obstacles)
 
     # Check if existing AI bombs threaten those obstacles
-    ai_bombs = [bomb for bomb in world.bomb_group if bomb.owner == ai]
+    player_bombs = [bomb for bomb in world.bomb_group if bomb.owner == player]
     bomb_threatens_obstacle = False
 
-    for bomb in ai_bombs:
+    for bomb in player_bombs:
         bx, by = bomb.grid_x, bomb.grid_y
         for ox, oy in path_obstacles:
             if abs(bx - ox) + abs(by - oy) <= bomb.spread:
