@@ -7,8 +7,8 @@
 ## 📋 Table des matières
 1. [Introduction](#introduction)
 2. [Technologie](#technologie)
-3. [Fonctionnalité](#fonctionnalité)
-4. [Essayer dès maintenant](#essaie)
+3. [Fonctionnalities](#fonctionnalité)
+4. [Quick Start](#essaie)
 5. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
@@ -22,6 +22,8 @@
 👉 Simplify Bomberman Game <br>
 
 👉 3 difficulties for the AI (easy, medium, hard) <br>
+
+👉 Smart AI behaviors (center, chase, attack, explore) <br>
 
 👉 Tournament AI against AI <br>
 
