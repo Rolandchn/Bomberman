@@ -204,12 +204,13 @@ class Game():
 
     def tournament(self):
 
+        print("tournament")
         ia_config = {"facile": 1,"moyen": 1,"difficile": 1}
 
         tournament = TournamentManager(self.screen, ia_config, nb_rounds=1)
         tournament.start()
 
-        print("tournament")
+
         self.state = GameState.MENU
 
 
