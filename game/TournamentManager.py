@@ -143,100 +143,88 @@ class TournamentManager:
 
 
     def show_results(self):
-        self.screen.fill((20, 20, 20))
+
+
         font = pygame.font.SysFont(None, 30)
         big_font = pygame.font.SysFont(None, 48)
 
-        # Titre
-        title = big_font.render("Résultats du Tournoi", True, (255, 255, 255))
-        self.screen.blit(title, title.get_rect(center=(SCREEN_WIDTH // 2, 40)))
-        print("\n--- Classement final ---")
-        y = 100
+        scroll_offset = 0
+        scroll_speed = 20
 
-        # Total des victoires
+        # Données pré-calculées
         total_victories = sum(stats["wins"] for stats in self.results.values())
-
-        # Classement par nombre de victoires décroissant
         sorted_results = sorted(self.results.items(), key=lambda x: x[1]["wins"], reverse=True)
-
-        for i,(ia_name, stats) in enumerate(sorted_results, start=1):
-            wins = stats["wins"]
-            percentage = (wins / total_victories) * 100 if total_victories > 0 else 0
-            #Affichage console
-            print(f"{ia_name} → {wins} victoires ({percentage:.2f}%)")
-            #affichage ecran
-            line = f"{i}. {ia_name} — {stats['wins']} victoires ({percentage:.2f}%)"
-            text = font.render(line, True, (200, 200, 200))
-            self.screen.blit(text, (50, y))
-            y += 40
-
-
-        #details des matchs
-        y += 20
-        detail_title = font.render("Détails des matchs :", True, (255, 255, 255))
-        self.screen.blit(detail_title, (50, y))
-        y += 40
-
-        for match in self.match_history:
-            line = f"{match['ia1']} vs {match['ia2']} --> Gagnant : {match['winner']} en {match['turns']} coups"
-            text = font.render(line, True, (180, 180, 180))
-            self.screen.blit(text, (50, y))
-            y += 40
-            if y > SCREEN_HEIGHT - 100:  # Limite d'affichage
-                break
-
-
-
-        # Moyenne générale des coups par match
         avg_turns = self.total_turns / self.total_matches if self.total_matches > 0 else 0
-        #console
-        print(f"\nNombre moyen de coups par match : {avg_turns:.2f}")
-        #ecran
-        line = f"Nombre moyen de coups par match : {avg_turns:.2f}"
-        text = font.render(line, True, (180, 180, 180))
-        self.screen.blit(text, (50, y))
-        y += 40
 
+        # Boucle d'affichage avec scroll
+        waiting = True
+        while waiting:
+            self.screen.fill((20, 20, 20))
+            y = 40 + scroll_offset
 
-        # Moyenne de coups par IA gagnante
-        print("\n--- Moyenne de coups par IA gagnante ---")
-        #ecran
-        title = font.render("Moyenne de coups par IA gagnante :", True, (255, 255, 255))
-        self.screen.blit(title, title.get_rect(center=(SCREEN_WIDTH // 2, y + 20)))
-        y += 40
+            # Titre
+            title = big_font.render("Résultats du Tournoi", True, (255, 255, 255))
+            self.screen.blit(title, title.get_rect(center=(SCREEN_WIDTH // 2, y)))
+            y += 60
 
-        for ia_name, stats in self.results.items():
-            turns = stats["total_turns"]
-            if len(turns) > 0:
-                avg = sum(turns) / len(turns)
+            # Classement
+            for i, (ia_name, stats) in enumerate(sorted_results, start=1):
+                wins = stats["wins"]
+                percentage = (wins / total_victories) * 100 if total_victories > 0 else 0
+                line = f"{i}. {ia_name} — {wins} victoires ({percentage:.2f}%)"
+                text = font.render(line, True, (200, 200, 200))
+                self.screen.blit(text, (50, y))
+                y += 30
 
-                print(f"{ia_name} → {avg:.2f} coups en moyenne pour gagner")
-                line = f"{ia_name} --> {avg:.2f} coups en moyenne pour gagner"
+            y += 20
+            detail_title = font.render("Détails des matchs :", True, (255, 255, 255))
+            self.screen.blit(detail_title, (50, y))
+            y += 40
 
-            else:
-                print(f"{ia_name} → Aucun match gagné")
-                line = f"{ia_name} --> Aucun match gagné"
+            for match in self.match_history:
+                line = f"{match['ia1']} vs {match['ia2']} → Gagnant : {match['winner']} en {match['turns']} coups"
+                text = font.render(line, True, (180, 180, 180))
+                self.screen.blit(text, (50, y))
+                y += 30
 
+            y += 30
+            line = f"Nombre moyen de coups par match : {avg_turns:.2f}"
             text = font.render(line, True, (180, 180, 180))
             self.screen.blit(text, (50, y))
             y += 30
 
-        # Bouton "Retour Menu"
-        button_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 80, 200, 50)
-        pygame.draw.rect(self.screen, (0, 128, 0), button_rect, border_radius=10)
-        button_text = font.render("Retour Menu", True, (255, 255, 255))
-        self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
+            title = font.render("Moyenne de coups par IA gagnante :", True, (255, 255, 255))
+            self.screen.blit(title, (50, y))
+            y += 30
 
-        pygame.display.update()
+            for ia_name, stats in self.results.items():
+                turns = stats["total_turns"]
+                if turns:
+                    avg = sum(turns) / len(turns)
+                    line = f"{ia_name} → {avg:.2f} coups pour gagner"
+                else:
+                    line = f"{ia_name} → Aucun match gagné"
+                text = font.render(line, True, (180, 180, 180))
+                self.screen.blit(text, (50, y))
+                y += 25
 
-        # Boucle d'attente pour interaction
-        waiting = True
-        while waiting:
+            # Bouton fixe en bas de l’écran
+            button_rect = pygame.Rect(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 60, 200, 40)
+            pygame.draw.rect(self.screen, (0, 128, 0), button_rect, border_radius=10)
+            button_text = font.render("Retour Menu", True, (255, 255, 255))
+            self.screen.blit(button_text, button_text.get_rect(center=button_rect.center))
+
+            pygame.display.update()
+
+            # Gestion des événements
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos):
+                    if event.button == 4:  # Scroll up
+                        scroll_offset = min(scroll_offset + scroll_speed, 0)
+                    elif event.button == 5:  # Scroll down
+                        scroll_offset -= scroll_speed
+                    elif button_rect.collidepoint(event.pos):
                         waiting = False
