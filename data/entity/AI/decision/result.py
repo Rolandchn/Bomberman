@@ -11,6 +11,7 @@ from game.GameAction import Action
 from game.GameLogic import GameLogic
 from game.GameStatus import GameStatus
 
+from data.texture.config import MAX_TURN, SHRINK_INTERVAL
 
 
 def result(world: GameWorld, action: Action):
@@ -28,5 +29,9 @@ def result(world: GameWorld, action: Action):
         new_world.turn += 1
 
     new_world.update(new_world.turn)
+
+    if world.turn > MAX_TURN and (world.turn - MAX_TURN) % SHRINK_INTERVAL == 0:
+        SHRINK_MARGIN = (world.turn - MAX_TURN) // SHRINK_INTERVAL
+        world.map.shrink_boundary(SHRINK_MARGIN)
 
     return new_world

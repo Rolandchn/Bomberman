@@ -33,7 +33,7 @@ def eval(simulated_world: GameWorld, status: GameStatus):
     ai_x, ai_y = ai.grid_x, ai.grid_y
     player_x, player_y = simulated_world.map.get_enemie_pos(ai)
 
-    CENTER_POS = (math.floor(simulated_world.map.width / 2), math.floor(simulated_world.map.height // 2))
+    CENTER_POS = (math.floor(simulated_world.map.width / 2), math.floor(simulated_world.map.height / 2) - 1)
     ENEMY_DETECTION_RANGE = 8
     
     player_distance = abs(player_x - ai_x) + abs(player_y - ai_y)

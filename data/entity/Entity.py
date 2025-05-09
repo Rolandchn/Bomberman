@@ -45,7 +45,7 @@ class Entity(pygame.sprite.Sprite):
         Output: check player sprite collides with any explosion. Return True if collides, otherwise False
         """
 
-        return pygame.sprite.spritecollideany(self, self.world.explosion_group)
+        return pygame.sprite.spritecollideany(self, self.world.explosion_group) or pygame.sprite.spritecollideany(self, self.world.fire_group)
 
     def respawn(self):
         self.life = 1

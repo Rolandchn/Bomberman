@@ -14,7 +14,7 @@ from data.texture.Color import Color
 
 class Fire(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int, world: GameWorld):
-        super().__init__(world.explosion_group)
+        super().__init__(world.fire_group)
 
         self.grid_x = x
         self.grid_y = y

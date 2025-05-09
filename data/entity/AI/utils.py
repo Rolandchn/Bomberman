@@ -8,10 +8,9 @@ if TYPE_CHECKING:
 from data.map.structure.Obstacle import Obstacle
 from data.map.structure.Wall import Wall
 
-from data.texture.config import DESTINATION_POS, current_destination_index
+from data.texture.config import DESTINATION_POS, MAX_TURN, SHRINK_INTERVAL, current_destination_index
 from collections import deque
 
-import random
 
 
 def choose_best_or_next(ai: Entity):
@@ -42,11 +41,23 @@ def get_danger_penalty(world: GameWorld, x, y):
     width, height = world.map.width, world.map.height
 
     in_explosion = is_in_explosion_range(x, y, world)
-    in_shrinking_zone = x <= margin or x >= width - margin - 1 or y <= margin or y >= height - margin - 1
 
-    if in_explosion or in_shrinking_zone:
-        return float("-inf")  
-    
+    # Predictive border danger
+    turns_until_shrink = MAX_TURN - world.turn
+
+    # If this tile will become a wall after the next shrink
+    will_be_outside_next = (
+        x == margin or x == width - margin - 1 or
+        y == margin or y == height - margin - 1
+    )
+
+    if in_explosion:
+        return float("-inf")
+
+    if will_be_outside_next and turns_until_shrink <= 10:
+        # Predictive danger: will be wall soon, high penalty
+        return -1000
+
     return 0
 
 

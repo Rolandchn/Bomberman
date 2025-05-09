@@ -13,6 +13,7 @@ class GameWorld:
     
         self.bomb_group = pygame.sprite.Group()
         self.explosion_group = pygame.sprite.Group()
+        self.fire_group = pygame.sprite.Group()
         
         self.map = Map(self)
 
@@ -25,6 +26,7 @@ class GameWorld:
 
         self.bomb_group.update(game_turn)
         self.explosion_group.update(game_turn)
+        self.fire_group.update(game_turn)
 
 
     def draw(self, screen):
@@ -35,7 +37,10 @@ class GameWorld:
 
         for bomb in self.bomb_group:
             bomb.draw(self.turn, screen)
+
         self.explosion_group.draw(screen)
+        self.fire_group.draw(screen)
+
 
 
     def clone(self):
@@ -47,6 +52,8 @@ class GameWorld:
             copy_sprite = sprite.clone(new_world)
             
             new_world.map.grid[copy_sprite] = position
+
+        new_world.map.current_margin = self.map.current_margin
 
         return new_world
 
