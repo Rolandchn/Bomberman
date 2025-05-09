@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from game.GameWorld import GameWorld
 
-import random
-
 from game.BombermanGame import GameStatus
 from game.GameLogic import GameLogic
 
@@ -15,11 +13,12 @@ from data.entity.AI.decision.minMax import minmax
 from data.entity.AI.difficulty import EASY, MEDIUM, HARD
 
 
+
 class IA(Entity):
     #   difficulty:
-    #   easy: random
-    #   moderate:  min max td4 (strategie: take the center, destroy obstacle)
-    #   strong:  min max td4 (strategie: corner the player, reaction to player following, reaction to player fleeing ...)
+    #   easy: MinMax 3 - Explorer
+    #   moderate:  MinMax 3 - Follower
+    #   strong:  MinMax 3 - Terminator
 
     def __init__(self, position, status: GameStatus, world: GameWorld, difficulty="facile"):
         super().__init__(position, status, world, world.player_group)

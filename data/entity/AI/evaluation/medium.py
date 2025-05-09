@@ -5,7 +5,6 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
     from data.entity.Entity import Entity
 
-import random
 import math
 
 from game.GameStatus import GameStatus
@@ -16,12 +15,14 @@ from data.entity.AI.evaluation.behavior.center import evaluate_center_behavior
 from data.entity.AI.evaluation.behavior.chase import evaluate_chase_behavior
 
 
+
 def eval(simulated_world: GameWorld, status: GameStatus):
     if terminal(simulated_world):
         return value(simulated_world)
             
     player: Entity = None
     opponent: Entity = None
+    
     for p in simulated_world.player_group:
         if p.status == status:
             player = p

@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
 
 from game.GameAction import Action
+
 from data.entity.Bombe import Bomb
 
 

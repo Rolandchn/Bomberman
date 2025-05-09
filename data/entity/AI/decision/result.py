@@ -14,6 +14,7 @@ from game.GameStatus import GameStatus
 from data.texture.config import MAX_TURN, SHRINK_INTERVAL
 
 
+
 def result(world: GameWorld, action: Action):
     new_world = world.clone()
 

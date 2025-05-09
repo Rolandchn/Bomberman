@@ -24,6 +24,7 @@ def eval(simulated_world: GameWorld, status: GameStatus):
             
     player: Entity = None
     opponent: Entity = None
+    
     for p in simulated_world.player_group:
         if p.status == status:
             player = p

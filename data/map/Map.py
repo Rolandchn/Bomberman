@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
     from data.entity.Explosion import Explosion
 
-
 import pygame
 
 from collections import defaultdict
@@ -21,6 +20,7 @@ from data.map.structure.Floor import Floor
 from data.map.structure.Obstacle import Obstacle
 
 from data.texture.config import TILE_SIZE, GRID_WIDTH, GRID_HEIGHT
+
 
 
 class Map:
