@@ -22,11 +22,11 @@ def eval(simulated_world: GameWorld, status: GameStatus):
             
     player: Entity = None
     opponent: Entity = None
-    
+
     for p in simulated_world.player_group:
         if p.status == status:
             player = p
-            
+
         else:
             opponent = p
 
@@ -38,7 +38,7 @@ def eval(simulated_world: GameWorld, status: GameStatus):
 
     CENTER_POS = (math.floor(simulated_world.map.width / 2), math.floor(simulated_world.map.height / 2) - 1)
     ENEMY_DETECTION_RANGE = 8
-    
+
     opponent_distance = abs(opponent_x - player_x) + abs(opponent_y - player_y)
 
     if opponent_distance <= ENEMY_DETECTION_RANGE:

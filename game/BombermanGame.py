@@ -204,16 +204,14 @@ class Game():
 
     def tournament(self):
 
-        ia_config = {"facile": 1,"moyen": 1,"difficile": 1}
+        ia_config = {"facile": 0,"moyen": 1,"difficile": 1}
 
         tournament = TournamentManager(self.screen, ia_config, nb_rounds=1)
         tournament.start()
 
         print("tournament")
-
-        # Une fois le tournoi terminé, retourner au menu
         self.state = GameState.MENU
-        
+
 
     def restart_game(self):
         '''

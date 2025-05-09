@@ -50,10 +50,13 @@ class GameWorld:
 
         for sprite, position in self.map.grid.items():
             copy_sprite = sprite.clone(new_world)
-            
             new_world.map.grid[copy_sprite] = position
 
         new_world.map.current_margin = self.map.current_margin
+
+        if hasattr(copy_sprite, "groups_to_add"):
+                for group in copy_sprite.groups_to_add():
+                    getattr(new_world, group).add(copy_sprite)
 
         return new_world
 

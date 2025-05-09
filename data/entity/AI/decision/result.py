@@ -19,7 +19,11 @@ def result(world: GameWorld, action: Action):
     new_world = world.clone()
 
     player = turn(new_world)
-    
+
+    if player is None:
+        return new_world
+
+
     GameLogic.apply_action(new_world, player, action)
 
     if world.turn_status == GameStatus.P1:
