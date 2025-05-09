@@ -17,6 +17,7 @@ def evaluate_attack_behavior(world: GameWorld, player: Entity, opponent: Entity)
     
     distance_to_enemy = abs(px - ox) + abs(py - oy)
 
+    # Base score: closer to opponent is better
     attack_score = max(0, 50 - distance_to_enemy * 10)
     attack_score += get_danger_penalty(world, px, py)
 
@@ -26,9 +27,10 @@ def evaluate_attack_behavior(world: GameWorld, player: Entity, opponent: Entity)
             if abs(bomb.grid_x - ox) + abs(bomb.grid_y - oy) <= bomb.spread:
                 attack_score += 120
 
-    # Encourage bomb placement when near enough
+    # --- Attack ---
     if distance_to_enemy <= 3:
         attack_score += 40
+
 
     # --- Obstacle Between AI and Enemy ---
     path_obstacles = get_obstacles_between((px, py), (ox, oy), world)

@@ -15,9 +15,10 @@ def evaluate_explore_behavior(world: GameWorld, player: Entity, destination_pos)
     px, py = player.grid_x, player.grid_y
     cx, cy = destination_pos
 
+    # Base score: starting explore
     score = 0
 
-    # Penalize distance from destination (exploration goal)
+    # --- Explore ---
     distance = abs(px - cx) + abs(py - cy)
     score -= distance * 5
 
@@ -27,6 +28,7 @@ def evaluate_explore_behavior(world: GameWorld, player: Entity, destination_pos)
         return danger_penalty
     score += danger_penalty
 
+    # --- Survival ---
     # Check for nearby bombs (threat or own)
     ai_bombs = [bomb for bomb in world.bomb_group if bomb.owner == player]
     path_obstacles = get_obstacles_between((px, py), (cx, cy), world)

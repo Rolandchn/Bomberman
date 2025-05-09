@@ -15,6 +15,7 @@ def evaluate_chase_behavior(world: GameWorld, player: Entity, target: Entity):
 
     distance_to_enemy = abs(px - tx) + abs(py - ty)
 
+    # Base score: closer to opponent is better
     chase_score = max(0, 50 - distance_to_enemy * 10)
     chase_score += get_danger_penalty(world, px, py)
 

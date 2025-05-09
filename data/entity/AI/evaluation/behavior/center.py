@@ -16,11 +16,12 @@ def evaluate_center_behavior(world: GameWorld, player: Entity, center_pos):
     cx, cy = center_pos
 
     distance = abs(px - cx) + abs(py - cy)
+
     # Base score: closer to center is better
     score = -distance * 5
     score += get_danger_penalty(world, px, py)
 
-    # --- Obstacle Analysis ---
+    # --- Obstacle Between AI and Enemy ---
     path_obstacles = get_obstacles_between((px, py), center_pos, world)
     num_obstacles = len(path_obstacles)
 
@@ -41,7 +42,7 @@ def evaluate_center_behavior(world: GameWorld, player: Entity, center_pos):
         if bomb_threatens_obstacle:
             score += 30 + 5 * num_obstacles  # reward breaking path
         else:
-            score -= 5 * num_obstacles  # mildly penalize if no bomb yet
+            score -= 5 * num_obstacles  # penalize if no bomb yet
 
      # Penalize if bomb threatens but no safe tile
     if bomb_threatens_obstacle and not get_safe_tiles_around(px, py, world):
