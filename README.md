@@ -6,14 +6,19 @@
 
 ## 📋 Table des matières
 1. [Introduction](#introduction)
-2. [Technologie](#technologie)
-3. [Fonctionnalities](#fonctionnalité)
-4. [Quick Start](#essaie)
-5. [Droits](#droits)
+2. [Topo](#topo)
+3. [Technologie](#technologie)
+4. [Fonctionnalities](#fonctionnalité)
+5. [Quick Start](#essaie)
+6. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
 Bomberman simplified is a game developed in Python by 2 developpers for a school project. <br>
 This project uses the principles of Minimax and Alpha-Beta Pruning to create intelligent and efficient AI behavior.
+
+## <a name="topo">💣 Topo<a/> 
+This project is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies. <br> 
+The game features destructible terrain, shrinking borders, bomb-based combat, and pathfinding challenges — making it an ideal environment for developing and testing game AI logic.
 
 ## <a name="technologie">⚙️ Technologie<a/> 
 - Python
