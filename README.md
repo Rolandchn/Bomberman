@@ -19,13 +19,33 @@
 - Python
 
 ## <a name="fonctionnalité">🔋 Fonctionnalities<a/> 
-👉 Simplify Bomberman Game <br>
+**Difficulty Levels:**<br>
+- 🟢 Easy AI:
+  - Random movement with persistent destination goals.
 
-👉 3 difficulties for the AI (easy, medium, hard) <br>
+  - Destroys nearby obstacles.
 
-👉 Smart AI behaviors (center, chase, attack, explore) <br>
+  - Basic bomb avoidance for survival.
 
-👉 Tournament AI against AI <br>
+- 🟡 Medium AI:
+
+  - Follows the player when nearby.
+
+  - Destroys obstacles blocking access to the player.
+
+  - Basic danger awareness without advanced tactics.
+
+-  🔴 Hard AI:
+
+  - Prioritizes center control or tactical areas.
+
+  - Strategically places bombs with escape routes.
+
+  - Predicts border shrink and avoids future danger.
+
+  - Avoids chain explosions and risky scenarios.
+    
+
 
 ## <a name="essaie">🤸 Quick Start<a/> 
 **Prerequisites**<br>
