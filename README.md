@@ -1,6 +1,6 @@
 <div align="center">
   <img src="public/banner.png" alt="Bannière du projet">
-<h3>Gestion d'une Colonie Spatiale</h3>
+<h3>Bomberman</h3>
 <p max-width=30ch>Explode everything !</p>
 </div>
 
