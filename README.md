@@ -18,7 +18,7 @@ This project uses the principles of Minimax and Alpha-Beta Pruning to create int
 
 ## <a name="topo">💣 Topo<a/> 
 Bomberman simplified is a turn based Bomberman-style game, the goal is to destroy the obstacle, create a path and explode your opponent ! <br> <br>
-With its destructible terrain, shrinking borders, bomb-based combat, and strategic pathfinding challenges, the game provides a dynamic environment perfectly suited for developing and testing intelligent AI agents.
+With it's destructible terrain, shrinking borders, bomb-based combat, and strategic pathfinding challenges, the game provides a dynamic environment perfectly suited for developing and testing intelligent AI agents.
 
 ## <a name="technologie">⚙️ Technologie<a/> 
 - Python
