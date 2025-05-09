@@ -19,15 +19,15 @@
 - Python
 
 ## <a name="fonctionnalité">🔋 Fonctionnalities<a/> 
-**Difficulty Levels:**<br>
-- 🟢 Easy AI:
+**Difficulty Levels:**
+🟢 Easy AI:
   - Random movement with persistent destination goals.
 
   - Destroys nearby obstacles.
 
   - Basic bomb avoidance for survival.
 
-- 🟡 Medium AI:
+🟡 Medium AI:
 
   - Follows the player when nearby.
 
@@ -35,7 +35,7 @@
 
   - Basic danger awareness without advanced tactics.
 
--  🔴 Hard AI:
+🔴 Hard AI:
 
   - Prioritizes center control or tactical areas.
 
