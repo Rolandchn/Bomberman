@@ -13,11 +13,11 @@
 6. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
-Bomberman simplified is a game developed in Python by 2 developpers for a school project. <br>
+Bomberman simplified is a game developed in Python by 2 developpers for a school project. <br><br>
 This project uses the principles of Minimax and Alpha-Beta Pruning to create intelligent and efficient AI behavior.
 
 ## <a name="topo">💣 Topo<a/> 
-This project is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies. <br> 
+Bomberman simplified is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies. <br> 
 The game features destructible terrain, shrinking borders, bomb-based combat, and pathfinding challenges — making it an ideal environment for developing and testing game AI logic.
 
 ## <a name="technologie">⚙️ Technologie<a/> 
