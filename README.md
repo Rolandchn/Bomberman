@@ -45,7 +45,7 @@
 
   - Avoids chain explosions and risky scenarios.
     
-
+**Tournament AI against AI**
 
 ## <a name="essaie">🤸 Quick Start<a/> 
 **Prerequisites**<br>
