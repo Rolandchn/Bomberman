@@ -21,22 +21,22 @@
 ## <a name="fonctionnalité">🔋 Fonctionnalities<a/> 
 **Difficulty Levels:**<br>
 🟢 Easy AI:
-  - Random movement with persistent destination goals.
+  - Friendly explorer.
 
   - Destroys nearby obstacles.
 
   - Basic bomb avoidance for survival.
 
 🟡 Medium AI:
-
-  - Follows the player when nearby.
+  - Moderate follower.
 
   - Destroys obstacles blocking access to the player.
 
   - Basic danger awareness without advanced tactics.
 
 🔴 Hard AI:
-
+  - Dangerous hunter.
+  
   - Prioritizes center control or tactical areas.
 
   - Strategically places bombs with escape routes.
