@@ -19,7 +19,7 @@
 - Python
 
 ## <a name="fonctionnalité">🔋 Fonctionnalities<a/> 
-**Difficulty Levels:**
+**Difficulty Levels:**<br>
 🟢 Easy AI:
   - Random movement with persistent destination goals.
 
