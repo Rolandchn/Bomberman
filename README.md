@@ -45,7 +45,10 @@
 
   - Avoids chain explosions and risky scenarios.
     
-**Tournament AI against AI**
+**Tournament AI against AI:**<br>
+  - All difficulty level.
+  - Score Tracker.
+  - Game data and analyze.
 
 ## <a name="essaie">🤸 Quick Start<a/> 
 **Prerequisites**<br>
