@@ -28,10 +28,12 @@
 👉 Tournament AI against AI <br>
 
 ## <a name="essaie">🤸 Quick Start<a/> 
-**Prérequis**<br>
-Installer un Java Developement Kit (JDK21+) sur le site Oracle. <br>
+**Prerequisites**<br>
+Make sure you have the following installed on your machine:
+- [Git](https://git-scm.com/)
+- [Python](https://www.python.org/)
 
-**Clone the Project**<br>
+**Clone the Repository**<br>
 ```bash
 git clone https://github.com/Rolandchn/Bomberman.git
 cd Bomberman
