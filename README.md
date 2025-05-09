@@ -41,7 +41,7 @@ This project uses the principles of Minimax and Alpha-Beta Pruning to create int
 
   - Strategically places bombs with escape routes.
     
-**Tournament AI against AI:**<br>
+**Tournament mode: AI against AI**<br>
   - All difficulty level.
   - Score Tracker.
   - Game data and analyze.
