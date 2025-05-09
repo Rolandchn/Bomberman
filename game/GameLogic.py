@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 from game.GameAction import Action
 
-from data.entity.Bombe import Bomb
+from data.entity.Bomb import Bomb
 
 
 

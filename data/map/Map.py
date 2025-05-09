@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Tuple
 
 if TYPE_CHECKING:
     from data.entity.Entity import Entity
-    from data.entity.Bombe import Bomb
+    from data.entity.Bomb import Bomb
     from game.GameWorld import GameWorld
     from data.entity.Explosion import Explosion
 
