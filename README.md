@@ -12,7 +12,8 @@
 5. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
-...
+This project is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies.<br> 
+The game features destructible terrain, shrinking borders, bomb-based combat, and pathfinding challenges — making it an ideal environment for developing and testing game AI logic.
 
 
 ## <a name="technologie">⚙️ Technologie<a/> 
@@ -40,10 +41,6 @@
   - Prioritizes center control or tactical areas.
 
   - Strategically places bombs with escape routes.
-
-  - Predicts border shrink and avoids future danger.
-
-  - Avoids chain explosions and risky scenarios.
     
 **Tournament AI against AI:**<br>
   - All difficulty level.
