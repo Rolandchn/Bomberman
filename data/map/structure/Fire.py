@@ -12,6 +12,7 @@ from data.texture.config import TILE_SIZE
 from data.texture.Color import Color
 
 
+
 class Fire(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int, world: GameWorld):
         super().__init__(world.fire_group)
@@ -25,12 +26,6 @@ class Fire(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.grid_x * TILE_SIZE
         self.rect.y = self.grid_y * TILE_SIZE
-
-
-    def kill(self, world: GameWorld):
-        world.map.update_grid_explosion(self)
-
-        super().kill()
 
 
     def clone(self, new_world):

@@ -12,26 +12,28 @@ from data.entity.AI.utils import get_danger_penalty, is_in_explosion_range, get_
 
 
 def evaluate_attack_behavior(world: GameWorld, player: Entity, opponent: Entity):
-    ax, ay = player.grid_x, player.grid_y
-    ex, ey = (opponent.grid_x, opponent.grid_y)
+    px, py = player.grid_x, player.grid_y
+    ox, oy = (opponent.grid_x, opponent.grid_y)
     
-    distance_to_enemy = abs(ax - ex) + abs(ay - ey)
+    distance_to_enemy = abs(px - ox) + abs(py - oy)
 
+    # Base score: closer to opponent is better
     attack_score = max(0, 50 - distance_to_enemy * 10)
-    attack_score += get_danger_penalty(world, ax, ay)
+    attack_score += get_danger_penalty(world, px, py)
 
     # Bomb placement bonus if enemy is in bomb range
     for bomb in world.bomb_group:
         if bomb.owner == player:
-            if abs(bomb.grid_x - ex) + abs(bomb.grid_y - ey) <= bomb.spread:
+            if abs(bomb.grid_x - ox) + abs(bomb.grid_y - oy) <= bomb.spread:
                 attack_score += 120
 
-    # Encourage bomb placement when near enough
+    # --- Attack ---
     if distance_to_enemy <= 3:
         attack_score += 40
 
+
     # --- Obstacle Between AI and Enemy ---
-    path_obstacles = get_obstacles_between((ax, ay), (ex, ey), world)
+    path_obstacles = get_obstacles_between((px, py), (ox, oy), world)
     num_obstacles = len(path_obstacles)
 
     # Check if existing AI bombs threaten those obstacles
@@ -56,7 +58,7 @@ def evaluate_attack_behavior(world: GameWorld, player: Entity, opponent: Entity)
                 attack_score += 30  # encourage placing bomb to open a path
 
     # Trapping logic
-    escape_routes = get_safe_tiles_around(ex, ey, world)
+    escape_routes = get_safe_tiles_around(ox, oy, world)
     if len(escape_routes) == 0:
         attack_score += 100
     elif len(escape_routes) == 1:
@@ -65,7 +67,7 @@ def evaluate_attack_behavior(world: GameWorld, player: Entity, opponent: Entity)
         attack_score += 20
 
     # Encourage moving if safe
-    if not is_in_explosion_range(ax, ay, world):
+    if not is_in_explosion_range(px, py, world):
         attack_score += 10
 
     return attack_score

@@ -11,21 +11,22 @@ from data.entity.AI.utils import get_danger_penalty, get_safe_tiles_around, get_
 
 
 
-def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
-    ax, ay = ai.grid_x, ai.grid_y
+def evaluate_center_behavior(world: GameWorld, player: Entity, center_pos):
+    px, py = player.grid_x, player.grid_y
     cx, cy = center_pos
 
-    distance = abs(ax - cx) + abs(ay - cy)
+    distance = abs(px - cx) + abs(py - cy)
+
     # Base score: closer to center is better
     score = -distance * 5
-    score += get_danger_penalty(world, ax, ay)
+    score += get_danger_penalty(world, px, py)
 
-    # --- Obstacle Analysis ---
-    path_obstacles = get_obstacles_between((ax, ay), center_pos, world)
+    # --- Obstacle Between AI and Enemy ---
+    path_obstacles = get_obstacles_between((px, py), center_pos, world)
     num_obstacles = len(path_obstacles)
 
     # Check if any of AI's bombs can destroy them
-    ai_bombs = [bomb for bomb in world.bomb_group if bomb.owner == ai]
+    ai_bombs = [bomb for bomb in world.bomb_group if bomb.owner == player]
 
     bomb_threatens_obstacle = False
     for bomb in ai_bombs:
@@ -41,10 +42,10 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
         if bomb_threatens_obstacle:
             score += 30 + 5 * num_obstacles  # reward breaking path
         else:
-            score -= 5 * num_obstacles  # mildly penalize if no bomb yet
+            score -= 5 * num_obstacles  # penalize if no bomb yet
 
      # Penalize if bomb threatens but no safe tile
-    if bomb_threatens_obstacle and not get_safe_tiles_around(ax, ay, world):
+    if bomb_threatens_obstacle and not get_safe_tiles_around(px, py, world):
         score -= 200
 
 

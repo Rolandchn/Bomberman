@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 from data.map.structure.Obstacle import Obstacle
 from data.map.structure.Wall import Wall
 
-from data.texture.config import DESTINATION_POS, MAX_TURN, SHRINK_INTERVAL, current_destination_index
+from data.texture.config import DESTINATION_POS, MAX_TURN, current_destination_index
 from collections import deque
 
 
