@@ -6,7 +6,8 @@ if TYPE_CHECKING:
     from game.GameWorld import GameWorld
     from data.entity.Entity import Entity
 
-from data.entity.AI.utils import get_danger_penalty, get_safe_tiles_around, get_obstacles_between, is_in_explosion_range
+
+from data.entity.AI.utils import get_danger_penalty, get_safe_tiles_around, get_obstacles_between
 
 
 
@@ -14,10 +15,9 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
     ax, ay = ai.grid_x, ai.grid_y
     cx, cy = center_pos
 
-    # Base score: closer to center is better
     distance = abs(ax - cx) + abs(ay - cy)
+    # Base score: closer to center is better
     score = -distance * 5
-
     score += get_danger_penalty(world, ax, ay)
 
     # --- Obstacle Analysis ---
@@ -31,7 +31,7 @@ def evaluate_center_behavior(world: GameWorld, ai: Entity, center_pos):
     for bomb in ai_bombs:
         bx, by = bomb.grid_x, bomb.grid_y
         for ox, oy in path_obstacles:
-            if (bx == ox and abs(by - oy) <= bomb.spread) or (by == oy and abs(bx - ox) <= bomb.spread):
+            if abs(bx - ox) + abs(by - oy) <= bomb.spread:
                 bomb_threatens_obstacle = True
                 break
         if bomb_threatens_obstacle:
