@@ -12,8 +12,8 @@
 5. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
-Bomberman simplified is a game developed with Pygame by 2 developpers for a school project. <br>
-This project is use principal of minimax and alpha-beta pruning to create smart and optimize AI. 
+Bomberman simplified is a game developed in Python by 2 developpers for a school project. <br>
+This project uses the principles of Minimax and Alpha-Beta Pruning to create intelligent and efficient AI behavior.
 
 ## <a name="technologie">⚙️ Technologie<a/> 
 - Python
