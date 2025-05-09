@@ -12,7 +12,7 @@
 5. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
-This project is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies.<br> 
+This project is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies.<br> <br>
 The game features destructible terrain, shrinking borders, bomb-based combat, and pathfinding challenges — making it an ideal environment for developing and testing game AI logic.
 
 
