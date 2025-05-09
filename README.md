@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/banner.png" alt="Bannière du projet">
 <h3>Bomberman</h3>
-<p max-width=30ch>BOOM ! BOOM ! Explode everything !</p>
+<p max-width=30ch>Tic... Tac... BOOM ! Explode everything !</p>
 </div>
 
 ## 📋 Table des matières
