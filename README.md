@@ -1,6 +1,6 @@
 <div align="center">
   <img src="public/banner.png" alt="Bannière du projet">
-<h3>Bomberman</h3>
+<h3>Bomberman simplified</h3>
 <p max-width=30ch>Tic... Tac... BOOM ! Explode everything !</p>
 </div>
 
@@ -12,8 +12,7 @@
 5. [Droits](#droits)
    
 ## <a name="introduction">🤖 Introduction<a/> 
-This project is a custom implementation of AI agents for a Bomberman-style game, designed to simulate various difficulty levels through distinct behavioral strategies.<br> <br>
-The game features destructible terrain, shrinking borders, bomb-based combat, and pathfinding challenges — making it an ideal environment for developing and testing game AI logic.
+Bomberman simplified is a game developed with Pygame by 2 developpers for a school project. This project is use principal of minimax and alpha-beta pruning to create smart and optimize AI. 
 
 
 ## <a name="technologie">⚙️ Technologie<a/> 
